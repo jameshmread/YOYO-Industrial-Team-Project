@@ -23,6 +23,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 $router->group([
     'middleware' => ['web', 'auth'],
+    'prefix' => 'admin',
+    'as' => 'admin.'
 ], function (Router $router) {
-    $router->resource('/users', 'AdminController');
+    $router->resource('/users', 'AdminUserController');
 });
