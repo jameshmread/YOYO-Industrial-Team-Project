@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/csvupload', 'CSVController@index');
+
+Route::post('/csvupload', 'CSVController@upload')->name('upload');
