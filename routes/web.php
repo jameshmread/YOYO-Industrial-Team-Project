@@ -25,7 +25,7 @@ $router->group([
     'middleware' => ['web', 'auth'],
 ], function (Router $router) {
 
-    Route::get('/csvupload', 'CSVController@index');
+    $router->get('/csvupload', 'CSVController@index');
 
-    Route::post('/csvupload', 'CSVController@upload')->name('upload');
+    $router->post('/csvupload', 'CSVController@upload')->name('upload');
 });
