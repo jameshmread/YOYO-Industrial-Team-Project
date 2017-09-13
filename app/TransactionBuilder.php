@@ -20,7 +20,9 @@ class TransactionBuilder
 
         $date = new Date($array[0]);
         $price;
+        preg_match('/[0-9][.][0-9]{2}/', $array[7], $price);;
         echo '<pre>';
+        var_dump($price[0]);
         echo '</pre>';
         return $array;
     }
