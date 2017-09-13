@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Routing\Router;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -18,3 +20,13 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+$router->group([
+    'middleware' => ['auth'],
+    'prefix' => 'api',
+    'as' => 'api.'
+], function (Router $router) {
+    $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
+    $router->get('/transactions/{month}', 'APIController@monthlyListing')->name('monthlyListing');
+    $router->get('/transactions/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
+});
