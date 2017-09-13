@@ -62,6 +62,14 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="is-admin" class="col-md-4 control-label">Admin Privileges</label>
+
+                            <div class="col-md-1">
+                                <input id="is-admin" type="checkbox" class="form-control" name="is_admin">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Register
