@@ -2,8 +2,6 @@
 
 namespace App;
 
-use App\Types\Date;
-
 class TransactionBuilder
 {
     public function createFromFile(string $filePath): array
@@ -18,7 +16,7 @@ class TransactionBuilder
     {
         $array = str_getcsv($line);
 
-        $date = new Date($array[0]);
+        $date = $this->extractDate($array[0]);
         // I assumed the store id in the model and the outlet reference in the
         // model are the same - LM.
         $storeId = $array[2];
@@ -40,6 +38,22 @@ class TransactionBuilder
         // var_dump($cashSpent);
         // echo '</pre>';
         return $array;
+    }
+
+    public function extractDate(string $csvLine): string
+    {
+        $dateAndTime = explode(' ', $csvLine);
+        $date = $dateAndTime[0];
+        $dayMonthYear = explode('/', $date);
+        $time = $dateAndTime[1];
+        $hourMinuteSecond = explode(':', $time);
+        $day = $dayMonthYear[0];
+        $month = $dayMonthYear[1];
+        $year = $dayMonthYear[2];
+        $hour = $hourMinuteSecond[0];
+        $minute = $hourMinuteSecond[1];
+        $second = $hourMinuteSecond[2];
+        return "$day/$month/$year $hour:$minute:$second";
     }
 
     public function extractPrice(string $string): float
