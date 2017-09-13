@@ -97,7 +97,7 @@ class AdminUserController extends Controller
         // Password check
         if (!empty($request->input('password'))) {
             $pass = trim($request->input('password'));
-            $user->password = bcrypt($pass);
+            $user->password = password_hash($pass, PASSWORD_DEFAULT);
         }
 
         // Save to database
