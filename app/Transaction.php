@@ -17,6 +17,11 @@ class Transaction extends Model
         'transaction_hash',
     ];
 
+    public function __construct($date)
+    {
+        $this->customer_id = $date;
+    }
+
     public function customer()
     {
         $this->hasOne('App\Customer');

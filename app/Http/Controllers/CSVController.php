@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\TransactionBuilder;
+use App\Transaction;
 
 class CSVController extends Controller
 {
@@ -16,9 +18,10 @@ class CSVController extends Controller
         $file = $request->file('inputFile');
 
         if ($file->isValid()) {
-            $lines = file($file, FILE_IGNORE_NEW_LINES);
-            $csv = array_map('str_getcsv', $lines);
+            $tb = new TransactionBuilder;
+            $csv = $tb->createFromFile($file);
             
+            $t = new Transaction('a');
             dd($csv);
         } else {
             die;
