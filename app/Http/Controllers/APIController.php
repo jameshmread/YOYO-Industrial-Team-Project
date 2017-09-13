@@ -27,43 +27,40 @@ class APIController extends Controller
         if ($request->month != null) {
             $month = $request->month;
         } else {
-            $month = null;
+            $month = 1;
         }
 
         if ($request->day != null) {
             $day = $request->day;
         } else {
-            $day = null;
+            $day = 1;
         }
 
         return Carbon::createFromDate($year, $month, $day);
     }
 
+    private function retrieveListingByDate($date)
+    {
+        return Transaction::where('date', '>=', $date)
+            ->get();
+    }
+
     public function yearlyListing(Request $request)
     {
         //Format to follow for queries are as follows YYYY
-
-        $date = $this->createListingDate($request);
-
-        return dd($date);
+        return $this->retrieveListingByDate($this->createListingDate($request));
     }
 
     public function monthlyListing(Request $request)
     {
         //Format to follow for queries are as follows YYYY/MM
-
-        $date = $this->createListingDate($request);
-
-        return dd($date);
+        return $this->retrieveListingByDate($this->createListingDate($request));
     }
 
     public function dailyListing(Request $request)
     {
         //Format to follow for queries are as follows YYYY/MM/DD
-
-        $date = $this->createListingDate($request);
-
-        return dd($date);
+        return $this->retrieveListingByDate($this->createListingDate($request));
     }
 
     public function periodToPeriod(Request $request)
