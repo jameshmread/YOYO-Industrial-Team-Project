@@ -40,9 +40,9 @@ class TransactionBuilder
         return $array;
     }
 
-    public function extractDate(string $csvLine): string
+    public function extractDate(string $csvCell): string
     {
-        $dateAndTime = explode(' ', $csvLine);
+        $dateAndTime = explode(' ', $csvCell);
         $date = $dateAndTime[0];
         $dayMonthYear = explode('/', $date);
         $time = $dateAndTime[1];
@@ -56,12 +56,12 @@ class TransactionBuilder
         return "$day/$month/$year $hour:$minute:$second";
     }
 
-    public function extractPrice(string $string): float
+    public function extractPrice(string $csvCell): float
     {
         $prices = array();
-        preg_match('/[0-9][.][0-9]{2}/', $string, $prices);
+        preg_match('/[0-9][.][0-9]{2}/', $csvCell, $prices);
         $price = floatval($prices[0]);
-        $isPositive = strpos($string, '-') === false;
+        $isPositive = strpos($csvCell, '-') === false;
         if (!$isPositive) {
             $price *= -1;
         }
