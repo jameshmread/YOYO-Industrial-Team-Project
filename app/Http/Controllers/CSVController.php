@@ -15,9 +15,10 @@ class CSVController extends Controller
     {
         $file = $request->file('inputFile');
 
-        if($file->isValid()) {
-            $csv = array_map('str_getcsv', file($file));
-
+        if ($file->isValid()) {
+            $lines = file($file, FILE_IGNORE_NEW_LINES);
+            $csv = array_map('str_getcsv', $lines);
+            
             dd($csv);
         } else {
             die;
