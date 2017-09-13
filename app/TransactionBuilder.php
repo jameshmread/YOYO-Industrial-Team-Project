@@ -12,7 +12,7 @@ class TransactionBuilder
         return $csv;
     }
 
-    public function convertLineIntoTransaction(string $line): array
+    public function convertLineIntoTransaction(string $line): Transaction
     {
         $array = str_getcsv($line);
 
@@ -37,7 +37,7 @@ class TransactionBuilder
         // echo '<pre>';
         // var_dump($cashSpent);
         // echo '</pre>';
-        return $array;
+        return $transaction;
     }
 
     public function extractDate(string $csvCell): string
