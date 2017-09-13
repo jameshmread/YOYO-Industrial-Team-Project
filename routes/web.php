@@ -26,9 +26,9 @@ $router->group([
     'prefix' => 'api',
     'as' => 'api.'
 ], function (Router $router) {
+    $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
     $router->get('/transactions/{year}', 'APIController@yearlyListing')->name('yearlyListing');
     $router->get('/transactions/{year}/{month}', 'APIController@monthlyListing')->name('monthlyListing');
     $router->get('/transactions/{year}/{month}/{day}', 'APIController@dailyListing')->name('dailyListing');
-    $router->get('/transactions/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
 });

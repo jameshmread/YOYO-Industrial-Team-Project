@@ -65,6 +65,13 @@ class APIController extends Controller
 
     public function periodToPeriod(Request $request)
     {
-        dd($request->period1, $request->period2);
+        //Periods follow the format of YYYY-MM-DD HH:MM:SS
+
+        $firstPeriod = Carbon::createFromFormat('Ymdhis', $request->period1);
+        $secondPeriod = Carbon::createFromFormat('Ymdhis', $request->period2);
+
+        return Transaction::where('date', '>=', $firstPeriod)
+            ->where('date', '<=', $secondPeriod)
+            ->get();
     }
 }
