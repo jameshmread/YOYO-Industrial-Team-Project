@@ -19,10 +19,26 @@ class TransactionBuilder
         $array = str_getcsv($line);
 
         $date = new Date($array[0]);
-        $price = $this->extractPrice($array[7]);
-        echo '<pre>';
-        var_dump($price);
-        echo '</pre>';
+        // I assumed the store id in the model and the outlet reference in the
+        // model are the same - LM.
+        $storeId = $array[2];
+        $customerId = $array[5];
+        $transactionType = $array[6];
+        $cashSpent = $this->extractPrice($array[7]);
+        $discountAmount = $this->extractPrice($array[8]);
+        $totalAmount = $this->extractPrice($array[9]);
+        $transaction = new Transaction(
+            $cashSpent,
+            $customerId,
+            $date,
+            $discountAmount,
+            $storeId,
+            $totalAmount,
+            $transactionType
+        );
+        // echo '<pre>';
+        // var_dump($cashSpent);
+        // echo '</pre>';
         return $array;
     }
 

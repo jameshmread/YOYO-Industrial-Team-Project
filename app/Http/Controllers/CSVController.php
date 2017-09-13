@@ -20,8 +20,6 @@ class CSVController extends Controller
         if ($file->isValid()) {
             $tb = new TransactionBuilder;
             $csv = $tb->createFromFile($file);
-            
-            $t = new Transaction('a');
             dd($csv);
         } else {
             die;

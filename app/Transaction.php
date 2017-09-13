@@ -17,9 +17,26 @@ class Transaction extends Model
         'transaction_hash',
     ];
 
-    public function __construct($date)
+    /**
+     * @todo add transaction_hash parameter
+     */
+    public function __construct(
+        $cashSpent,
+        $customerId,
+        $date,
+        $discountAmount,
+        $storeId,
+        $totalAmount,
+        $transactionType
+    )
     {
-        $this->customer_id = $date;
+        $this->cash_spent = $cashSpent;
+        $this->customer_id = $customerId;
+        $this->date = $date;
+        $this->discountAmount = $discountAmount;
+        $this->storeId = $storeId;
+        $this->totalAmount = $totalAmount;
+        $this->transactionType = $transactionType;
     }
 
     public function customer()
