@@ -45,21 +45,9 @@ class APIController extends Controller
             ->get();
     }
 
-    public function yearlyListing(Request $request)
+    public function dmyListing(Request $request)
     {
-        //Format to follow for queries are as follows YYYY
-        return $this->retrieveListingByDate($this->createListingDate($request));
-    }
-
-    public function monthlyListing(Request $request)
-    {
-        //Format to follow for queries are as follows YYYY/MM
-        return $this->retrieveListingByDate($this->createListingDate($request));
-    }
-
-    public function dailyListing(Request $request)
-    {
-        //Format to follow for queries are as follows YYYY/MM/DD
+        //Format will follow YYYY/MM/DD if available
         return $this->retrieveListingByDate($this->createListingDate($request));
     }
 
