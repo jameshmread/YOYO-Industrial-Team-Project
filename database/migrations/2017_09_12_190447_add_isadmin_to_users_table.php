@@ -17,14 +17,4 @@ class AddIsadminToUsersTable extends Migration
             $table->boolean('is_admin')->default(0);
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
-    }
 }
