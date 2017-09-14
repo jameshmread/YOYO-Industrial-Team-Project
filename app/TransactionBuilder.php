@@ -11,39 +11,41 @@ class TransactionBuilder
     public function createFromFile(string $filePath): array
     {
         $lines = file($filePath, FILE_IGNORE_NEW_LINES);
-        $csv = array_map(array($this, 'convertLineIntoTransaction'), $lines);
-        $this->removeNullValuesFromArray($csv);
-        return $csv;
+        $transactions = array();
+        foreach ($lines as $currentLine) {
+            try {
+                $transaction = $this->extractTransactionFromLine($currentLine);
+                $transactions[$transaction->transaction_hash] = $transaction;
+            } catch (\exception $e) { // @todo custom exception
+                continue;
+            }
+        }
+        return $transactions;
     }
 
-    public function convertLineIntoTransaction(string $line)
+    public function extractTransactionFromLine(string $line)
     {
-        $transaction = null;
-        try {
-            $array = str_getcsv($line);
+        $array = str_getcsv($line);
 
-            $date = $this->extractDate($array[0]);
-            // I assumed the store id in the model and the outlet reference in the
-            // model are the same - LM.
-            $storeId = $array[2];
-            $customerId = $array[5];
-            $transactionType = $array[6];
-            $cashSpent = $this->extractPrice($array[7]);
-            $discountAmount = $this->extractPrice($array[8]);
-            $totalAmount = $this->extractPrice($array[9]);
+        $date = $this->extractDate($array[0]);
+        // I assumed the store id in the model and the outlet reference in the
+        // model are the same - LM.
+        $storeId = $array[2];
+        $customerId = $array[5];
+        $transactionType = $array[6];
+        $cashSpent = $this->extractPrice($array[7]);
+        $discountAmount = $this->extractPrice($array[8]);
+        $totalAmount = $this->extractPrice($array[9]);
 
-            $transaction = new Transaction(
-                $cashSpent,
-                $customerId,
-                $date,
-                $discountAmount,
-                $storeId,
-                $totalAmount,
-                $transactionType
-            );
-        } catch (\ErrorException $e) {
-            return null;
-        }
+        $transaction = new Transaction(
+            $cashSpent,
+            $customerId,
+            $date,
+            $discountAmount,
+            $storeId,
+            $totalAmount,
+            $transactionType
+        );
         // echo '<pre>';
         // var_dump($cashSpent);
         // echo '</pre>';
@@ -79,16 +81,6 @@ class TransactionBuilder
             return $price;
         } else {
             throw new \ErrorException;
-        }
-    }
-
-    public function removeNullValuesFromArray(array &$array)
-    {
-        $sizeOfArray = sizeof($array);
-        for ($i = $sizeOfArray - 1; $i >= 0; $i--) {
-            if (null === $array[$i]) {
-                unset($array[$i]);
-            }
         }
     }
 }
