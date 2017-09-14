@@ -19,7 +19,9 @@ Route::get('/', function () {
 
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
+Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+
 
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -30,7 +32,9 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'admin'], function() {
-
+    Route::get('/foo', function(){
+        return view('foo');
+    });
 });
 
 
