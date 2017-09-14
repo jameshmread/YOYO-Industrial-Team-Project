@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
+
 class TransactionBuilder
 {
     /**
@@ -31,7 +33,15 @@ class TransactionBuilder
         // I assumed the store id in the model and the outlet reference in the
         // model are the same - LM.
         $storeId = $array[2];
-        $customerId = $array[5];
+
+        $customerReference = $array[5];
+        $customer = Customer::where('customer_reference', $customerReference)->first();
+        if (null === $customer) {
+            $customer = new Customer;
+            $customer->customer_reference = $customerReference;
+            $customer->save();
+        }
+
         $transactionType = $array[6];
         $cashSpent = $this->extractPrice($array[7]);
         $discountAmount = $this->extractPrice($array[8]);
@@ -39,7 +49,7 @@ class TransactionBuilder
 
         $transaction = new Transaction(
             $cashSpent,
-            $customerId,
+            $customer->id,
             $date,
             $discountAmount,
             $storeId,
@@ -62,7 +72,7 @@ class TransactionBuilder
             $hour = $cellArray[3];
             $minute = $cellArray[4];
             $second = $cellArray[5];
-            return "$day/$month/$year $hour:$minute:$second";
+            return "$year-$month-$day $hour:$minute:$second";
         } else {
             throw new \ErrorException;
         }

@@ -20,6 +20,13 @@ class CSVController extends Controller
         if ($file->isValid()) {
             $tb = new TransactionBuilder;
             $csv = $tb->createFromFile($file);
+            /**
+             * @todo optimise: calling save on every model is probably
+             * inefficient
+             */
+            foreach ($csv as $currentTransaction) {
+                $currentTransaction->save();
+            }
             dd($csv);
         } else {
             die;
