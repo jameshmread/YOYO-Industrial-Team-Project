@@ -44,14 +44,29 @@
                                 </div>
 
                             </div>
+                            <div class="row">
+                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    <label for="passwordField">Password</label>
+                                    <input type="password" class="form-control" id="passwordField" name="password"
+                                           placeholder="Password">
+                                </div>
 
-                            <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                <label for="passwordField">Password</label>
-                                <input type="password" class="form-control" id="passwordField" name="password"
-                                       placeholder="Password">
+                                <div class="form-group">
+                                    <label for="is-admin" class="col-md-4 control-label">Admin Privileges</label>
+
+                                    <div class="col-md-1">
+                                        <input id="is_admin" type="hidden" class="form-control" name="is_admin"
+                                               value="0">
+                                        <input id="is_admin" type="checkbox" class="form-control" name="is_admin"
+                                               value="1">
+                                    </div>
+                                </div>
                             </div>
-
-                            <button type="submit" class="btn btn-primary">{{ $page_details['button'] }}</button>
+                            <div class="row">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">{{ $page_details['button'] }}</button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
