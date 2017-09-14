@@ -7,6 +7,9 @@ use App\User;
 
 class AdminUserController extends Controller
 {
+    public function __construct () {
+        $this->middleware('admin:1');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -96,8 +99,7 @@ class AdminUserController extends Controller
 
         // Password check
         $this->validate($request, [
-            'password' => 'bail|required|min:6|',
-            'password_confirmation' => 'required|min:6|confirmed',
+            'password' => 'bail|required|min:6|confirmed',
             'name' => 'required|alpha',
             'email' => 'required|email'
         ]);

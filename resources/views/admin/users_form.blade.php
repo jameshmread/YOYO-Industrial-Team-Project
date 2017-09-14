@@ -46,8 +46,8 @@
                             </div>
                             <div class="row">
                                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <label for="passwordField">Password</label>
-                                    <input type="password" class="form-control" id="passwordField" name="password"
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password"
                                            placeholder="Password">
                                 </div>
                                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
