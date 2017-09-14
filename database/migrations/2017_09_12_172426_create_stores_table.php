@@ -17,6 +17,7 @@ class CreateStoresTable extends Migration
             $table->increments('id');
             $table->integer('outlet_reference')->unsigned();
             $table->string('outlet_name');
+            $table->timestamps();
         });
     }
 

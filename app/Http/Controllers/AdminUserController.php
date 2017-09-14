@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Http\Requests\AdminUserRequest;
 
 class AdminUserController extends Controller
 {
@@ -42,11 +43,11 @@ class AdminUserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  AdminUserRequest $request
      * @param User $user
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $user)
+    public function store(AdminUserRequest $request, User $user)
     {
         return $this->update($request, $user);
     }
@@ -75,23 +76,23 @@ class AdminUserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  AdminUserRequest $request
      * @param  User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(AdminUserRequest $request, User $user)
     {
+        $tmpUser = User::find($user->id);
+
         $user->fill($request->all());
 
-        // Password check
-        $this->validate($request, [
-            'password' => 'bail|required|min:6|confirmed',
-            'name' => 'required|alpha',
-            'email' => 'required|email'
-        ]);
+        $user->is_admin = $request->input('admin') ? 1 : 0;
+
         if (!empty($request->input('password'))) {
             $pass = trim($request->input('password'));
-            $user->password = password_hash($pass, PASSWORD_DEFAULT);
+            $user->password = bcrypt($pass);
+        } else {
+            $user->password = $tmpUser->password;
         }
 
         // Save to database

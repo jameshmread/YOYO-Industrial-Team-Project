@@ -23,6 +23,7 @@ class CreateTransactionsTable extends Migration
             $table->decimal('discount_amount', 5, 2);
             $table->decimal('total_amount', 5, 2);
             $table->string('transaction_hash');
+            $table->timestamps();
         });
     }
 
