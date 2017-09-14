@@ -31,8 +31,4 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    public static function scopeis_admin ($query) {
-        return $query->where('is_admin', 1);
-    }
 }

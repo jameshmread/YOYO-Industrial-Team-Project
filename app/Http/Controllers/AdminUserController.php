@@ -7,9 +7,11 @@ use App\User;
 
 class AdminUserController extends Controller
 {
-    public function __construct () {
-        $this->middleware('admin:1');
+    public function __construct()
+    {
+        $this->middleware('admin');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -39,13 +41,13 @@ class AdminUserController extends Controller
             'button' => 'Create User'
         ];
 
-        return view('admin.users_form', compact('user','page_details'));
+        return view('admin.users_form', compact('user', 'page_details'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param User $user
      * @return \Illuminate\Http\Response
      */
@@ -57,7 +59,7 @@ class AdminUserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -68,7 +70,7 @@ class AdminUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -83,14 +85,14 @@ class AdminUserController extends Controller
             'button' => 'Update User'
         ];
 
-        return view('admin.users_form', compact('user','page_details'));
+        return view('admin.users_form', compact('user', 'page_details'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  User  $user
+     * @param  \Illuminate\Http\Request $request
+     * @param  User $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user)
@@ -121,7 +123,7 @@ class AdminUserController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Request $request
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
