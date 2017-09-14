@@ -44,6 +44,7 @@ class TransactionBuilderTest extends TestCase
         $this->assertEquals('dusa-0017', $transactions[11]->customer_id);
         $this->assertEquals('24/08/2015 10:04:54', $transactions[2]->date);
         $this->assertEquals(0.00, $transactions[16]->discountAmount);
+        $this->assertEquals('86ef272a30426fd61f3f440314b5d0cf', $transactions[1]->transaction_hash);
     }
 
     /**

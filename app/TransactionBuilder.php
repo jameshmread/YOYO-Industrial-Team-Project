@@ -31,6 +31,7 @@ class TransactionBuilder
             $cashSpent = $this->extractPrice($array[7]);
             $discountAmount = $this->extractPrice($array[8]);
             $totalAmount = $this->extractPrice($array[9]);
+
             $transaction = new Transaction(
                 $cashSpent,
                 $customerId,

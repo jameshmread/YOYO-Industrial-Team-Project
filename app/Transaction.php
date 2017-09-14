@@ -17,9 +17,6 @@ class Transaction extends Model
         'transaction_hash',
     ];
 
-    /**
-     * @todo add transaction_hash parameter
-     */
     public function __construct(
         $cashSpent,
         $customerId,
@@ -37,6 +34,7 @@ class Transaction extends Model
         $this->storeId = $storeId;
         $this->totalAmount = $totalAmount;
         $this->transactionType = $transactionType;
+        $this->transaction_hash = hash('md5', "$cashSpent$customerId$date$discountAmount$storeId$totalAmount$transactionType");
     }
 
     public function customer()
