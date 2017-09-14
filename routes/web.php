@@ -19,17 +19,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
-Route::middleware(['admin', 'auth'])->group(function(){
-
-   //Anything requiring admin access put here
-
-    Route::get('/something', function(){
-
-   });
+Route::group(['middleware' => 'admin'], function() {
+    Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 
 });
-
-
 
 
