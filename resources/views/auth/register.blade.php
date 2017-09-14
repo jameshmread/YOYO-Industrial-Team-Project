@@ -65,7 +65,8 @@
                             <label for="is-admin" class="col-md-4 control-label">Admin Privileges</label>
 
                             <div class="col-md-1">
-                                <input id="is-admin" type="checkbox" class="form-control" name="is_admin">
+                                <input id="is_admin" type="hidden" class="form-control" name="is_admin" value="0">
+                                <input id="is_admin" type="checkbox" class="form-control" name="is_admin" value="1">
                             </div>
                         </div>
 

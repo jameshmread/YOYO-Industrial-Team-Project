@@ -95,6 +95,9 @@ class AdminUserController extends Controller
         $user->fill($request->all());
 
         // Password check
+        $this->validate($request, [
+           'password' => 'bail|required|min:6|'
+        ]);
         if (!empty($request->input('password'))) {
             $pass = trim($request->input('password'));
             $user->password = password_hash($pass, PASSWORD_DEFAULT);
