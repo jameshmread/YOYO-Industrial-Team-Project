@@ -7,11 +7,6 @@ use App\User;
 
 class AdminUserController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin');
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -54,17 +49,6 @@ class AdminUserController extends Controller
     public function store(Request $request, User $user)
     {
         return $this->update($request, $user);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
