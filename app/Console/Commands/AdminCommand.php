@@ -50,9 +50,9 @@ class AdminCommand extends Command
             $this->error('The email must be valid');
         }
 
-        $password = $this->ask('Please enter the admin password [of at least 8 characters, containing one upper and lower case letter and a number');
+        $password = $this->secret('Please enter the admin password [of at least 8 characters, containing one upper and lower case letter and a number');
 
-        $confirmedPassword = $this->ask('Please confirm the admin password');
+        $confirmedPassword = $this->secret('Please confirm the admin password');
 
         if ($this->passwordEqualityCheck($password, $confirmedPassword) !== 0) {
             $this->error('The password must match');
