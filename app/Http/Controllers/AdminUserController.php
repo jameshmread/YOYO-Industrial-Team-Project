@@ -96,7 +96,10 @@ class AdminUserController extends Controller
 
         // Password check
         $this->validate($request, [
-           'password' => 'bail|required|min:6|'
+            'password' => 'bail|required|min:6|',
+            'password_confirmation' => 'required|min:6|confirmed',
+            'name' => 'required|alpha',
+            'email' => 'required|email'
         ]);
         if (!empty($request->input('password'))) {
             $pass = trim($request->input('password'));

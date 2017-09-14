@@ -30,8 +30,8 @@
                             <div class="row">
 
                                 <div class="form-group col-md-5{{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <label for="nameField">Name</label>
-                                    <input type="text" class="form-control" id="nameField" name="name"
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
                                            placeholder="{{$user->name}}"
                                            value="{{ Request::old('name', $user->name) }}">
                                 </div>
@@ -49,6 +49,11 @@
                                     <label for="passwordField">Password</label>
                                     <input type="password" class="form-control" id="passwordField" name="password"
                                            placeholder="Password">
+                                </div>
+                                <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+                                    <label for="password_confirmation">Confirm Password</label>
+                                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
+                                           placeholder="Confirm Password">
                                 </div>
 
                                 <div class="form-group">
