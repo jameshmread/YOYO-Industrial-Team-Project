@@ -42,12 +42,14 @@ class AdminCommand extends Command
 
         if (!$this->checkName($name)) {
             $this->error('The name must be alphabetical only');
+            exit();
         }
 
         $email = $this->ask('Please enter the email of the admin user');
 
         if (!$this->checkEmail($email)) {
             $this->error('The email must be valid');
+            exit();
         }
 
         $password = $this->secret('Please enter the admin password [of at least 8 characters, containing one upper and lower case letter and a number');
@@ -56,9 +58,11 @@ class AdminCommand extends Command
 
         if ($this->passwordEqualityCheck($password, $confirmedPassword) !== 0) {
             $this->error('The password must match');
+            exit();
         }
         if (!$this->checkPassword($password)) {
             $this->error('The password must be valid');
+            exit();
         }
 
         User::create([
