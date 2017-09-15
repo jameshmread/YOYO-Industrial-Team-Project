@@ -22,11 +22,14 @@ class CSVController extends Controller
             $csv = $tb->createFromFile($file);
             /**
              * @todo optimise: calling save on every model is probably
-             * inefficient (use findOrCreate?)
+             * inefficient
              */
             foreach ($csv as $currentTransaction) {
-                $currentTransaction->save();
+                if (null === Transaction::where('transaction_hash', $currentTransaction->transaction_hash)->first()) {
+                    $currentTransaction->save();
+                }
             }
+            dd($csv);
         } else {
             die;
         }

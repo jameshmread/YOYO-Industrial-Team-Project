@@ -19,25 +19,8 @@ class Transaction extends Model
 
     public $timestamps = false;
 
-    public function __construct(
-        $cashSpent,
-        $customerId,
-        $date,
-        $discountAmount,
-        $storeId,
-        $totalAmount,
-        $transactionType
-    )
-    {
-        $this->cash_spent = $cashSpent;
-        $this->customer_id = $customerId;
-        $this->date = $date;
-        $this->discount_amount = $discountAmount;
-        $this->store_id = $storeId;
-        $this->total_amount = $totalAmount;
-        $this->transaction_type = $transactionType;
-        $this->transaction_hash = hash('md5', "$cashSpent$customerId$date$discountAmount$storeId$totalAmount$transactionType");
-    }
+    public function __construct()
+    {}
 
     public function customer()
     {
@@ -47,5 +30,10 @@ class Transaction extends Model
     public function store()
     {
         $this->hasOne('App\Store');
+    }
+
+    public function updateTransactionHash()
+    {
+        $this->transaction_hash = hash('md5', ''.$this->cash_spent.$this->customer_id.$this->date.$this->discount_amount.$this->store_id.$this->total_amount.$this->transaction_type);        
     }
 }

@@ -29,10 +29,12 @@ class TransactionBuilder
     {
         $array = str_getcsv($line);
 
-        $date = $this->extractDate($array[0]);
+        $transaction = new Transaction;
+
+        $transaction->date = $this->extractDate($array[0]);
         // I assumed the store id in the model and the outlet reference in the
         // model are the same - LM.
-        $storeId = $array[2];
+        $transaction->store_id = $array[2];
 
         $customerReference = $array[5];
         $customer = Customer::where('customer_reference', $customerReference)->first();
@@ -42,23 +44,17 @@ class TransactionBuilder
             $customer->save();
         }
 
-        $transactionType = $array[6];
-        $cashSpent = $this->extractPrice($array[7]);
-        $discountAmount = $this->extractPrice($array[8]);
-        $totalAmount = $this->extractPrice($array[9]);
-
-        $transaction = new Transaction(
-            $cashSpent,
-            $customer->id,
-            $date,
-            $discountAmount,
-            $storeId,
-            $totalAmount,
-            $transactionType
-        );
         // echo '<pre>';
-        // var_dump($cashSpent);
+        // var_dump('yo');
         // echo '</pre>';
+        $transaction->customer_id = $customer->id;
+        $transaction->transaction_type = $array[6];
+        $transaction->cash_spent = $this->extractPrice($array[7]);
+        $transaction->discount_amount = $this->extractPrice($array[8]);
+        $transaction->total_amount = $this->extractPrice($array[9]);
+        $transaction->updateTransactionHash();
+
+
         return $transaction;
     }
 
