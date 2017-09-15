@@ -27,7 +27,6 @@ class CSVController extends Controller
             foreach ($csv as $currentTransaction) {
                 $currentTransaction->save();
             }
-            dd($csv);
         } else {
             die;
         }
