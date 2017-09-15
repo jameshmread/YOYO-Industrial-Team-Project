@@ -22,7 +22,7 @@ class CSVController extends Controller
             $csv = $tb->createFromFile($file);
             /**
              * @todo optimise: calling save on every model is probably
-             * inefficient
+             * inefficient (use findOrCreate?)
              */
             foreach ($csv as $currentTransaction) {
                 $currentTransaction->save();
