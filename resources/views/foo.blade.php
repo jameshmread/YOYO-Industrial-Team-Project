@@ -1,3 +1,0 @@
-<html>
-Hey there.
-</html>

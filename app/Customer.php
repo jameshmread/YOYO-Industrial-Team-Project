@@ -10,6 +10,7 @@ class Customer extends Model
         'id',
         'customer_reference',
     ];
+    public $timestamps = false;
 
     public function transactions()
     {

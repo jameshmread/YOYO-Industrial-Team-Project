@@ -11,17 +11,13 @@
 |
 */
 
+use Illuminate\Routing\Router;
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-//Auth::routes();
-
-Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-Route::post('login', 'Auth\LoginController@login');
-Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-
+Route::get('/home', 'HomeController@index')->name('home');
 
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -29,12 +25,50 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::group(['middleware' => 'admin'], function() {
-    Route::get('/foo', function(){
-        return view('foo');
-    });
+/**
+ * GUEST ROUTES
+ */
+$router->group([
+    'middlware' => ['web', 'guest']
+], function (Router $router) {
+    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'Auth\LoginController@login');
 });
 
+/**
+ * AUTH ROUTES
+ */
+$router->group([
+    'middlware' => ['web', 'guest']
+], function (Router $router) {
+    Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+});
 
+/**
+ * ADMIN ROUTES
+ */
+$router->group([
+    'middleware' => ['web', 'auth', 'admin'],
+    'prefix' => 'admin',
+    'as' => 'admin.'
+], function (Router $router) {
+    $router->resource('/users', 'AdminUserController')->except('show');
+    $router->get('/csvupload', 'CSVController@index')->name('uploadIndex');
+    $router->post('/csvupload', 'CSVController@upload')->name('upload');
+});
+
+/**
+ * API ROUTES
+ */
+$router->group([
+    'middleware' => ['auth'],
+    'prefix' => 'api',
+    'as' => 'api.'
+], function (Router $router) {
+    $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
+    $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
+    $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
+    $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
+    $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
+});

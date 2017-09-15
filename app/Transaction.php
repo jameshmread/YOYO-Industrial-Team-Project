@@ -17,6 +17,28 @@ class Transaction extends Model
         'transaction_hash',
     ];
 
+    public $timestamps = false;
+
+    public function __construct(
+        $cashSpent,
+        $customerId,
+        $date,
+        $discountAmount,
+        $storeId,
+        $totalAmount,
+        $transactionType
+    )
+    {
+        $this->cash_spent = $cashSpent;
+        $this->customer_id = $customerId;
+        $this->date = $date;
+        $this->discount_amount = $discountAmount;
+        $this->store_id = $storeId;
+        $this->total_amount = $totalAmount;
+        $this->transaction_type = $transactionType;
+        $this->transaction_hash = hash('md5', "$cashSpent$customerId$date$discountAmount$storeId$totalAmount$transactionType");
+    }
+
     public function customer()
     {
         $this->hasOne('App\Customer');
