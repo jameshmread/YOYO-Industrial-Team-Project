@@ -29,6 +29,7 @@ $user = User::find($id);
 $user->name = request('name');
 $user->email = request('email');
 $user->save();
-return view('edituser', compact('user'));
+//return view('home', compact('user'));
+return redirect(route('home'));
 }
 }

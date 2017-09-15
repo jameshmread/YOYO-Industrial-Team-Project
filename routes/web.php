@@ -20,11 +20,27 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/users', 'UserController@index');
-Route::get('/users/{user}', 'UserController@show');
+Route::get('/users/{user}', 'UserController@show')->name('editUser');
 Route::post('/users', 'UserController@edit');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+/**
+ * ADMIN ROUTES
+ */
+$router->group([
+    'middleware' => ['web', 'auth', 'admin'],
+    'prefix' => 'admin',
+    'as' => 'admin.'
+], function (Router $router) {
+    $router->resource('/users', 'AdminUserController')->except('show');
+    $router->get('/csvupload', 'CSVController@index')->name('uploadIndex');
+    $router->post('/csvupload', 'CSVController@upload')->name('upload');
+});
+
+/**
+ * API ROUTES
+ */
 $router->group([
     'middleware' => ['auth'],
     'prefix' => 'api',

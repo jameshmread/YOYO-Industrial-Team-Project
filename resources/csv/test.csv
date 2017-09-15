@@ -1,0 +1,17 @@
+Date & Time,Retailer Ref,Outlet Ref,Retailer Name,Outlet Name,New user id,Transaction Type,Cash Spent,Discount Amount,Total Amount
+24/08/2015 10:02:28,91,238,Dundee Student Ass,Library,dusa-0046,Payment,�0.80,�0.00,�0.80
+24/08/2015 10:04:54,91,238,Dundee Student Ass,Library,dusa-0046,Payment,�0.50,�0.00,�0.50
+24/08/2015 12:07:34,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,�7.00,�0.00,�7.00
+24/08/2015 13:53:48,91,239,Dundee Student Ass,Spare,dusa-0064,Payment,�1.05,�0.00,�1.05
+24/08/2015 14:19:37,91,239,Dundee Student Ass,Spare,dusa-0006,Payment,�3.50,�0.00,�3.50
+24/08/2015 15:52:53,91,236,Dundee Student Ass,Air Bar,dusa-0055,Payment,�1.25,�0.00,�1.25
+24/08/2015 15:53:18,91,236,Dundee Student Ass,Air Bar,dusa-0055,Refund,-�1.25,�0.00,-�1.25
+24/08/2015 18:37:55,91,239,Dundee Student Ass,Spare,dusa-0013,Payment,�2.00,�0.00,�2.00
+24/08/2015 21:35:05,91,239,Dundee Student Ass,Spare,dusa-0051,Payment,�2.00,�0.00,�2.00
+25/08/2015 09:01:45,91,238,Dundee Student Ass,Library,dusa-0067,Payment,�1.75,�0.00,�1.75
+25/08/2015 09:43:43,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,�0.60,�0.00,�0.60
+25/08/2015 10:55:32,91,238,Dundee Student Ass,Library,dusa-0046,Payment,�1.60,�0.00,�1.60
+25/08/2015 12:21:12,91,238,Dundee Student Ass,Library,dusa-0075,Payment,�2.09,�0.00,�2.09
+25/08/2015 12:49:44,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,�7.00,�0.00,�7.00
+25/08/2015 13:07:39,91,239,Dundee Student Ass,Spare,dusa-0006,Payment,�3.50,�0.00,�3.50
+25/08/2015 13:08:45,91,239,Dundee Student Ass,Spare,dusa-0006,Payment,�4.00,�0.00,�4.00
