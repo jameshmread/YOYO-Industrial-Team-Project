@@ -72,3 +72,14 @@ $router->group([
     $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
     $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
 });
+
+/**
+ * API ROUTES
+ */
+$router->group([
+    'middleware' => ['auth'],
+    'prefix' => 'charts',
+    'as' => 'charts.'
+], function (Router $router) {
+    $router->get('/barchart', 'ChartController@barchart')->name('barchart');
+});
