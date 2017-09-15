@@ -11,12 +11,12 @@ class UserController extends Controller
     
 	public function index(){
 		$users = User::all();
-		return view('index', compact('users'));
+		return view('userlist', compact('users'));
 	}
 
 	public function show($id){
 		$user = User::find($id);
-		return view('show', compact('user'));
+		return view('edituser', compact('user'));
 	}
 	
 
@@ -29,6 +29,6 @@ $user = User::find($id);
 $user->name = request('name');
 $user->email = request('email');
 $user->save();
-return view('show', compact('user'));
+return view('edituser', compact('user'));
 }
 }
