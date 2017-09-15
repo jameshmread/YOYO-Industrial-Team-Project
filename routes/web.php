@@ -30,6 +30,8 @@ $router->group([
     'as' => 'admin.'
 ], function (Router $router) {
     $router->resource('/users', 'AdminUserController')->except('show');
+    $router->get('/csvupload', 'CSVController@index')->name('uploadIndex');
+    $router->post('/csvupload', 'CSVController@upload')->name('upload');
 });
 
 /**
