@@ -17,9 +17,33 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Password Reset Routes...
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
+/**
+ * GUEST ROUTES
+ */
+$router->group([
+    'middlware' => ['web', 'guest']
+], function (Router $router) {
+    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'Auth\LoginController@login');
+});
+
+/**
+ * AUTH ROUTES
+ */
+$router->group([
+    'middlware' => ['web', 'guest']
+], function (Router $router) {
+    Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+});
 
 /**
  * ADMIN ROUTES
