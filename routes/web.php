@@ -21,6 +21,20 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+/**
+ * ADMIN ROUTES
+ */
+$router->group([
+    'middleware' => ['web', 'auth', 'admin'],
+    'prefix' => 'admin',
+    'as' => 'admin.'
+], function (Router $router) {
+    $router->resource('/users', 'AdminUserController')->except('show');
+});
+
+/**
+ * API ROUTES
+ */
 $router->group([
     'middleware' => ['auth'],
     'prefix' => 'api',
