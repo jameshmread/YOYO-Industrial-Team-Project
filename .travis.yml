@@ -9,11 +9,14 @@ php:
 
 before_script:
   - cp .env.travis .env
-  - mysql -e "create database IF NOT EXISTS hello_world_test;" -uroot;
   - composer self-update
   - composer install --no-interaction --prefer-dist
+  - mysql -e "create database IF NOT EXISTS homestead_test;" -uroot;
   - php artisan key:generate
   - php artisan migrate
+
+script:
+- phpunit
 
 services:
   - mysql
