@@ -7,6 +7,9 @@ php:
   - hhvm
   - nightly
 
+env:
+  - DB=mysql
+
 before_script:
   - cp .env.travis .env
   - if [[ "$DB" == "mysql" ]]; then mysql -e "create database IF NOT EXISTS hello_world_test;" -uroot; fi
