@@ -62,7 +62,6 @@ $router->group([
  * API ROUTES
  */
 $router->group([
-    'middleware' => ['auth'],
     'prefix' => 'api',
     'as' => 'api.'
 ], function (Router $router) {
