@@ -17,7 +17,7 @@ class TransactionBuilder
         foreach ($lines as $currentLine) {
             try {
                 $transaction = $this->extractTransactionFromLine($currentLine);
-                $transactions[$transaction->transaction_hash] = $transaction;
+                $transactions[$transaction->transaction_hash] = $transaction; // What does this line do?
             } catch (\exception $e) { // @todo custom exception
                 continue;
             }
@@ -47,18 +47,17 @@ class TransactionBuilder
         $discountAmount = $this->extractPrice($array[8]);
         $totalAmount = $this->extractPrice($array[9]);
 
-        $transaction = new Transaction(
-            $cashSpent,
-            $customer->id,
-            $date,
-            $discountAmount,
-            $storeId,
-            $totalAmount,
-            $transactionType
-        );
-        // echo '<pre>';
-        // var_dump($cashSpent);
-        // echo '</pre>';
+        $transaction = Transaction::create([
+            'customer_id' => $customer->id,
+            'store_id' => $storeId,
+            'date' => $date,
+            'transaction_type' => $transactionType,
+            'cash_spent' => $cashSpent,
+            'discount_amount' => $discountAmount,
+            'total_amount' => $totalAmount,
+            'transaction_hash' => hash('md5', "$cashSpent$customer->id$date$discountAmount$storeId$totalAmount$transactionType"),
+        ]);
+
         return $transaction;
     }
 
