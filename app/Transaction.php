@@ -21,11 +21,11 @@ class Transaction extends Model
 
     public function customer()
     {
-        $this->hasOne('App\Customer');
+        return $this->hasOne('App\Customer');
     }
 
     public function store()
     {
-        $this->hasOne('App\Store');
+        return $this->hasOne('App\Store');
     }
 }

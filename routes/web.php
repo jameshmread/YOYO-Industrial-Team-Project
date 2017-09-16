@@ -39,9 +39,8 @@ $router->group([
  * AUTH ROUTES
  */
 $router->group([
-    'middlware' => ['web', 'guest']
+    'middlware' => ['web', 'auth']
 ], function (Router $router) {
-    Route::get('logout', 'Auth\LoginController@logout')->name('logout');
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 });
 
@@ -53,8 +52,9 @@ $router->group([
     'prefix' => 'admin',
     'as' => 'admin.'
 ], function (Router $router) {
+    $router->get('/', 'AdminController@index')->name('dashboard');
     $router->resource('/users', 'AdminUserController')->except('show');
-    $router->get('/csvupload', 'CSVController@index')->name('uploadIndex');
+    $router->get('/csvupload', 'CSVController@index')->name('upload.index');
     $router->post('/csvupload', 'CSVController@upload')->name('upload');
 });
 
