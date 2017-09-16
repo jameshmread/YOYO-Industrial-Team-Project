@@ -15,6 +15,8 @@ class CSVController extends Controller
 
     public function upload(Request $request)
     {
+        // TODO AG Add $request validation
+
         $file = $request->file('inputFile');
 
         if ($file->isValid()) {
@@ -30,5 +32,7 @@ class CSVController extends Controller
         } else {
             die;
         }
+
+        return view('csv.csvconfirm');
     }
 }
