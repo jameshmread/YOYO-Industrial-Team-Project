@@ -14,6 +14,6 @@ class Customer extends Model
 
     public function transactions()
     {
-        $this->hasMany('App\Transaction');
+        return $this->hasMany('App\Transaction');
     }
 }
