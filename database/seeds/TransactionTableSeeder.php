@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Database\Seeder;
-class DatabaseSeeder extends Seeder
+class TransactionTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -9,6 +9,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(TransactionTableSeeder::class);
+        $trans = factory(App\Transaction::class, 20)->create();
+
     }
 }
