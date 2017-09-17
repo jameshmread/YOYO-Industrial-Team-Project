@@ -13,14 +13,11 @@
 
 use Illuminate\Routing\Router;
 
+// TODO Clean our ROUTE:: and $routers
+
 Route::get('/', function () {
     return view('welcome');
 });
-
-//user edit
-Route::get('/users', 'UserController@index');
-Route::get('/users/{user}', 'UserController@show');
-Route::post('/users', 'UserController@edit');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -47,6 +44,8 @@ $router->group([
     'middlware' => ['web', 'auth']
 ], function (Router $router) {
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+    $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
+    $router->put('/profile/{user}', 'UserController@update')->name('user.update');
 });
 
 /**

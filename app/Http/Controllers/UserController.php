@@ -8,27 +8,30 @@ use App\User;
 
 class UserController extends Controller
 {
-    
-	public function index(){
-		$users = User::all();
-		return view('userlist', compact('users'));
-	}
+    public function edit($id)
+    {
+        $user = User::find($id);
 
-	public function show($id){
-		$user = User::find($id);
-		return view('edituser', compact('user'));
-	}
-	
+        return view('edituser', compact('user'));
+    }
 
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'alpha',
+            'email' => 'email',
+        ]);
 
-    public function edit(Request $request){
+        if (!empty($request->input('name'))) {
+            $user->name = $request->input('name');
+        }
 
+        if (!empty($request->input('email'))) {
+            $user->email = $request->input('email');
+        }
 
-$id = request('id');
-$user = User::find($id);
-$user->name = request('name');
-$user->email = request('email');
-$user->save();
-return view('edituser', compact('user'));
-}
+        $user->save();
+
+        return redirect('home');
+    }
 }
