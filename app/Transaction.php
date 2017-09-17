@@ -19,12 +19,6 @@ class Transaction extends Model
 
     public $timestamps = false;
 
-<<<<<<< HEAD
-    public function __construct()
-    {}
-
-=======
->>>>>>> master
     public function customer()
     {
         return $this->hasOne('App\Customer');

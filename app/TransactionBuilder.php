@@ -43,11 +43,7 @@ class TransactionBuilder
             $customer->customer_reference = $customerReference;
             $customer->save();
         }
-
-<<<<<<< HEAD
-        // echo '<pre>';
-        // var_dump('yo');
-        // echo '</pre>';
+        
         $transaction->customer_id = $customer->id;
         $transaction->transaction_type = $array[6];
         $transaction->cash_spent = $this->extractPrice($array[7]);
@@ -55,23 +51,6 @@ class TransactionBuilder
         $transaction->total_amount = $this->extractPrice($array[9]);
         $transaction->updateTransactionHash();
 
-=======
-        $transactionType = $array[6];
-        $cashSpent = $this->extractPrice($array[7]);
-        $discountAmount = $this->extractPrice($array[8]);
-        $totalAmount = $this->extractPrice($array[9]);
-
-        $transaction = Transaction::create([
-            'customer_id' => $customer->id,
-            'store_id' => $storeId,
-            'date' => $date,
-            'transaction_type' => $transactionType,
-            'cash_spent' => $cashSpent,
-            'discount_amount' => $discountAmount,
-            'total_amount' => $totalAmount,
-            'transaction_hash' => hash('md5', "$cashSpent$customer->id$date$discountAmount$storeId$totalAmount$transactionType"),
-        ]);
->>>>>>> master
 
         return $transaction;
     }
