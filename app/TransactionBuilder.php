@@ -100,8 +100,8 @@ class TransactionBuilder
     public function extractPrice(string $csvCell): float
     {
         $prices = array();
-        preg_match('/[0-9][.][0-9]{2}/', $csvCell, $prices);
-        if (1 === sizeof($prices)) {
+        preg_match('/\d(\.(\d)?(\d)?)?/', $csvCell, $prices);
+        if (sizeof($prices) > 0) {
             $price = floatval($prices[0]);
             $isPositive = strpos($csvCell, '-') === false;
             if (!$isPositive) {
