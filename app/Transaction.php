@@ -28,4 +28,9 @@ class Transaction extends Model
     {
         return $this->hasOne('App\Store');
     }
+
+    public function updateTransactionHash()
+    {
+        $this->transaction_hash = hash('md5', ''.$this->cash_spent.$this->customer_id.$this->date.$this->discount_amount.$this->store_id.$this->total_amount.$this->transaction_type);        
+    }
 }
