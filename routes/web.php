@@ -17,6 +17,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//user edit
+Route::get('/users', 'UserController@index');
+Route::get('/users/{user}', 'UserController@show');
+Route::post('/users', 'UserController@edit');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 // Password Reset Routes...
