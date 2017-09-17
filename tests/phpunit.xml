@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="bootstrap_tests.php">
+<phpunit bootstrap="bootstrap_tests.php" colors="true">
   <php>
         <ini name="display_errors" value="true"/>
         <var name="DB_DSN" value="mysql:dbname=homestead;host=localhost" />
