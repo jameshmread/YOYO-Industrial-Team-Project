@@ -11,31 +11,32 @@
         },
         created() {
             axios.get('/api/transactions/recent')
-                .then(response =>
-                    this.transactions = response.data
-                );
+                .then(response => {
+                    this.transactions = response.data;
 
-            this.getDates(this.transactions);
-        },
-        mounted() {
-            // Overwriting base render method with actual data.
-            this.renderChart({
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                datasets: [
-                    {
-                        label: 'Recent Transactions',
-                        backgroundColor: '#f87979',
-                        data: [60, 60, 60]
-                    }
-                ]
-            })
+                    this.transactionDates = response.data.map(x => {
+                        return x.date
+                    });
+
+                    this.transactionCosts = response.data.map(x => {
+                        return x.cash_spent
+                    });
+
+                    this.updateChart();
+                });
         },
         methods: {
-            getDates(transactions) {
-                for (transaction in transactions) {
-                    this.transactionDates.push(['hello'])
-
-                }
+            updateChart() {
+                this.renderChart({
+                    labels: this.transactionDates,
+                    datasets: [
+                        {
+                            label: 'Cash Spent',
+                            backgroundColor: 'red',
+                            data: this.transactionCosts,
+                        }
+                    ]
+                }, {responsive: true, maintainAspectRatio: false})
             }
         }
     })
