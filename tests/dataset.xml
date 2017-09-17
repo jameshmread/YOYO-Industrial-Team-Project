@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<dataset>
+    <transactions>
+        <column>id</column>
+        <column>customer_id</column>
+        <column>store_id</column>
+        <column>date</column>
+        <column>transaction_type</column>
+        <column>cash_spent</column>
+        <column>discount_amount</column>
+        <column>total_amount</column>
+        <column>transaction_hash</column>
+    </transactions>
+</dataset>
