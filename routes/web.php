@@ -17,6 +17,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+<<<<<<< HEAD
+Auth::routes();
+
+Route::get('/users', 'UserController@index');
+Route::get('/users/{user}', 'UserController@show')->name('editUser');
+Route::post('/users', 'UserController@edit');
+
+=======
+>>>>>>> origin/master
 Route::get('/home', 'HomeController@index')->name('home');
 
 // Password Reset Routes...
