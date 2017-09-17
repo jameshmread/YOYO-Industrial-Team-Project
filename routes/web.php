@@ -62,6 +62,7 @@ $router->group([
  * API ROUTES
  */
 $router->group([
+    'middleware' => ['cors'],
     'prefix' => 'api',
     'as' => 'api.'
 ], function (Router $router) {
