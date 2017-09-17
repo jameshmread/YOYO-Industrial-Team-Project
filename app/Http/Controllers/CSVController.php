@@ -21,17 +21,7 @@ class CSVController extends Controller
 
         if ($file->isValid()) {
             $tb = new TransactionBuilder;
-            $csv = $tb->createFromFile($file);
-            /**
-             * @todo optimise: calling save on every model is probably
-             * inefficient
-             */
-            foreach ($csv as $currentTransaction) {
-                if (null === Transaction::where('transaction_hash', $currentTransaction->transaction_hash)->first()) {
-                    $currentTransaction->save();
-                }
-            }
-            dd($csv);
+            $tb->copyTransactionsFromCsvToDb($file);
         } else {
             die;
         }

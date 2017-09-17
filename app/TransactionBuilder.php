@@ -25,17 +25,38 @@ class TransactionBuilder
         return $transactions;
     }
 
+    public function copyTransactionsFromCsvToDb(string $filePath)
+    {
+        // if (false === set_time_limit(1000)) {
+        //     throw new \exception; // @todo
+        // }
+        $file_handle = fopen($filePath, 'r');
+        while (!feof($file_handle)) {
+            $line = fgets($file_handle);
+            try {
+                $transaction = $this->extractTransactionFromLine($line);
+                if (!$transaction->wasRecentlyCreated()) {
+                    $transaction->save();
+                }
+            } catch (\exception $e) { // @todo custom exception
+                continue;
+            }
+        }
+        fclose($file_handle);
+    }
+
     public function extractTransactionFromLine(string $line)
     {
         $array = str_getcsv($line);
 
-        $transaction = new Transaction;
+        if (!is_array($array) || sizeof($array) < 10) {
+            throw new \exception; // @todo
+        }
 
-        $transaction->date = $this->extractDate($array[0]);
+        $date = $this->extractDate($array[0]);
         // I assumed the store id in the model and the outlet reference in the
         // model are the same - LM.
-        $transaction->store_id = $array[2];
-
+        $storeId = $array[2];
         $customerReference = $array[5];
         $customer = Customer::where('customer_reference', $customerReference)->first();
         if (null === $customer) {
@@ -43,15 +64,20 @@ class TransactionBuilder
             $customer->customer_reference = $customerReference;
             $customer->save();
         }
-        
-        $transaction->customer_id = $customer->id;
-        $transaction->transaction_type = $array[6];
-        $transaction->cash_spent = $this->extractPrice($array[7]);
-        $transaction->discount_amount = $this->extractPrice($array[8]);
-        $transaction->total_amount = $this->extractPrice($array[9]);
-        $transaction->updateTransactionHash();
-
-
+        $transactionType = $array[6];
+        $cashSpent = $this->extractPrice($array[7]);
+        $discountAmount = $this->extractPrice($array[8]);
+        $totalAmount = $this->extractPrice($array[9]);
+        $transaction = Transaction::firstOrCreate([
+            'customer_id' => $customer->id,
+            'store_id' => $storeId,
+            'date' => $date,
+            'transaction_type' => $transactionType,
+            'cash_spent' => $cashSpent,
+            'discount_amount' => $discountAmount,
+            'total_amount' => $totalAmount,
+            'transaction_hash' => hash('md5', "$cashSpent$customer->id$date$discountAmount$storeId$totalAmount$transactionType"),
+        ]);
         return $transaction;
     }
 
