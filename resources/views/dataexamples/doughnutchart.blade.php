@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <barchart></barchart>
+                <doughnut></doughnut>
             </div>
         </div>
     </div>

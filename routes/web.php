@@ -83,4 +83,5 @@ $router->group([
 ], function (Router $router) {
     $router->get('/barchart', 'ChartController@barchart')->name('barchart');
     $router->get('/linechart', 'ChartController@linechart')->name('linechart');
+    $router->get('/doughnut', 'ChartController@doughnut')->name('doughnut');
 });

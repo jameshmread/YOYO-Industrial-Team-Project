@@ -15,4 +15,9 @@ class ChartController extends Controller
     {
         return view('dataexamples.linechart');
     }
+
+    public function doughnut()
+    {
+        return view('dataexamples.doughnutchart');
+    }
 }
