@@ -10,4 +10,9 @@ class ChartController extends Controller
     {
         return view('dataexamples.barchart');
     }
+
+    public function linechart()
+    {
+        return view('dataexamples.linechart');
+    }
 }

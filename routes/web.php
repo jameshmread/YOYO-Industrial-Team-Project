@@ -82,4 +82,5 @@ $router->group([
     'as' => 'charts.'
 ], function (Router $router) {
     $router->get('/barchart', 'ChartController@barchart')->name('barchart');
+    $router->get('/linechart', 'ChartController@linechart')->name('linechart');
 });
