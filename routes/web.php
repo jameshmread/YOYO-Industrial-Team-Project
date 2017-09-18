@@ -42,6 +42,22 @@ $router->group([
     'middlware' => ['web', 'auth']
 ], function (Router $router) {
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+
+    Route::get('demo', function(){
+        return view('Auth\demo');
+    });
+
+    Route::get('linechart', function(){
+        return view('Auth\transactionchart');
+    });
+
+    Route::get('piechart', function(){
+        return view('Auth\transactionchartPie');
+    });
+
+    Route::get('barchart', function(){
+        return view('Auth\transactionchartBar');
+    });
 });
 
 /**
