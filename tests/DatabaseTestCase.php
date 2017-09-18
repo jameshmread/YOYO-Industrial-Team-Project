@@ -29,6 +29,6 @@ abstract class DatabaseTestCase extends TestCase
 
     public function getDataSet()
     {
-        return $this->createFlatXmlDataSet('dataset.xml');
+        return $this->createFlatXmlDataSet('./dataset.xml');
     }
 }
