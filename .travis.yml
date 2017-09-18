@@ -20,6 +20,7 @@ script:
  - php artisan db:seed --env=testing --no-interaction -vvv
  - phpunit
  - php artisan migrate:rollback --env=testing --no-interaction -vvv
+ - tests/phpunit
 
 services:
   - mysql
