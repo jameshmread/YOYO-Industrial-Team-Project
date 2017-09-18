@@ -16,6 +16,11 @@ window.Vue = require('vue');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('linechart', require('./components/transchart.vue'));
+Vue.component('piechart', require('./components/transchartPie.vue'));
+Vue.component('barchart', require('./components/transchartBar.vue'));
+
+
 
 const app = new Vue({
     el: '#app'
