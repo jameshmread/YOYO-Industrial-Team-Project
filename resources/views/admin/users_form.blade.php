@@ -72,6 +72,25 @@
                         </label>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h3>Rights to view:</h3>
+
+                            <select class="urights form-control" name="rights[]" multiple>
+                                @foreach ($user_rights as $key => $label)
+                                    @if ($key != 'old')
+                                        <option value="{{ Request::old($key, $key) }}"
+                                                {{ $user->$key == true ? 'selected' : '' }}>
+                                            {{ $label }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <br>
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">{{ $page_details['button'] }}</button>
                     </div>
