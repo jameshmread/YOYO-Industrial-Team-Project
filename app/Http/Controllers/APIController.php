@@ -66,7 +66,8 @@ class APIController extends Controller
 
     public function totalByStore(){
 
-        return DB::select('select store_id, SUM(t.total_amount) as total from transactions t group by store_id');
+        return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total from transactions t, stores s where s.id = t.store_id group by t.store_id');
+
 
 
 
