@@ -68,16 +68,14 @@ class APIController extends Controller
     public function userVolumePerStore()
     {
         // Will need a limit on returned transactions
+        // Likely pass in day or set two method for week/month/year
 
-        $trans = Store::all()->map(function ($item) {
+        return Store::all()->map(function ($item) {
             return [
                 'store' => $item['outlet_name'],
                 'customers' => Transaction::where('store_id', '=', $item['outlet_reference'])
                     ->count(),
             ];
         });
-
-
-        return $trans;
     }
 }
