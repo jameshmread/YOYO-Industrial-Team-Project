@@ -26,8 +26,10 @@
                 <option value="20">Premier Shop YoYo</option>
             </select>
 
+
             <h1 style="text-align:center;">Some data</h1>
-            <line-chart></line-chart>
+            <line-chart :chart-data="datacollection"></line-chart>
+            <button @click="fillData()">Randomize</button>
 
         </div>
     </div>
@@ -36,19 +38,42 @@
 <script>
     import LineChart from './linechart.js'
 
-    function store_id() {
-        var e = document.getElementById("StoreDropDown");
-        var value = e.options[e.selectedIndex].value;
-    }
-
-    export default
-    {
-        components:
-            {
-                'line-chart': LineChart
+    export default {
+        components: {
+            LineChart
+        },
+        data () {
+            return {
+                datacollection: null
             }
+        },
+        mounted () {
+            this.fillData()
+        },
+        methods: {
+            fillData () {
+                this.datacollection = {
+                    labels: [this.getRandomInt(), this.getRandomInt()],
+                    datasets: [
+                        {
+                            label: 'Data One',
+                            backgroundColor: '#f87979',
+                            data: [this.getRandomInt(), this.getRandomInt()]
+                        }, {
+                            label: 'Data One',
+                            backgroundColor: '#f87979',
+                            data: [this.getRandomInt(), this.getRandomInt()]
+                        }
+                    ]
+                }
+            },
+            getRandomInt () {
+                return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+            }
+        }
     }
 </script>
+
 
 <style>
     .container {

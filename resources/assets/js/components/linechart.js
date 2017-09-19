@@ -1,50 +1,12 @@
-import {Line} from 'vue-chartjs'
+import { Line, mixins } from 'vue-chartjs'
+const { reactiveProp } = mixins
 
-export default Line.extend(
-    {
-        mounted ()
-        {
-            axios.get('/api/transactions/totalbystore')
-                .then(response=> {
-                    console.log(response.data);
-
-                    this.labels = response.data.map(x => { return x.name});
-
-                    this.rows = response.data.map(x => {return x.total});
-
-                    this.setGraph();
-                });
-        },
-
-        data()
-        {
-            return {
-                rows: [],
-                labels: []
-            }
-        },
+export default Line.extend({
+    mixins: [reactiveProp],
+    props: ['options'],
+    mounted () {
 
 
-
-        methods:
-            {
-                onlyUnique(value, index, self) {
-                    return self.indexOf(value) === index;
-                },
-
-                setGraph()
-                {
-                    this.renderChart({
-                        labels: this.labels,
-                        datasets: [
-                            {
-                                label: 'Transaction',
-                                backgroundColor: 'blue',
-                                data: this.rows,
-                            }
-                        ]
-                    }, {responsive: true, maintainAspectRatio: false})
-                }
-            }
+        this.renderChart(this.chartData, this.options)
     }
-)
+})
