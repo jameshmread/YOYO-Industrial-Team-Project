@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
 {
@@ -61,5 +62,13 @@ class APIController extends Controller
         return Transaction::where('date', '>=', $firstPeriod)
             ->where('date', '<=', $secondPeriod)
             ->get();
+    }
+
+    public function totalByStore(){
+
+        return DB::select('select store_id, SUM(t.total_amount) as total from transactions t group by store_id');
+
+
+
     }
 }
