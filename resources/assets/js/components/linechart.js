@@ -8,7 +8,7 @@ export default Line.extend(
                 .then(response=> {
                     console.log(response.data);
 
-                    this.labels = response.data.map(x => { return x.store_id});
+                    this.labels = response.data.map(x => { return x.name});
 
                     this.rows = response.data.map(x => {return x.total});
 
