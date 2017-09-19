@@ -43,6 +43,8 @@ $router->group([
 $router->group([
     'middlware' => ['web', 'auth']
 ], function (Router $router) {
+
+    $router::get('linechart', function(){ return view('Auth\transactionchart');});
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
@@ -70,6 +72,7 @@ $router->group([
     'prefix' => 'api',
     'as' => 'api.'
 ], function (Router $router) {
+    $router->get('/transactions/totalbystore', 'APIController@totalByStore')->name('storeTotal');
     $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
     $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
