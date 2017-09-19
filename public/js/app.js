@@ -59338,19 +59338,25 @@ module.exports = function spread(callback) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(24)(
-  /* script */
-  __webpack_require__(175),
-  /* template */
-  __webpack_require__(176),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(24)
+/* script */
+var __vue_script__ = __webpack_require__(175)
+/* template */
+var __vue_template__ = __webpack_require__(176)
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\Carsten\\Documents\\GitHub\\YOYO-Industrial-Team-Project\\resources\\assets\\js\\components\\Example.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Example.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] Example.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -59406,24 +59412,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _vm._m(0)
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "container"
-  }, [_c('div', {
-    staticClass: "row"
-  }, [_c('div', {
-    staticClass: "col-md-8 col-md-offset-2"
-  }, [_c('div', {
-    staticClass: "panel panel-default"
-  }, [_c('div', {
-    staticClass: "panel-heading"
-  }, [_vm._v("Example Component")]), _vm._v(" "), _c('div', {
-    staticClass: "panel-body"
-  }, [_vm._v("\n                    I'm an example component!\n                ")])])])])])
-}]}
-module.exports.render._withStripped = true
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+          _c("div", { staticClass: "panel panel-default" }, [
+            _c("div", { staticClass: "panel-heading" }, [
+              _vm._v("Example Component")
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "panel-body" }, [
+              _vm._v(
+                "\n                    I'm an example component!\n                "
+              )
+            ])
+          ])
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -59440,19 +59460,25 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(178)
 }
-var Component = __webpack_require__(24)(
-  /* script */
-  __webpack_require__(183),
-  /* template */
-  __webpack_require__(274),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
+var normalizeComponent = __webpack_require__(24)
+/* script */
+var __vue_script__ = __webpack_require__(183)
+/* template */
+var __vue_template__ = __webpack_require__(274)
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
 )
-Component.options.__file = "C:\\Users\\Carsten\\Documents\\GitHub\\YOYO-Industrial-Team-Project\\resources\\assets\\js\\components\\transchart.vue"
+Component.options.__file = "resources\\assets\\js\\components\\transchart.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] transchart.vue: functional components are not supported with templates, they should use render functions.")}
 
@@ -59857,7 +59883,7 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__linechart_js__ = __webpack_require__(184);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LineChart_js__ = __webpack_require__(284);
 //
 //
 //
@@ -59895,71 +59921,43 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
-
-function store_id() {
-    var e = document.getElementById("StoreDropDown");
-    var value = e.options[e.selectedIndex].value;
-}
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
-        'line-chart': __WEBPACK_IMPORTED_MODULE_0__linechart_js__["a" /* default */]
+        LineChart: __WEBPACK_IMPORTED_MODULE_0__LineChart_js__["a" /* default */]
+    },
+    data: function data() {
+        return {
+            datacollection: null
+        };
+    },
+    mounted: function mounted() {
+        this.fillData();
+    },
+
+    methods: {
+        fillData: function fillData() {
+            this.datacollection = {
+                labels: [this.getRandomInt(), this.getRandomInt()],
+                datasets: [{
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [this.getRandomInt(), this.getRandomInt()]
+                }, {
+                    label: 'Data One',
+                    backgroundColor: '#f87979',
+                    data: [this.getRandomInt(), this.getRandomInt()]
+                }]
+            };
+        },
+        getRandomInt: function getRandomInt() {
+            return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+        }
     }
 });
 
 /***/ }),
-/* 184 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__ = __webpack_require__(185);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__);
-
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["Line"].extend({
-    mounted: function mounted() {
-        var _this = this;
-
-        axios.get('/api/transactions/totalbystore').then(function (response) {
-            console.log(response.data);
-
-            _this.labels = response.data.map(function (x) {
-                return x.name;
-            });
-
-            _this.rows = response.data.map(function (x) {
-                return x.total;
-            });
-
-            _this.setGraph();
-        });
-    },
-    data: function data() {
-        return {
-            rows: [],
-            labels: []
-        };
-    },
-
-
-    methods: {
-        onlyUnique: function onlyUnique(value, index, self) {
-            return self.indexOf(value) === index;
-        },
-        setGraph: function setGraph() {
-            this.renderChart({
-                labels: this.labels,
-                datasets: [{
-                    label: 'Transaction',
-                    backgroundColor: 'blue',
-                    data: this.rows
-                }]
-            }, { responsive: true, maintainAspectRatio: false });
-        }
-    }
-}));
-
-/***/ }),
+/* 184 */,
 /* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -76642,109 +76640,101 @@ module.exports = {"_args":[[{"raw":"vue-chartjs","scope":null,"escapedName":"vue
 /* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "container"
-  }, [_c('div', {
-    staticClass: "Chart"
-  }, [_vm._m(0), _vm._v(" "), _c('h1', {
-    staticStyle: {
-      "text-align": "center"
-    }
-  }, [_vm._v("Some data")]), _vm._v(" "), _c('line-chart')], 1)])
-},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('select', {
-    attrs: {
-      "id": "StoreDropDown",
-      "onChange": "store_id()"
-    }
-  }, [_c('option', {
-    attrs: {
-      "value": "0"
-    }
-  }, [_vm._v("All")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "1"
-    }
-  }, [_vm._v("Library")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "2"
-    }
-  }, [_vm._v("Spare")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "3"
-    }
-  }, [_vm._v("Air Bar")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "4"
-    }
-  }, [_vm._v("Ents")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "5"
-    }
-  }, [_vm._v("Remote Campus Shop")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "6"
-    }
-  }, [_vm._v("Liar Bar")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "7"
-    }
-  }, [_vm._v("Mono")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "8"
-    }
-  }, [_vm._v("Food on Four")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "9"
-    }
-  }, [_vm._v("College Shop")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "10"
-    }
-  }, [_vm._v("Dental Cafe")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "11"
-    }
-  }, [_vm._v("DJCAD Cantina")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "12"
-    }
-  }, [_vm._v("DOJ Catering")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "13"
-    }
-  }, [_vm._v("DUSA The Union: Marketplace")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "14"
-    }
-  }, [_vm._v("DUSA The Union: Online")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "15"
-    }
-  }, [_vm._v("Floor Five")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "16"
-    }
-  }, [_vm._v("Level 2, Reception")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "17"
-    }
-  }, [_vm._v("Ninewells Shop")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "18"
-    }
-  }, [_vm._v("Online DUSA")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "19"
-    }
-  }, [_vm._v("Premier Shop")]), _vm._v(" "), _c('option', {
-    attrs: {
-      "value": "20"
-    }
-  }, [_vm._v("Premier Shop YoYo")])])
-}]}
-module.exports.render._withStripped = true
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c(
+      "div",
+      { staticClass: "Chart" },
+      [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("h1", { staticStyle: { "text-align": "center" } }, [
+          _vm._v("Some data")
+        ]),
+        _vm._v(" "),
+        _c("line-chart", { attrs: { "chart-data": _vm.datacollection } }),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            on: {
+              click: function($event) {
+                _vm.fillData()
+              }
+            }
+          },
+          [_vm._v("Randomize")]
+        )
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "select",
+      { attrs: { id: "StoreDropDown", onChange: "store_id()" } },
+      [
+        _c("option", { attrs: { value: "0" } }, [_vm._v("All")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "1" } }, [_vm._v("Library")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "2" } }, [_vm._v("Spare")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "3" } }, [_vm._v("Air Bar")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "4" } }, [_vm._v("Ents")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "5" } }, [_vm._v("Remote Campus Shop")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "6" } }, [_vm._v("Liar Bar")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "7" } }, [_vm._v("Mono")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "8" } }, [_vm._v("Food on Four")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "9" } }, [_vm._v("College Shop")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "10" } }, [_vm._v("Dental Cafe")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "11" } }, [_vm._v("DJCAD Cantina")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "12" } }, [_vm._v("DOJ Catering")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "13" } }, [
+          _vm._v("DUSA The Union: Marketplace")
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "14" } }, [
+          _vm._v("DUSA The Union: Online")
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "15" } }, [_vm._v("Floor Five")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "16" } }, [
+          _vm._v("Level 2, Reception")
+        ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "17" } }, [_vm._v("Ninewells Shop")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "18" } }, [_vm._v("Online DUSA")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "19" } }, [_vm._v("Premier Shop")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "20" } }, [_vm._v("Premier Shop YoYo")])
+      ]
+    )
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
@@ -76757,6 +76747,35 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 276 */,
+/* 277 */,
+/* 278 */,
+/* 279 */,
+/* 280 */,
+/* 281 */,
+/* 282 */,
+/* 283 */,
+/* 284 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__ = __webpack_require__(185);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__);
+
+var reactiveProp = __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["mixins"].reactiveProp;
+
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["Line"].extend({
+    mixins: [reactiveProp],
+    props: ['options'],
+    mounted: function mounted() {
+        // this.chartData is created in the mixin.
+        // If you want to pass options please create a local options object
+        this.renderChart(this.chartData, this.options);
+    }
+}));
 
 /***/ })
 /******/ ]);
