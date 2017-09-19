@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
+use App\Store;
 use Illuminate\Http\Request;
 use App\Transaction;
 use Carbon\Carbon;
@@ -61,5 +63,21 @@ class APIController extends Controller
         return Transaction::where('date', '>=', $firstPeriod)
             ->where('date', '<=', $secondPeriod)
             ->get();
+    }
+
+    public function userVolumePerStore()
+    {
+        // Will need a limit on returned transactions
+
+        $trans = Store::all()->map(function ($item) {
+            return [
+                'store' => $item['outlet_name'],
+                'customers' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->count(),
+            ];
+        });
+
+
+        return $trans;
     }
 }
