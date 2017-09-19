@@ -62,4 +62,9 @@ class APIController extends Controller
             ->where('date', '<=', $secondPeriod)
             ->get();
     }
+
+    public function totalSales (Request $request) {
+        return Transaction::where('transaction_type', '=', 'Payment')
+            ->get();
+    }
 }
