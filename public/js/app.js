@@ -59868,7 +59868,38 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+
+
+function store_id() {
+    var e = document.getElementById("StoreDropDown");
+    var value = e.options[e.selectedIndex].value;
+}
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
@@ -59893,7 +59924,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log(response.data);
 
             _this.labels = response.data.map(function (x) {
-                return x.store_id;
+                return x.name;
             });
 
             _this.rows = response.data.map(function (x) {
@@ -76616,12 +76647,103 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "container"
   }, [_c('div', {
     staticClass: "Chart"
-  }, [_c('h1', {
+  }, [_vm._m(0), _vm._v(" "), _c('h1', {
     staticStyle: {
       "text-align": "center"
     }
   }, [_vm._v("Some data")]), _vm._v(" "), _c('line-chart')], 1)])
-},staticRenderFns: []}
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('select', {
+    attrs: {
+      "id": "StoreDropDown",
+      "onChange": "store_id()"
+    }
+  }, [_c('option', {
+    attrs: {
+      "value": "0"
+    }
+  }, [_vm._v("All")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "1"
+    }
+  }, [_vm._v("Library")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "2"
+    }
+  }, [_vm._v("Spare")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "3"
+    }
+  }, [_vm._v("Air Bar")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "4"
+    }
+  }, [_vm._v("Ents")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "5"
+    }
+  }, [_vm._v("Remote Campus Shop")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "6"
+    }
+  }, [_vm._v("Liar Bar")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "7"
+    }
+  }, [_vm._v("Mono")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "8"
+    }
+  }, [_vm._v("Food on Four")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "9"
+    }
+  }, [_vm._v("College Shop")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "10"
+    }
+  }, [_vm._v("Dental Cafe")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "11"
+    }
+  }, [_vm._v("DJCAD Cantina")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "12"
+    }
+  }, [_vm._v("DOJ Catering")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "13"
+    }
+  }, [_vm._v("DUSA The Union: Marketplace")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "14"
+    }
+  }, [_vm._v("DUSA The Union: Online")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "15"
+    }
+  }, [_vm._v("Floor Five")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "16"
+    }
+  }, [_vm._v("Level 2, Reception")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "17"
+    }
+  }, [_vm._v("Ninewells Shop")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "18"
+    }
+  }, [_vm._v("Online DUSA")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "19"
+    }
+  }, [_vm._v("Premier Shop")]), _vm._v(" "), _c('option', {
+    attrs: {
+      "value": "20"
+    }
+  }, [_vm._v("Premier Shop YoYo")])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
