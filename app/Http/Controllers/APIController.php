@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
 {
@@ -16,6 +17,7 @@ class APIController extends Controller
             ->get();
 
         return $recentTransactions;
+
     }
 
     private function createListingDate(Request $request)
@@ -63,8 +65,10 @@ class APIController extends Controller
             ->get();
     }
 
-    public function totalSales (Request $request) {
-        return Transaction::where('transaction_type', '=', 'Payment')
+    public function totalSales () {
+        return DB::table('transactions')->join('stores', 'transactions.store_id', '=' ,'stores.id')
+            ->orderBy('store_id', 'asc')
+            ->orderBy('date', 'asc')
             ->get();
     }
 }
