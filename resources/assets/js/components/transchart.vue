@@ -27,8 +27,9 @@
             </select>
 
             <h1 style="text-align:center;">Some data</h1>
-            <pie-chart :chart-data="datacollection"></pie-chart>
-            <button @click="addInfo()">Add</button>
+            <pie-chart :chart-data="datacollection"
+                       :options="{responsive: true, maintainAspectRatio: false}"></pie-chart>
+            <button @click="fillData()">Crys</button>
         </div>
     </div>
 </template>
@@ -40,46 +41,61 @@
         components: {
             PieChart
         },
-        data () {
+        data() {
             return {
-                datacollection: [
 
-                ]
+                datacollection: {
+                    datasets: null,
+                },
+
+                datacollection2: {
+                    labels: [1, 2, 3, 4, 5, 6, 7],
+                    datasets: [
+                        {
+                            label: 'Stuff',
+                            fillColor: "rgba(220,220,220,0.2)",
+                            strokeColor: "rgba(220,220,220,1)",
+                            pointColor: "rgba(220,220,220,1)",
+                            pointStrokeColor: "#fff",
+                            data: [65, 59, 80, 81, 56, 55, 40]
+                        },
+                        {
+                            label: 'Stuff2',
+                            fillColor: "rgba(151,187,205,0.2)",
+                            strokeColor: "rgba(151,187,205,1)",
+                            pointColor: "rgba(151,187,205,1)",
+                            pointStrokeColor: "#fff",
+                            data: [28, 48, 40, 19, 86, 27, 90]
+                        }
+                    ]
+                }
             }
         },
-        mounted () {
-            this.addInfo()
+
+            created() {
+            this.fillData()
         },
         methods: {
-            addInfo () {
+            fillData() {
 
-                var storeData = [];
-                this.datacollection['labels'] = [];
-                this.datacollection['datasets'] = [];
-
-                axios.get('/api/transactions/totalbystore').then(response =>
-                {
+                axios.get('/api/transactions/totalbystore').then(response => {
                     console.log(response);
 
-
-                    for(var i = 0; i < response.data.length; i++)
-                    {
-                        storeData =
+                    for (var i = 0; i < response.data.length; i++) {
+                        this.datacollection['datasets'].push(
                             {
                                 label: response.data[i].name,
-                                backgroundColor: 'red',
-                                data: response.data[i].total,
-                            };
-                        this.datacollection['datasets'].push(storeData);
-
+                                fillColor: "rgba(151,187,205,0.2)",
+                                strokeColor: "rgba(151,187,205,1)",
+                                pointColor: "rgba(151,187,205,1)",
+                                pointStrokeColor: "#fff",
+                                data: [response.data[i].total]
+                            });
                     }
 
-                    this.datacollection['labels'].push('1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1');
-
-
                     console.log(this.datacollection);
-                })
-
+                    
+                });
             },
         }
     }
@@ -90,6 +106,7 @@
         max-width: 800px;
         margin: 0 auto;
     }
+
     h1 {
         font-family: 'Helvetica', Arial;
         color: #464646;
@@ -99,6 +116,7 @@
         font-size: 28px;
         margin-top: 0;
     }
+
     .Chart {
         padding: 20px;
         box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, .4);
