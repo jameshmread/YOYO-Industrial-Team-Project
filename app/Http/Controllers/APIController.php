@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Transaction;
 use App\Store;
 use Carbon\Carbon;
+use function PHPSTORM_META\map;
 
 class APIController extends Controller
 {
@@ -77,21 +78,29 @@ class APIController extends Controller
 
     public function spendingPath()
     {
+        $transactions = null;
 
-        return Store::all()
-            ->map(function ($item) {
+        $transactions = Store::all()
+            ->map(function ($item) use ($transactions) {
                 $store = null;
                 $habit = null;
 
-                if ($transactions = Transaction::where('store_id', '=', $item['outlet_reference'])
+                if (Transaction::where('store_id', '=', $item['outlet_reference'])
                         ->count() > 2) {
-                    $user_totals = null;
 
-                    User::all()
-                        ->map(function ($item) use ($transactions) {
+                    $transactions = Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->get();
 
-                        });
+                    return $transactions;
                 }
             });
+
+        $users = null;
+
+        $users = User::all()
+            ->map(function ($item) use ($users) {
+
+            });
+
     }
 }
