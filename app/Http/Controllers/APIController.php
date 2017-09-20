@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Customer;
+use App\Store;
 use Illuminate\Http\Request;
 use App\Transaction;
 use Carbon\Carbon;
@@ -19,8 +21,8 @@ class APIController extends Controller
             ->get();
 
         return response()
-                ->json($recentTransactions)
-                ->header(self::CORS_KEY, self::CORS_VALUE);
+            ->json($recentTransactions)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
     private function createListingDate(Request $request)
@@ -55,7 +57,7 @@ class APIController extends Controller
         //Format will follow YYYY/MM/DD if available
         $transactionArray = $this->retrieveListingByDate($this->createListingDate($request));
         return response()->json($transactionArray)
-                ->header(self::CORS_KEY, self::CORS_VALUE);
+            ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
     public function periodToPeriod(Request $request)
@@ -69,7 +71,25 @@ class APIController extends Controller
             ->where('date', '<=', $secondPeriod)
             ->get();
         return response()
-                ->json($transactionArray)
-                ->header(self::CORS_KEY, self::CORS_VALUE);
+            ->json($transactionArray)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+    public function userVolumePerStore()
+    {
+        // Will need a limit on returned transactions
+        // Likely pass in day or set two method for week/month/year
+
+        $userVolumeArray = Store::all()->map(function ($item) {
+            return [
+                'store' => $item['outlet_name'],
+                'customers' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->count(),
+            ];
+        });
+
+        return response()
+            ->json($userVolumeArray)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 }
