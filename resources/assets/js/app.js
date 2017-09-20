@@ -16,7 +16,6 @@ window.Vue = require('vue');
  */
 
 Vue.component('example', require('./components/Example.vue'));
-Vue.component('linechart', require('./components/transchart.vue'));
 
 
 const app = new Vue({
