@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Transaction;
+use App\Store;
 use Carbon\Carbon;
 
 class APIController extends Controller
@@ -19,8 +21,8 @@ class APIController extends Controller
             ->get();
 
         return response()
-                ->json($recentTransactions)
-                ->header(self::CORS_KEY, self::CORS_VALUE);
+            ->json($recentTransactions)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
     private function createListingDate(Request $request)
@@ -55,7 +57,7 @@ class APIController extends Controller
         //Format will follow YYYY/MM/DD if available
         $transactionArray = $this->retrieveListingByDate($this->createListingDate($request));
         return response()->json($transactionArray)
-                ->header(self::CORS_KEY, self::CORS_VALUE);
+            ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
     public function periodToPeriod(Request $request)
@@ -69,7 +71,27 @@ class APIController extends Controller
             ->where('date', '<=', $secondPeriod)
             ->get();
         return response()
-                ->json($transactionArray)
-                ->header(self::CORS_KEY, self::CORS_VALUE);
+            ->json($transactionArray)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+    public function spendingPath()
+    {
+
+        return Store::all()
+            ->map(function ($item) {
+                $store = null;
+                $habit = null;
+
+                if ($transactions = Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->count() > 2) {
+                    $user_totals = null;
+
+                    User::all()
+                        ->map(function ($item) use ($transactions) {
+
+                        });
+                }
+            });
     }
 }

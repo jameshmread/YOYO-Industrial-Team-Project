@@ -26,6 +26,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $router->group([
     'as' => 'api.'
 ], function (Router $router) {
+    $router->get('/transactions/users/spendingpath', 'APIController@spendingPath')->name('user.spendingpath');
     $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
     $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
