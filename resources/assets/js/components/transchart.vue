@@ -1,7 +1,6 @@
 <template>
     <div class="container">
         <div class="Chart">
-
             <select id="StoreDropDown" onChange="store_id()">
                 <option value="0">All</option>
                 <option value="1">Library</option>
@@ -27,76 +26,122 @@
             </select>
 
             <h1 style="text-align:center;">Some data</h1>
-            <pie-chart :chart-data="datacollection"
-                       :options="{responsive: true, maintainAspectRatio: false}"></pie-chart>
-            <button @click="fillData()">Crys</button>
+            <Chart :chart-data="datacollection" :options="options"></Chart>
+            <button @click="getData()">Get</button>
+            <button @click="fillData()">Fill</button>
         </div>
     </div>
 </template>
 
 <script>
-    import PieChart from './piechart.js'
+    import Chart from './linechart'
 
     export default {
         components: {
-            PieChart
+            'Chart' : Chart
         },
         data() {
             return {
 
-                datacollection: {
-                    datasets: null,
-                },
+                colours : ['rgba(255,0,0,0.25)',
+                    'rgba(0,255,0, 0.25)',
+                    'rgba(0,0,255, 0.25)',
+                    ],
 
-                datacollection2: {
-                    labels: [1, 2, 3, 4, 5, 6, 7],
+                datacollection: {
+                    labels: [],
                     datasets: [
                         {
-                            label: 'Stuff',
-                            fillColor: "rgba(220,220,220,0.2)",
-                            strokeColor: "rgba(220,220,220,1)",
-                            pointColor: "rgba(220,220,220,1)",
-                            pointStrokeColor: "#fff",
-                            data: [65, 59, 80, 81, 56, 55, 40]
-                        },
-                        {
-                            label: 'Stuff2',
-                            fillColor: "rgba(151,187,205,0.2)",
-                            strokeColor: "rgba(151,187,205,1)",
-                            pointColor: "rgba(151,187,205,1)",
-                            pointStrokeColor: "#fff",
-                            data: [28, 48, 40, 19, 86, 27, 90]
+                            label: null,
+                            data:[]
                         }
                     ]
-                }
+                },
+
+                options : {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Stores'
+                            }
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Total Amount'
+                            }
+                        }]
+                    }
+                },
+
+                dataLabels:[],
+                dataValues: []
             }
         },
 
-            created() {
-            this.fillData()
+        mounted()
+        {
+            this.getData();
+            this.fillData();
         },
+
         methods: {
-            fillData() {
+            getData() {
 
                 axios.get('/api/transactions/totalbystore').then(response => {
                     console.log(response);
 
-                    for (var i = 0; i < response.data.length; i++) {
-                        this.datacollection['datasets'].push(
-                            {
-                                label: response.data[i].name,
-                                fillColor: "rgba(151,187,205,0.2)",
-                                strokeColor: "rgba(151,187,205,1)",
-                                pointColor: "rgba(151,187,205,1)",
-                                pointStrokeColor: "#fff",
-                                data: [response.data[i].total]
-                            });
-                    }
+                    this.dataLabels = response.data.map(x => x.name);
+                    console.log(this.dataLabels);
+                    this.dataValues = response.data.map(x => x.total);
+                    console.log(this.dataValues);
 
-                    console.log(this.datacollection);
-                    
                 });
             },
+
+            getRandomColor() {
+                var letters = '0123456789ABCDEF'.split('');
+                var color = '#';
+                for (var i = 0; i < 6; i++ ) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            },
+
+            randomNumber()
+            {
+                var number = Math.floor(Math.random() * 1000);
+                console.log(number);
+                return number;
+            },
+
+            fillData()
+            {
+
+                var datasetValue = [];
+
+                for(var i =0; i < this.dataValues.length; i++)
+                {
+                    datasetValue[i] =
+                        {
+                            label: this.dataLabels[i],
+                            borderColor: this.colours[i],
+                            backgroundColor: 'rgba(0,0,0,0)',
+                            data: [this.randomNumber(), this.randomNumber(), this.randomNumber()],
+                            lineTension: 1
+                        };
+                }
+
+                this.datacollection =
+                    {
+                        labels: ['One', 'Two', '3'],
+                        datasets : datasetValue
+                    }
+
+            }
         }
     }
 </script>
