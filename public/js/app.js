@@ -59883,7 +59883,7 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LineChart_js__ = __webpack_require__(284);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__piechart_js__ = __webpack_require__(184);
 //
 //
 //
@@ -59924,40 +59924,67 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
-        LineChart: __WEBPACK_IMPORTED_MODULE_0__LineChart_js__["a" /* default */]
+        PieChart: __WEBPACK_IMPORTED_MODULE_0__piechart_js__["a" /* default */]
     },
     data: function data() {
         return {
-            datacollection: null
+            datacollection: []
         };
     },
     mounted: function mounted() {
-        this.fillData();
+        this.addInfo();
     },
 
     methods: {
-        fillData: function fillData() {
-            this.datacollection = {
-                labels: [this.getRandomInt(), this.getRandomInt()],
-                datasets: [{
-                    label: 'Data One',
-                    backgroundColor: '#f87979',
-                    data: [this.getRandomInt(), this.getRandomInt()]
-                }, {
-                    label: 'Data One',
-                    backgroundColor: '#f87979',
-                    data: [this.getRandomInt(), this.getRandomInt()]
-                }]
-            };
-        },
-        getRandomInt: function getRandomInt() {
-            return Math.floor(Math.random() * (50 - 5 + 1)) + 5;
+        addInfo: function addInfo() {
+            var _this = this;
+
+            var storeData = [];
+            this.datacollection['labels'] = [];
+            this.datacollection['datasets'] = [];
+
+            axios.get('/api/transactions/totalbystore').then(function (response) {
+                console.log(response);
+
+                for (var i = 0; i < response.data.length; i++) {
+                    storeData = {
+                        label: response.data[i].name,
+                        backgroundColor: 'red',
+                        data: response.data[i].total
+                    };
+                    _this.datacollection['datasets'].push(storeData);
+                }
+
+                _this.datacollection['labels'].push('1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1');
+
+                console.log(_this.datacollection);
+            });
         }
     }
 });
 
 /***/ }),
-/* 184 */,
+/* 184 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__ = __webpack_require__(185);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__);
+
+var reactiveProp = __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["mixins"].reactiveProp;
+
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["Pie"].extend({
+    mixins: [reactiveProp],
+    props: ['options'],
+    mounted: function mounted() {
+        // this.chartData is created in the mixin.
+        // If you want to pass options please create a local options object
+        this.renderChart(this.chartData, this.options);
+    }
+}));
+
+/***/ }),
 /* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -76655,18 +76682,18 @@ var render = function() {
           _vm._v("Some data")
         ]),
         _vm._v(" "),
-        _c("line-chart", { attrs: { "chart-data": _vm.datacollection } }),
+        _c("pie-chart", { attrs: { "chart-data": _vm.datacollection } }),
         _vm._v(" "),
         _c(
           "button",
           {
             on: {
               click: function($event) {
-                _vm.fillData()
+                _vm.addInfo()
               }
             }
           },
-          [_vm._v("Randomize")]
+          [_vm._v("Add")]
         )
       ],
       1
@@ -76747,35 +76774,6 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 276 */,
-/* 277 */,
-/* 278 */,
-/* 279 */,
-/* 280 */,
-/* 281 */,
-/* 282 */,
-/* 283 */,
-/* 284 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__ = __webpack_require__(185);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_chartjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__);
-
-var reactiveProp = __WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["mixins"].reactiveProp;
-
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0_vue_chartjs__["Line"].extend({
-    mixins: [reactiveProp],
-    props: ['options'],
-    mounted: function mounted() {
-        // this.chartData is created in the mixin.
-        // If you want to pass options please create a local options object
-        this.renderChart(this.chartData, this.options);
-    }
-}));
 
 /***/ })
 /******/ ]);

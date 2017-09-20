@@ -27,47 +27,60 @@
             </select>
 
             <h1 style="text-align:center;">Some data</h1>
-            <line-chart :chart-data="datacollection"></line-chart>
-            <button @click="fillData()">Randomize</button>
+            <pie-chart :chart-data="datacollection"></pie-chart>
+            <button @click="addInfo()">Add</button>
         </div>
     </div>
 </template>
 
 <script>
-    import LineChart from './LineChart.js'
+    import PieChart from './piechart.js'
 
     export default {
         components: {
-            LineChart
+            PieChart
         },
         data () {
             return {
-                datacollection: null
+                datacollection: [
+
+                ]
             }
         },
         mounted () {
-            this.fillData()
+            this.addInfo()
         },
         methods: {
-            fillData () {
-                this.datacollection = {
-                    labels: [this.getRandomInt(), this.getRandomInt()],
-                    datasets: [
-                        {
-                            label: 'Data One',
-                            backgroundColor: '#f87979',
-                            data: [this.getRandomInt(), this.getRandomInt()]
-                        }, {
-                            label: 'Data One',
-                            backgroundColor: '#f87979',
-                            data: [this.getRandomInt(), this.getRandomInt()]
-                        }
-                    ]
-                }
+            addInfo () {
+
+                var storeData = [];
+                this.datacollection['labels'] = [];
+                this.datacollection['datasets'] = [];
+
+                axios.get('/api/transactions/totalbystore').then(response =>
+                {
+                    console.log(response);
+
+
+                    for(var i = 0; i < response.data.length; i++)
+                    {
+                        storeData =
+                            {
+                                label: response.data[i].name,
+                                backgroundColor: 'red',
+                                data: response.data[i].total,
+                            };
+                        this.datacollection['datasets'].push(storeData);
+
+                    }
+
+                    this.datacollection['labels'].push('1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1','1');
+
+
+                    console.log(this.datacollection);
+                })
+
             },
-            getRandomInt () {
-                return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-            }
         }
     }
 </script>

@@ -1,7 +1,7 @@
-import { Line, mixins } from 'vue-chartjs'
+import { Pie, mixins } from 'vue-chartjs'
 const { reactiveProp } = mixins
 
-export default Line.extend({
+export default Pie.extend({
     mixins: [reactiveProp],
     props: ['options'],
     mounted () {
