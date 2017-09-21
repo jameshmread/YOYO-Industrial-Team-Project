@@ -101,21 +101,6 @@ class APIController extends Controller
 
     public function userSpendingPath()
     {
-        $transactions = null;
-
-        $transactions = Store::all()
-            ->map(function ($item) use ($transactions) {
-
-                if (Transaction::where('store_id', '=', $item['outlet_reference'])
-                        ->count() > 2) {
-                    $transactions = Transaction::where('store_id', '=', $item['outlet_reference'])
-                        ->get();
-                    
-                    return $transactions;
-                }
-            });
-
-        dd($transactions);
 
     }
 }

@@ -16,11 +16,11 @@
                     this.allData = response.data;
 
                     this.customers = response.data.map(x => {
-                        return x.customers
+                        return x.average_transaction_value
                     });
 
                     this.stores = response.data.map(x => {
-                        return x.store
+                        return x.store_id
                     });
 
                     this.updateChart();

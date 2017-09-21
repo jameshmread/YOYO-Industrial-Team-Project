@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="container">
-        <h1>User Volume per Store</h1>
+        <h1>User Spending Path</h1>
         <div class="row">
             <div class="col-md-6">
                 <userspendingpathbarchart></userspendingpathbarchart>
