@@ -32,4 +32,5 @@ $router->group([
     $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
     $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
     $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
+    $router->get('/transactions/{name}/{period1}/{period2}', 'APIController@storesByTime')->name('storeTime');
 });
