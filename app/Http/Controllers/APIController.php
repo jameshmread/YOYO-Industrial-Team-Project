@@ -102,4 +102,19 @@ class APIController extends Controller
             ->json($totalSales)
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
+
+    public function averageSalesPerStore () {
+        $averages = Store::all()->map(function ($item) {
+            return [
+                'store_id' => $item['id'],
+                'average_transaction value' => Transaction::where('store_id', '=',
+                        $item['id'])
+                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['id'])
+                        ->count()
+            ];
+        });
+        return response()
+            ->json($averages->all())
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
 }
