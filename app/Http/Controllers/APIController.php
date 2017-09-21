@@ -108,8 +108,7 @@ class APIController extends Controller
         $averages = Store::all()->map(function ($item) {
             return [
                 'store_id' => $item['id'],
-                'average_transaction value' => Transaction::where('store_id', '=',
-                        $item['id'])
+                'average_transaction_value' => Transaction::where('store_id', '=', $item['id'])
                         ->sum('total_amount') / Transaction::where('store_id', '=', $item['id'])
                         ->count()
             ];
