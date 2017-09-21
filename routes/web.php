@@ -43,9 +43,13 @@ $router->group([
 $router->group([
     'middlware' => ['web', 'auth']
 ], function (Router $router) {
+<<<<<<< HEAD
 
     $router->get('/stores', function(){ return view('Auth\transactionchart');});
     $router->get('logout', 'Auth\LoginController@logout')->name('logout');
+=======
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+>>>>>>> master
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
     $router->get('/data/users/volumeperstore/{type}', 'DataController@userVolumePerStore')->name('user.volumeperstore');
@@ -63,4 +67,8 @@ $router->group([
     $router->resource('/users', 'AdminUserController')->except('show');
     $router->get('/csvupload', 'CSVController@index')->name('upload.index');
     $router->post('/csvupload', 'CSVController@upload')->name('upload');
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> master

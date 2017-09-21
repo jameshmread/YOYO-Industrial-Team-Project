@@ -15,8 +15,6 @@ window.Vue = require('vue');
  */
 
 Vue.component('example', require('./components/Example.vue'));
-Vue.component('linechart', require('./components/transchart.vue'));
-
 
 Vue.component('uservolumeperstorebarchart', require('./components/UserVolumePerStoreBarchart.vue'));
 Vue.component('uservolumeperstorelinechart', require('./components/UserVolumePerStoreLinechart.vue'));
