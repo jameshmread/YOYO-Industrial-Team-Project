@@ -19,6 +19,9 @@ Vue.component('example', require('./components/Example.vue'));
 Vue.component('uservolumeperstorebarchart', require('./components/UserVolumePerStoreBarchart.vue'));
 Vue.component('uservolumeperstorelinechart', require('./components/UserVolumePerStoreLinechart.vue'));
 Vue.component('uservolumeperstorepiechart', require('./components/UserVolumePerStorePiechart.vue'));
+Vue.component('userspendingpathbarchart', require('./components/UserSpendingPathBarchart.vue'));
+Vue.component('userspendingpathlinechart', require('./components/UserSpendingPathLinechart.vue'));
+Vue.component('userspendingpathpiechart', require('./components/UserSpendingPathPiechart.vue'));
 
 const app = new Vue({
     el: '#app'
