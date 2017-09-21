@@ -20,7 +20,6 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/test/{name}/{period1}/{period2}', 'APIController@storesByTime')->name('storeTime');
 
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -45,7 +44,7 @@ $router->group([
     'middlware' => ['web', 'auth']
 ], function (Router $router) {
 
-    $router::get('linechart', function(){ return view('Auth\transactionchart');});
+    $router::get('/stores', function(){ return view('Auth\transactionchart');});
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
@@ -79,4 +78,6 @@ $router->group([
     $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
     $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
     $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
+    $router->get('/test/{name}/{period1}/{period2}', 'APIController@storesByTime')->name('storeTime');
 });
+
