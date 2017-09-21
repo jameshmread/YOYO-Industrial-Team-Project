@@ -94,18 +94,12 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-<<<<<<< HEAD
-    public function totalByStore(){
-
-        return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total from transactions t, stores s where s.id = t.store_id group by t.store_id');
-
-    }
-
-    public function storesByTime(Request $request){
+    public function storesByTime(Request $request)
+    {
         $name = $request->name;
         $name = str_replace("-", " ", $name);
 
-        
+
         return DB::table('transactions')
             ->join('stores', 'transactions.store_id', '=', 'stores.id')
             ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount')
@@ -113,10 +107,5 @@ class APIController extends Controller
             ->where('date', '>=', $request->period1)
             ->where('date', '<=', $request->period2)
             ->get();
-=======
-    public function totalByStore()
-    {
-        return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
->>>>>>> master
     }
 }
