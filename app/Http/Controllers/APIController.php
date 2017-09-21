@@ -64,4 +64,12 @@ class APIController extends Controller
             ->get();
     }
 
+    public function totalByStore(){
+
+        return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
+
+
+
+
+    }
 }
