@@ -43,8 +43,6 @@ $router->group([
 $router->group([
     'middlware' => ['web', 'auth']
 ], function (Router $router) {
-
-    $router::get('linechart', function(){ return view('Auth\transactionchart');});
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
@@ -64,22 +62,3 @@ $router->group([
     $router->get('/csvupload', 'CSVController@index')->name('upload.index');
     $router->post('/csvupload', 'CSVController@upload')->name('upload');
 });
-<<<<<<< HEAD
-
-/**
- * API ROUTES
- */
-$router->group([
-    'middleware' => ['auth'],
-    'prefix' => 'api',
-    'as' => 'api.'
-], function (Router $router) {
-    $router->get('/transactions/totalbystore', 'APIController@totalByStore')->name('storeTotal');
-    $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
-    $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
-    $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
-    $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
-    $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
-});
-=======
->>>>>>> master
