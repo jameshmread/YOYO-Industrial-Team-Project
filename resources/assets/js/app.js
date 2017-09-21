@@ -20,6 +20,8 @@ Vue.component('uservolumeperstorebarchart', require('./components/UserVolumePerS
 Vue.component('uservolumeperstorelinechart', require('./components/UserVolumePerStoreLinechart.vue'));
 Vue.component('uservolumeperstorepiechart', require('./components/UserVolumePerStorePiechart.vue'));
 
+Vue.component('store', require('./components/transchart.vue'));
+
 const app = new Vue({
     el: '#app'
 });
