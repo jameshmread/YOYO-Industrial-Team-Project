@@ -20,6 +20,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/test/{name}/{period1}/{period2}', 'APIController@storesByTime')->name('storeTime');
 
 // Password Reset Routes...
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -31,7 +32,7 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
  * GUEST ROUTES
  */
 $router->group([
-    'middlware' => ['web', 'guest']
+    'middleware' => ['web', 'guest']
 ], function (Router $router) {
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
     Route::post('login', 'Auth\LoginController@login');
