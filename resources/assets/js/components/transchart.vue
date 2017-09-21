@@ -8,15 +8,13 @@
                         <option v-for="item in choiceData" :value="item">{{item}}</option>
                     </select>
                 </div>
-
+                <button v-on:click="fillData">Greet</button>
             </div>
         </div>
 
         <div class="Chart">
             <h1 style="text-align:center;">Some data</h1>
             <Chart :chart-data="datacollection" :options="options"></Chart>
-            <button @click="getData()">Get</button>
-            <button @click="fillData()">Fill</button>
         </div>
     </div>
 </template>
@@ -31,8 +29,8 @@
         data() {
             return {
 
-                selected: [],
-                choiceData: ['Food On Four', 'Library', 'Others'],
+                selected: ['Library', 'Spare'],
+                choiceData: ['Library', 'Spare'],
 
                 colours: ['rgba(255,0,0,0.25)',
                     'rgba(0,255,0, 0.25)',
@@ -63,7 +61,7 @@
                         xAxes: [{
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Stores'
+                                labelString: 'Date'
                             }
                         }],
                         yAxes: [{
@@ -75,8 +73,17 @@
                     }
                 },
 
-                dataLabels: [],
-                dataValues: []
+                dataNames:
+                [
+                ],
+
+                dataLabels: [
+                ],
+                dataValues: [
+                ],
+
+                dataColours: [
+                ]
             }
         },
 
@@ -88,17 +95,46 @@
 
             getStores()
             {
-                this.choiceData = ['1', '2', '3'];
+                for(var i = 0; i< this.selected.length; i++) {
+
+                    var address = ('/api/transactions/store/' + this.selected[i] + '/' + '2017-09-01' + '/' + '2017-09-30');
+                    axios.get(address).then(response=>
+                    {
+
+                     this.dataNames.push(response.data.map(x=>{return x.outlet_name}));
+                     this.dataValues.push(response.data.map(x=>{return x.total_amount}));
+                     this.dataLabels.push(response.data.map(x=>{return x.date}));
+                     this.dataColours.push(response.data.map(x=>{return x.chart_colour}));
+
+                    });
+                }
             },
 
-            getRandomColor() {
-                var letters = '0123456789ABCDEF'.split('');
-                var color = '#';
-                for (var i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
+            fillData()
+            {
+                var datasetValue = [];
+
+                for(var i =0; i < this.selected.length; i++)
+                {
+                    datasetValue[i] =
+                        {
+                            label: this.dataNames[i][0],
+                            borderColor: this.dataColours[i][0],
+                            backgroundColor: 'rgba(0,0,0,0)',
+                            data: this.dataValues[i]
+                        };
+
+                    console.log(datasetValue[i]);
                 }
-                return color;
+
+                this.datacollection =
+                    {
+                        labels : this.dataLabels[0],
+                        datasets : datasetValue
+                    }
+
             }
+
         }
     }
 </script>
