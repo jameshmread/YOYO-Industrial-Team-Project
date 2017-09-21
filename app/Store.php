@@ -13,6 +13,8 @@ class Store extends Model
         'outlet_name',
     ];
 
+    public $timestamps = false;
+
     public function transactions()
     {
         return $this->hasMany('App\Transaction');
