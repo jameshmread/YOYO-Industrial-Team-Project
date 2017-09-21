@@ -98,4 +98,24 @@ class APIController extends Controller
     {
         return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
     }
+
+    public function userSpendingPath()
+    {
+        $transactions = null;
+
+        $transactions = Store::all()
+            ->map(function ($item) use ($transactions) {
+
+                if (Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->count() > 2) {
+                    $transactions = Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->get();
+                    
+                    return $transactions;
+                }
+            });
+
+        dd($transactions);
+
+    }
 }

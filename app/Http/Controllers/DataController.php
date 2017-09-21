@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 
 class DataController extends Controller
 {
-    public function userVolumePerStore(Request $request, User $user)
+    // TODO Add middleware __construct to check if access to this stores data?
+
+    public function userVolumePerStore()
     {
-        // User will be used later to determine access
-        return view('charts.uservolumeperstore_' . $request->type);
+        return view('charts.uservolumeperstore.uservolume');
+    }
+
+    public function userSpendingPath()
+    {
+        return view('charts.userspendingpath.spendingpath');
     }
 }
