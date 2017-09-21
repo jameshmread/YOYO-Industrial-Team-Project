@@ -48,6 +48,7 @@ $router->group([
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
+    $router->get('/data/users/volumeperstore/{type}', 'DataController@userVolumePerStore')->name('user.volumeperstore');
 });
 
 /**
@@ -63,6 +64,7 @@ $router->group([
     $router->get('/csvupload', 'CSVController@index')->name('upload.index');
     $router->post('/csvupload', 'CSVController@upload')->name('upload');
 });
+<<<<<<< HEAD
 
 /**
  * API ROUTES
@@ -81,3 +83,5 @@ $router->group([
     $router->get('/test/{name}/{period1}/{period2}', 'APIController@storesByTime')->name('storeTime');
 });
 
+=======
+>>>>>>> master
