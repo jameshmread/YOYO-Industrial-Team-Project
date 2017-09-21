@@ -9,6 +9,33 @@ use App\Http\Requests\AdminUserRequest;
 class AdminUserController extends Controller
 {
     /**
+     * array used to hole all possible roles a user may have
+     * avoids generating on the fly
+     *
+     * @var array
+     */
+    protected static $user_rights = [
+        'is_air_bar_staff' => 'Air Bar',
+        'is_college_shop_staff' => 'College Shop',
+        'is_dental_cafe_staff' => 'Dental Cafe',
+        'is_djcad_cantina_staff' => 'DJAD Cantina',
+        'is_doj_catering_staff' => 'DOJ Catering',
+        'is_dusa_marketplace_staff' => 'DUSA Marketplace',
+        'is_dusa_union_online_staff' => 'DUSA Online',
+        'is_dusa_ents_staff' => 'DUSA Entrance',
+        'is_floor_five_staff' => 'Floor Five',
+        'is_food_on_four_staff' => 'Food on Four',
+        'is_level2_reception_staff' => 'Level 2 Reception',
+        'is_liar_bar_staff' => 'Liar Bar',
+        'is_library_staff' => 'Library',
+        'is_mono_staff' => 'Mono',
+        'is_ninewells_shop_staff' => 'Ninewells Shop',
+        'is_prem_shop_staff' => 'Premier Shop',
+        'is_remote_campus_shop_staff' => 'Remote Campus',
+        'is_spare_staff' => 'Spare Shop',
+    ];
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -28,6 +55,7 @@ class AdminUserController extends Controller
     public function create()
     {
         $user = new User();
+        $user_rights = self::$user_rights;
 
         $page_details = [
             'title' => 'Create New User',
@@ -37,7 +65,7 @@ class AdminUserController extends Controller
             'button' => 'Create User'
         ];
 
-        return view('admin.users_form', compact('user', 'page_details'));
+        return view('admin.users_form', compact('user', 'page_details', 'user_rights'));
     }
 
     /**
@@ -61,6 +89,7 @@ class AdminUserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
+        $user_rights = self::$user_rights;
 
         $page_details = [
             'title' => 'Edit User',
@@ -70,7 +99,7 @@ class AdminUserController extends Controller
             'button' => 'Update User'
         ];
 
-        return view('admin.users_form', compact('user', 'page_details'));
+        return view('admin.users_form', compact('user', 'page_details', 'user_rights'));
     }
 
     /**
@@ -82,6 +111,11 @@ class AdminUserController extends Controller
      */
     public function update(AdminUserRequest $request, User $user)
     {
+        // Iterates through the main user-rights properties and assigns them a default value of 0 or 1
+        collect(self::$user_rights)->each(function ($value, $key) use ($user, $request) {
+            $user->$key = in_array($key, $request->input('rights', [])) ? 1 : 0;
+        });
+
         $tmpUser = User::find($user->id);
 
         $user->fill($request->all());
