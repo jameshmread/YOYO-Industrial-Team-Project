@@ -103,7 +103,8 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function averageSalesPerStore () {
+    public function averageSalesPerStore ()
+    {
         $averages = Store::all()->map(function ($item) {
             return [
                 'store_id' => $item['id'],
@@ -116,5 +117,9 @@ class APIController extends Controller
         return response()
             ->json($averages->all())
             ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+    public function totalByStore()
+    {
+        return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
     }
 }
