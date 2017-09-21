@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Customer;
 use Illuminate\Http\Request;
 use App\Transaction;
 use App\Store;
@@ -76,6 +77,24 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
+    public function userVolumePerStore()
+    {
+        // Will need a limit on returned transactions
+        // Likely pass in day or set two method for week/month/year
+
+        $userVolumeArray = Store::all()->map(function ($item) {
+            return [
+                'store' => $item['outlet_name'],
+                'customers' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->count(),
+            ];
+        });
+
+        return response()
+            ->json($userVolumeArray)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
     public function spendingPath()
     {
         $transactions = null;
@@ -101,6 +120,5 @@ class APIController extends Controller
             ->map(function ($item) use ($users) {
 
             });
-
     }
 }
