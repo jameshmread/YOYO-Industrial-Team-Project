@@ -94,10 +94,14 @@ class APIController extends Controller
     }
 
     public function totalSales () {
-        $totalSales = DB::table('transactions')->join('stores', 'transactions.store_id', '=' ,'stores.id')
-            ->orderBy('store_id', 'asc')
-            ->orderBy('date', 'asc')
-            ->get();
+        $totalSales = Store::all()->map(function ($item) {
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'store_id' => $item['id'],
+                'total_sales' => Transaction::where('store_id', '=', $item['id'])
+                        ->sum('total_amount')
+            ];
+        });
         return response()
             ->json($totalSales)
             ->header(self::CORS_KEY, self::CORS_VALUE);
@@ -107,6 +111,7 @@ class APIController extends Controller
     {
         $averages = Store::all()->map(function ($item) {
             return [
+                'outlet_name' => $item['outlet_name'],
                 'store_id' => $item['id'],
                 'average_transaction_value' => Transaction::where('store_id', '=', $item['id'])
                         ->sum('total_amount') / Transaction::where('store_id', '=', $item['id'])
