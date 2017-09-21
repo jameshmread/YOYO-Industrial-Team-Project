@@ -98,4 +98,9 @@ class APIController extends Controller
     {
         return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
     }
+
+    public function uniqueUsersPerStore()
+    {
+        return response()->json(array())->header(self::CORS_KEY, self::CORS_VALUE);
+    }
 }

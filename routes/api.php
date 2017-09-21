@@ -26,6 +26,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $router->group([
     'as' => 'api.'
 ], function (Router $router) {
+    $router->get('/unique-users-per-store', 'APIController@uniqueUsersPerStore')->name('uniqueUsersPerStore');
     $router->get('/transactions/users/volumeperstore', 'APIController@userVolumePerStore')->name('userVolumePerStore');
     $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
