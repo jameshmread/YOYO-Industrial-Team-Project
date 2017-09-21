@@ -102,8 +102,10 @@ class APIController extends Controller
 
         return DB::table('transactions')
             ->join('stores', 'transactions.store_id', '=', 'stores.id')
-            ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount')
+            ->join('colours', 'stores.outlet_name', '=', 'colours.store')
+            ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
             ->where('stores.outlet_name', '=', $name)
+            ->where('colours.store', '=', $name)
             ->where('date', '>=', $request->period1)
             ->where('date', '<=', $request->period2)
             ->get();
