@@ -38,6 +38,7 @@ class User extends Authenticatable
         'is_prem_shop_staff',
         'is_remote_campus_shop_staff',
         'is_spare_staff',
+        'is_reportable',
         'is_reportable_only',
     ];
 
