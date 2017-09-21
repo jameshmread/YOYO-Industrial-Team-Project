@@ -71,25 +71,16 @@ class APIController extends Controller
     }
 
     public function storesByTime(Request $request){
-//
-//        $name = $request ->name;
-//        $firstPeriod = Carbon::createFromFormat('YYYY-MM-DD', $request->period1);
-//        $secondPeriod = Carbon::createFromFormat('YYYY-MM-DD', $request->period2);
-//
-//        return DB::table('transactions')
-//            ->join('stores', 'transactions.store_id', '=', 'stores.id')
-//            ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount')
-//            ->where('stores.outlet_name', '=', $name)
-//            ->where('date', '>=', $firstPeriod)
-//            ->where('date', '<=', $secondPeriod)
-//            ->get();
+        $name = $request->name;
+        $name = str_replace("-", " ", $name);
 
-//        return DB::select('SELECT s.outlet_name as name, t.date as date,
-//		                  t.total_amount as total
-//                          FROM transactions t, stores s
-//                          WHERE t.store_id = s.id
-//                          AND s.outlet_name = \'Liar Bar\'
-//                            AND (t.date BETWEEN \'2017-09-01\' AND \'2017-09-30\'');
-
+        
+        return DB::table('transactions')
+            ->join('stores', 'transactions.store_id', '=', 'stores.id')
+            ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount')
+            ->where('stores.outlet_name', '=', $name)
+            ->where('date', '>=', $request->period1)
+            ->where('date', '<=', $request->period2)
+            ->get();
     }
 }
