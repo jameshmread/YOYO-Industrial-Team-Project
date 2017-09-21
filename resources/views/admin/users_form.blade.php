@@ -87,6 +87,27 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="col-md-4">
+                            <h3>Report Frequency</h3>
+
+                            <select class="reportfrequency form-control" name="reportfrequency">
+                                <option value="none"
+                                        {{ $user->report_frequency === 'none' ? 'selected' : '' }}>
+                                    None
+                                </option>
+
+                                <option value="weekly"
+                                        {{ $user->report_frequency === 'weekly' ? 'selected' : '' }}>
+                                    Weekly
+                                </option>
+
+                                <option value="monthly"
+                                        {{ $user->report_frequency === 'monthly' ? 'selected' : '' }}>
+                                    Monthly
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
                     <br>
