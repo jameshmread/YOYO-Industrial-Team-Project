@@ -18,4 +18,8 @@ class DataController extends Controller
     {
         return view('charts.userspendingpath.spendingpath');
     }
+
+    public function displayAngularPage () {
+        return view('angular.angular');
+    }
 }
