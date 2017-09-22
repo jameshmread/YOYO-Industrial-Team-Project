@@ -42,13 +42,11 @@
 </template>
 
 <script>
-    import Datepicker from 'vuejs-datepicker';
     import Chart from './linechart';
     import Multiselect from 'vue-multiselect';
     export default {
         components: {
             'Chart': Chart,
-            'date-picker': Datepicker,
             Multiselect
         },
 
@@ -62,7 +60,7 @@
                 'DJCAD Cantina',
                 'DOJ Catering',
                 'DUSA The Union: Marketplace',
-                'DUSA The Union Online',
+                'DUSA The Union: Online',
                 'Ents',
                 'Floor Five',
                 'Food on Four',
@@ -73,7 +71,7 @@
                 'Ninewells Shop',
                 'Online DUSA',
                 'Premier Shop',
-                'Permier Shop - Yoyo Accept',
+    'Premier Shop - Yoyo Accept',
                 'Remote Campus Shop',
                 'Spare'],
 
@@ -163,40 +161,43 @@
 
                 axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
-                        returns.push(response.data);
+                        if(response.data.length > 1 && Array.isArray(response.data)) {
+                            returns.push(response.data);
+                        }
                     })
                 }).then( response=>
                 {
-
                     this.dataNames = [];
                     this.dataLabels = [];
                     this.dataValues = [];
                     this.dataColours = [];
+                    if(returns.length > 0)
+                    {
+                        for(var i =0; i < returns.length; i++) {
 
-                    for(var i =0; i < returns.length; i++) {
+                            if (returns[i][0] != null) {
+                                var Name = null;
+                                var Data = [];
+                                var Colour = null;
+                                var Labels = [];
 
-                        if(returns[i][0] != null) {
-                            var Name = null;
-                            var Data = [];
-                            var Colour = null;
-                            var Labels = [];
+                                for (var j = 0; j < returns[i].length; j++) {
+                                    Name = returns[i][0].outlet_name;
+                                    Data.push(returns[i][j].total_amount);
+                                    Labels.push(returns[i][j].date);
+                                    Colour = returns[i][0].chart_colour;
+                                }
 
-                            for (var j = 0; j < returns[i].length; j++) {
-                                Name = returns[i][0].outlet_name;
-                                Data.push(returns[i][j].total_amount);
-                                Labels.push(returns[i][j].date);
-                                Colour = returns[i][0].chart_colour;
+                                this.dataNames.push(Name);
+                                this.dataLabels.push(Labels);
+                                this.dataValues.push(Data);
+                                this.dataColours.push(Colour);
                             }
-
-                            this.dataNames.push(Name);
-                            this.dataLabels.push(Labels);
-                            this.dataValues.push(Data);
-                            this.dataColours.push(Colour);
                         }
+
                     }
-                }).then(response=>
-                {
-                    this.fillData();
+                }).then( response=> {
+                    this.lineChart();
                 });
             },
 
@@ -212,7 +213,7 @@
 
 
 
-                for(var i =0; i < this.selected.length; i++)
+                for(var i =0; i < this.dataNames.length; i++)
                 {
                     datasetValue[i] =
                         {

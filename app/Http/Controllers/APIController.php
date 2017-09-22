@@ -100,14 +100,31 @@ class APIController extends Controller
         $name = str_replace("-", " ", $name);
 
 
-        return DB::table('transactions')
-            ->join('stores', 'transactions.store_id', '=', 'stores.id')
-            ->join('colours', 'stores.outlet_name', '=', 'colours.store')
-            ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
-            ->where('stores.outlet_name', '=', $name)
-            ->where('colours.store', '=', $name)
-            ->where('date', '>=', $request->period1)
-            ->where('date', '<=', $request->period2)
-            ->get();
+//        return DB::table('transactions')
+//            ->join('stores', 'transactions.store_id', '=', 'stores.id')
+//            ->join('colours', 'stores.outlet_name', '=', 'colours.store')
+//            ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
+//            ->where('stores.outlet_name', '=', $name)
+//            ->where('colours.store', '=', $name)
+//            ->where('date', '>=', $request->period1)
+//            ->where('date', '<=', $request->period2)
+//            ->get();
+
+        if((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.id')
+                ->select('transactions.total_amount')
+                ->where('stores.outlet_name', '=', $name)
+                ->count() >= 1))
+        {
+
+            return DB::table('transactions')
+                ->join('stores', 'transactions.store_id', '=', 'stores.id')
+                ->join('colours', 'stores.outlet_name', '=', 'colours.store')
+                ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
+                ->where('stores.outlet_name', '=', $name)
+                ->where('colours.store', '=', $name)
+                ->where('date', '>=', $request->period1)
+                ->where('date', '<=', $request->period2)
+                ->get();
+        }
     }
 }
