@@ -141,7 +141,6 @@
 
             getStores()
             {
-                console.log(this.selected);
                 if(this.period1== null || this.period2 == null)
                 {
                     return;
@@ -169,18 +168,17 @@
                 }).then( response=>
                 {
 
-                    for(var i =0; i < returns.length; i++)
-                    {
+                    for(var i =0; i < returns.length; i++) {
                         var Name = null;
                         var Data = [];
                         var Colour = null;
                         var Labels = [];
 
-                        for(var j = 0; j < returns[i].length; j++) {
-                            Name = returns[i][j].outlet_name;
+                        for (var j = 0; j < returns[i].length; j++) {
+                            Name = returns[i][0].outlet_name;
                             Data.push(returns[i][j].total_amount);
                             Labels.push(returns[i][j].date);
-                            Colour = returns[i][j].chart_colour;
+                            Colour = returns[i][0].chart_colour;
                         }
 
                         this.dataNames.push(Name);
@@ -189,6 +187,8 @@
                         this.dataColours.push(Colour);
 
                     }
+                }).then(response=>
+                {
                     this.fillData();
                 });
             },
@@ -214,7 +214,6 @@
                             data: this.dataValues[i]
                         };
 
-                    console.log(datasetValue[i]);
                 }
 
                 this.datacollection =
