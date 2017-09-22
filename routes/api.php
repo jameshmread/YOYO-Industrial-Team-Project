@@ -29,7 +29,6 @@ $router->group([
     $router->get('/transactions/averagesales', 'APIController@averageSalesPerStore')->name('averageSales');
     $router->get('/transactions/totalsales', 'APIController@totalSales')->name('totalSales');
     $router->get('/transactions/users/volumeperstore', 'APIController@userVolumePerStore')->name('userVolumePerStore');
-    $router->get('/transactions/users/spendingpath', 'APIController@userSpendingPath')->name('userUpendingPath');
     $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
     $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');

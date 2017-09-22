@@ -55,7 +55,6 @@ $router->group([
 ], function (Router $router) {
     $router->get('/data/stores', 'DataController@displayAngularPage')->name('angular');
     $router->get('/data/users/volumeperstore', 'DataController@userVolumePerStore')->name('user.volumeperstore');
-    $router->get('/data/users/spendingpath', 'DataController@userSpendingPath')->name('user.spendingpath');
 });
 
 /**
