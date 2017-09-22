@@ -2,12 +2,10 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\DB;
-
 class TransactionBuilder
 {
     /**
-     * @todo could probably use some refactoring - array_map makes the 
+     * @todo could probably use some refactoring - array_map makes the
      * removeNullValuesFromArray method necessary.
      */
     public function createFromFile(string $filePath): array
@@ -57,10 +55,20 @@ class TransactionBuilder
         // I assumed the store id in the model and the outlet reference in the
         // model are the same - LM.
         $storeId = $array[2];
+
+        $store_name = $array[4];
+
+        if (null === Store::where('outlet_reference', $storeId)->first()) {
+            Store::create([
+                'outlet_reference' => $storeId,
+                'outlet_name' => $store_name,
+            ]);
+        }
+
         $customerReference = $array[5];
         $customer = Customer::where('customer_reference', $customerReference)->first();
         if (null === $customer) {
-            $customer = new Customer;
+            $customer = new Customer();
             $customer->customer_reference = $customerReference;
             $customer->save();
         }
@@ -76,7 +84,8 @@ class TransactionBuilder
             'cash_spent' => $cashSpent,
             'discount_amount' => $discountAmount,
             'total_amount' => $totalAmount,
-            'transaction_hash' => hash('md5', "$cashSpent$customer->id$date$discountAmount$storeId$totalAmount$transactionType"),
+            'transaction_hash' => hash('md5',
+                "$cashSpent$customer->id$date$discountAmount$storeId$totalAmount$transactionType"),
         ]);
         return $transaction;
     }

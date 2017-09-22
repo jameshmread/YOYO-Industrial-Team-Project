@@ -7,6 +7,7 @@ use App\Store;
 use Illuminate\Http\Request;
 use App\Transaction;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
 {
@@ -92,6 +93,7 @@ class APIController extends Controller
             ->json($userVolumeArray)
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
+
     
     public function retainedUsersPerStore(){
         
@@ -122,6 +124,10 @@ class APIController extends Controller
     
     
     public function avgTimeBetweenPurchases(){
-        
+    }
+
+    public function totalByStore()
+    {
+        return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
     }
 }

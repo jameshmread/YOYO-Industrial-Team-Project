@@ -2,10 +2,12 @@
 
 namespace Tests;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestCase as PhpUnitTestCase;
 use PHPUnit\DbUnit\TestCaseTrait;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 
-abstract class DatabaseTestCase extends TestCase
+abstract class DatabaseTestCase extends PhpUnitTestCase
 {
     use TestCaseTrait;
 
@@ -19,16 +21,16 @@ abstract class DatabaseTestCase extends TestCase
     {
         if ($this->conn === null) {
             if (self::$pdo == null) {
-                self::$pdo = new \PDO( $GLOBALS['DB_DSN'], $GLOBALS['DB_USER'], $GLOBALS['DB_PASSWD'] );
+                self::$pdo = DB::connection()->getPdo();
+                Artisan::call('migrate');
             }
-            $this->conn = $this->createDefaultDBConnection(self::$pdo, $GLOBALS['DB_DBNAME']);
+            $this->conn = $this->createDefaultDBConnection(self::$pdo, ':memory:');
         }
-
         return $this->conn;
     }
 
     public function getDataSet()
     {
-        return $this->createFlatXmlDataSet('dataset.xml');
+        return $this->createFlatXmlDataSet(__DIR__.'/dataset.xml');
     }
 }

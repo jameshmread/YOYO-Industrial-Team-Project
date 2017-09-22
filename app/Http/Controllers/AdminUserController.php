@@ -15,6 +15,7 @@ class AdminUserController extends Controller
      * @var array
      */
     protected static $user_rights = [
+        'is_reportable' => 'Can receive reports',
         'is_air_bar_staff' => 'Air Bar',
         'is_college_shop_staff' => 'College Shop',
         'is_dental_cafe_staff' => 'Dental Cafe',
@@ -121,6 +122,7 @@ class AdminUserController extends Controller
         $user->fill($request->all());
 
         $user->is_admin = $request->input('admin') ? 1 : 0;
+        $user->report_frequency = $request->input('reportfrequency');
 
         if (!empty($request->input('password'))) {
             $pass = trim($request->input('password'));
