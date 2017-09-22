@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -27,6 +27,8 @@ $router->group([
     'as' => 'api.'
 ], function (Router $router) {
     $router->get('/unique-users-per-store', 'APIController@uniqueUsersPerStore')->name('uniqueUsersPerStore');
+    $router->get('/transactions/averagesales', 'APIController@averageSalesPerStore')->name('averageSales');
+    $router->get('/transactions/totalsales', 'APIController@totalSales')->name('totalSales');
     $router->get('/transactions/users/volumeperstore', 'APIController@userVolumePerStore')->name('userVolumePerStore');
     $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
