@@ -64,8 +64,8 @@ class APIController extends Controller
     {
         //Periods follow the format of YYYY-MM-DD HH:MM:SS
 
-        $firstPeriod = Carbon::createFromFormat('Ymdhis', $request->period1);
-        $secondPeriod = Carbon::createFromFormat('Ymdhis', $request->period2);
+        $firstPeriod = Carbon::createFromFormat('YmdHis', $request->period1);
+        $secondPeriod = Carbon::createFromFormat('YmdHis', $request->period2);
 
         $transactionArray = Transaction::where('date', '>=', $firstPeriod)
             ->where('date', '<=', $secondPeriod)
@@ -93,13 +93,14 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function totalSales () {
+    public function totalSales()
+    {
         $totalSales = Store::all()->map(function ($item) {
             return [
                 'outlet_name' => $item['outlet_name'],
-                'store_id' => $item['id'],
-                'total_sales' => Transaction::where('store_id', '=', $item['id'])
-                        ->sum('total_amount')
+                'store_id' => $item['outlet_reference'],
+                'total_sales' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->sum('total_amount')
             ];
         });
         return response()
@@ -107,14 +108,14 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function averageSalesPerStore ()
+    public function averageSalesPerStore()
     {
         $averages = Store::all()->map(function ($item) {
             return [
                 'outlet_name' => $item['outlet_name'],
-                'store_id' => $item['id'],
-                'average_transaction_value' => Transaction::where('store_id', '=', $item['id'])
-                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['id'])
+                'store_id' => $item['outlet_reference'],
+                'average_transaction_value' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['outlet_reference'])
                         ->count()
             ];
         });
@@ -122,6 +123,7 @@ class APIController extends Controller
             ->json($averages->all())
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
+
     public function totalByStore()
     {
         return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
