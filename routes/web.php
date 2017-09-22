@@ -53,7 +53,9 @@ $router->group([
 $router->group([
     'middleware' => ['web', 'auth', 'report']
 ], function (Router $router) {
-    $router->get('/data/stores', 'DataController@displayAngularPage')->name('angular');
+    $router->get('/data/stores/revenue', 'DataController@displayAngularPage')->name('store.revenue');
+    $router->get('/data/stores/retained', 'DataController@uniqueUsersPerStore')->name('store.retained');
+    $router->get('/data/stores/unique', 'DataController@retainedUsersPerStore')->name('store.unique');
     $router->get('/data/users/volumeperstore', 'DataController@userVolumePerStore')->name('user.volumeperstore');
 });
 

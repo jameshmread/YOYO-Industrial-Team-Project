@@ -14,7 +14,18 @@ class DataController extends Controller
         return view('charts.uservolumeperstore.uservolume');
     }
 
-    public function displayAngularPage () {
+    public function displayAngularPage()
+    {
         return view('angular.angular');
+    }
+
+    public function uniqueUsersPerStore()
+    {
+        return view('angular.unique');
+    }
+
+    public function retainedUsersPerStore()
+    {
+        return view('angular.retained');
     }
 }
