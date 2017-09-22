@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
@@ -26,6 +26,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $router->group([
     'as' => 'api.'
 ], function (Router $router) {
+    $router->get('/transactions/averagesales', 'APIController@averageSalesPerStore')->name('averageSales');
+    $router->get('/transactions/totalsales', 'APIController@totalSales')->name('totalSales');
     $router->get('/transactions/users/volumeperstore', 'APIController@userVolumePerStore')->name('userVolumePerStore');
     $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
