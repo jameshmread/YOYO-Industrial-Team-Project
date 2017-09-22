@@ -64,8 +64,8 @@ class APIController extends Controller
     {
         //Periods follow the format of YYYY-MM-DD HH:MM:SS
 
-        $firstPeriod = Carbon::createFromFormat('Ymdhis', $request->period1);
-        $secondPeriod = Carbon::createFromFormat('Ymdhis', $request->period2);
+        $firstPeriod = Carbon::createFromFormat('YmdHis', $request->period1);
+        $secondPeriod = Carbon::createFromFormat('YmdHis', $request->period2);
 
         $transactionArray = Transaction::where('date', '>=', $firstPeriod)
             ->where('date', '<=', $secondPeriod)
@@ -107,19 +107,22 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function averageSalesPerStore ()
+    public function averageSalesPerStore()
     {
-        $averages = Store::all()->map(function ($item) {
-            return [
-                'outlet_name' => $item['outlet_name'],
-                'store_id' => $item['id'],
-                'average_transaction_value' => Transaction::where('store_id', '=', $item['id'])
-                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['id'])
-                        ->count()
-            ];
+//        $firstPeriod = Carbon::createFromFormat('YmdHis', $request->period1);
+//        $secondPeriod = Carbon::createFromFormat('YmdHis', $request->period2);
+
+        $returns = Store::all()->map(function ($item) {
+            return
+                [
+                    $item['outlet_name'] => Transaction::orderby('date', 'asc')
+                        ->select('total_amount', 'date')
+                        ->get()
+                ];
         });
+
         return response()
-            ->json($averages->all())
+            ->json($returns->all())
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
     public function totalByStore()
