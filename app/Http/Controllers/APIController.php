@@ -64,8 +64,8 @@ class APIController extends Controller
     {
         //Periods follow the format of YYYY-MM-DD HH:MM:SS
 
-        $firstPeriod = Carbon::createFromFormat('Ymdhis', $request->period1);
-        $secondPeriod = Carbon::createFromFormat('Ymdhis', $request->period2);
+        $firstPeriod = Carbon::createFromFormat('YmdHis', $request->period1);
+        $secondPeriod = Carbon::createFromFormat('YmdHis', $request->period2);
 
         $transactionArray = Transaction::where('date', '>=', $firstPeriod)
             ->where('date', '<=', $secondPeriod)
