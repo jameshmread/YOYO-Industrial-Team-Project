@@ -5,10 +5,21 @@
 
             <div class="col col-md-3 col-lg-3 col-sm-3">
 
-                <select id="DataChoiceSelection" name="selected" v-model="selected"
-                        class="storeDropDown form-control" multiple>
-                    <option v-for="item in choiceData" :value="item">{{item}}</option>
-                </select>
+                <!--<select id="DataChoiceSelection" name="selected" v-model="selected"-->
+                        <!--class="storeDropDown form-control" multiple>-->
+                    <!--<option v-for="item in choiceData" :value="item">{{item}}</option>-->
+                <!--</select>-->
+                <multiselect
+                v-model="selected"
+                :options="choiceData"
+                :searchable="false"
+                :close-on-select="false"
+                :show-labels="false"
+                :hide-selected="true"
+                placeholder="Pick a value"
+                multiple = "true">
+                </multiselect>
+
             </div>
 
             <div class="col col-md-3 col-lg-3 col-sm-3">
@@ -32,17 +43,19 @@
 
 <script>
     import Datepicker from 'vuejs-datepicker';
-    import Chart from './linechart'
+    import Chart from './linechart';
+    import Multiselect from 'vue-multiselect';
     export default {
         components: {
             'Chart': Chart,
-            'date-picker': Datepicker
+            'date-picker': Datepicker,
+            Multiselect
         },
 
         data() {
             return {
 
-                selected: ['Library', 'Spare'],
+                selected: [],
                 choiceData: ['Air Bar',
                 'College Shop',
                 'Dental Cafe',
@@ -64,17 +77,7 @@
                 'Remote Campus Shop',
                 'Spare'],
 
-                colours: ['rgba(255,0,0,0.25)',
-                    'rgba(0,255,0, 0.25)',
-                    'rgba(0,0,255, 0.25)',
-                    'rgba(0,0,255, 0.25)',
-                    'rgba(125,125,0, 0.25)',
-                    'rgba(125,0,125, 0.25)',
-                    'rgba(0,125,125, 0.25)',
-                    'rgba(125,75,255, 0.25)',
-                    'rgba(75,125,255, 0.25)',
-                    'rgba(255,125,75, 0.25)'
-                ],
+                colours: [],
 
                 period1: null,
                 period2: null,
