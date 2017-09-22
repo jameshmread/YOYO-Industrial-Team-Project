@@ -60,7 +60,7 @@
                                     <ul class="dropdown-menu" role="menu">
                                         <li class="dropdown-header"><h5>Stores</h5></li>
                                         <li>
-                                            <a href="#">Store Example</a>
+                                            <a href="{{route('angular')}}">Transaction Average per Store</a>
                                         </li>
 
                                         <br>

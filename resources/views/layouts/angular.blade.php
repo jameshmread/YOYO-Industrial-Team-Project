@@ -52,6 +52,26 @@
                                 </li>
                             @endif
 
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                        View Data <span class="caret"></span>
+                                    </a>
+
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li class="dropdown-header"><h5>Stores</h5></li>
+                                        <li>
+                                            <a href="{{route('angular')}}">Transaction Average per Store</a>
+                                        </li>
+
+                                        <br>
+
+                                        <li class="dropdown-header"><h5>Users</h5></li>
+                                        <li>
+                                            <a href="{{route('user.volumeperstore')}}">User Volume per Store</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                     {{ Auth::user()->name }} <span class="caret"></span>
