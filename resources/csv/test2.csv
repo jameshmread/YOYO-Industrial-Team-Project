@@ -1,0 +1,37 @@
+Date & Time,Retailer Ref,Outlet Ref,Retailer Name,Outlet Name,New user id,Transaction Type,Cash Spent,Discount Amount,Total Amount
+24/08/2015 10:02,91,238,Dundee Student Ass,Library,dusa-0046,Payment,£0.80,£0.00,£0.80
+24/08/2015 10:04,91,238,Dundee Student Ass,Library,dusa-0046,Payment,£0.50,£0.00,£0.50
+24/08/2015 12:07,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,£7.00,£0.00,£7.00
+24/08/2015 13:53,91,239,Dundee Student Ass,Spare,dusa-0064,Payment,£1.05,£0.00,£1.05
+24/08/2015 14:19,91,239,Dundee Student Ass,Spare,dusa-0006,Payment,£3.50,£0.00,£3.50
+24/08/2015 15:52,91,236,Dundee Student Ass,Air Bar,dusa-0055,Payment,£1.25,£0.00,£1.25
+24/08/2015 15:53,91,236,Dundee Student Ass,Air Bar,dusa-0055,Refund,-£1.25,£0.00,-£1.25
+24/08/2015 18:37,91,239,Dundee Student Ass,Spare,dusa-0013,Payment,£2.00,£0.00,£2.00
+24/08/2015 21:35,91,239,Dundee Student Ass,Spare,dusa-0051,Payment,£2.00,£0.00,£2.00
+25/08/2015 09:01,91,238,Dundee Student Ass,Library,dusa-0067,Payment,£1.75,£0.00,£1.75
+25/08/2015 09:43,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,£0.60,£0.00,£0.60
+25/08/2015 10:55,91,238,Dundee Student Ass,Library,dusa-0046,Payment,£1.60,£0.00,£1.60
+25/08/2015 12:21,91,238,Dundee Student Ass,Library,dusa-0075,Payment,£2.09,£0.00,£2.09
+25/08/2015 12:49,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,£7.00,£0.00,£7.00
+25/08/2015 13:07,91,239,Dundee Student Ass,Spare,dusa-0006,Payment,£3.50,£0.00,£3.50
+25/08/2015 13:08,91,239,Dundee Student Ass,Spare,dusa-0006,Payment,£4.00,£0.00,£4.00
+25/08/2015 14:14,91,239,Dundee Student Ass,Spare,dusa-0013,Payment,£3.00,£0.00,£3.00
+25/08/2015 15:24,91,239,Dundee Student Ass,Spare,dusa-0074,Payment,£2.50,£0.00,£2.50
+25/08/2015 16:02,91,239,Dundee Student Ass,Spare,dusa-0015,Payment,£0.60,£0.00,£0.60
+25/08/2015 18:30,91,239,Dundee Student Ass,Spare,dusa-0013,Payment,£1.50,£0.00,£1.50
+25/08/2015 22:03,91,243,Dundee Student Ass,Ents,dusa-0081,Redemption,£0.00,£1.00,£1.00
+26/08/2015 09:10,91,238,Dundee Student Ass,Library,dusa-0067,Payment,£1.75,£0.00,£1.75
+26/08/2015 09:51,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,£0.60,£0.00,£0.60
+26/08/2015 09:54,91,239,Dundee Student Ass,Spare,dusa-0069,Payment,£1.20,£0.00,£1.20
+26/08/2015 12:20,91,239,Dundee Student Ass,Spare,dusa-0006,Payment,£3.50,£0.00,£3.50
+26/08/2015 12:24,91,238,Dundee Student Ass,Library,dusa-0075,Payment,£2.40,£0.00,£2.40
+26/08/2015 13:04,91,239,Dundee Student Ass,Spare,dusa-0013,Payment,£4.00,£0.00,£4.00
+26/08/2015 13:18,91,239,Dundee Student Ass,Spare,dusa-0087,Payment,£1.95,£0.00,£1.95
+26/08/2015 13:26,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,£5.50,£0.00,£5.50
+26/08/2015 15:32,91,239,Dundee Student Ass,Spare,dusa-0069,Payment,£1.00,£0.00,£1.00
+26/08/2015 17:26,91,243,Dundee Student Ass,Ents,dusa-0009,Payment,£1.00,£0.00,£1.00
+26/08/2015 17:27,91,243,Dundee Student Ass,Ents,dusa-0009,Refund,-£1.00,£0.00,-£1.00
+27/08/2015 08:39,91,239,Dundee Student Ass,Spare,dusa-0054,Payment,£0.80,£0.00,£0.80
+27/08/2015 08:50,91,238,Dundee Student Ass,Library,dusa-0067,Payment,£1.75,£0.00,£1.75
+27/08/2015 10:13,91,239,Dundee Student Ass,Spare,dusa-0017,Payment,£2.10,£0.00,£2.10
+27/08/2015 10:34,91,238,Dundee Student Ass,Library,dusa-0093,Payment,£2.40,£0.00,£2.40

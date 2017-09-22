@@ -95,10 +95,11 @@ class APIController extends Controller
     }
 
     
-    public function retainedUsersPerStore(){
-        
-               $customers = Transaction::all()->pluck('customer_id')->unique()->flatten();
-
+        public function retainedUsersPerStore()
+    {
+ 
+        $customers = Transaction::all()->pluck('customer_id')->unique()->flatten();
+ 
         $userVolumeArray = Store::all()->map(function ($item) use ($customers) {
             return [
                 'store' => $item['outlet_name'],
@@ -112,19 +113,53 @@ class APIController extends Controller
                     })
             ];
         });
+ 
+        $userVolumeArray = $userVolumeArray->map(function ($item) {
+ 
+            $user = 0;
+            foreach ($item['users_rentended'] as $value) {
+                if ($value['customer_retended']) $user++;
+            }
+ 
+            return [
+                'store' => $item['store'],
+                'total_users_retained' => $user,
+            ];
+        });
+ 
+        return response()
+            ->json($userVolumeArray)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+ 
+    }
+        
+        public function retainedUsersPerStoreWTimes(){
+        
+               $customers = Transaction::all()->pluck('customer_id')->unique()->flatten();
+
+        $userVolumeArray = Store::all()->map(function ($item) use ($customers) {
+            return [
+                'store' => $item['outlet_name'],
+                'users_retained' =>
+                    $customers->map(function ($cust) use ($item) {
+                        return [
+                            'customer' => $cust,
+                            'customer_retained' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                                    ->where('customer_id', '=', $cust)->count() > 2,
+                            'time_between' => Transaction::where('customer_retained', '=', 'true')
+                                    
+                                    
+                        ];
+                    })
+            ];
+        });
     
         return response()
             ->json($userVolumeArray)
             ->header(self::CORS_KEY, self::CORS_VALUE);
         
         }
-    
-    
-    
-    
-    
-    public function avgTimeBetweenPurchases(){
-    }
+
 
     public function totalByStore()
     {

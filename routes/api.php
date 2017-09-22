@@ -33,7 +33,6 @@ $router->group([
     $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
     $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
     $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
-    $router->get('/transactions/users/unqiueusers/{year}', 'APIController@dmyListing')->name('uniqueUsers');
     
     
 });
