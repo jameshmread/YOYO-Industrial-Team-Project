@@ -17,7 +17,7 @@
                 :show-labels="false"
                 :hide-selected="true"
                 placeholder="Pick a value"
-                multiple = "true">
+                :multiple = "true">
                 </multiselect>
 
             </div>
@@ -227,6 +227,8 @@
         }
     }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
     .container {
