@@ -12,4 +12,8 @@ class DataController extends Controller
         // User will be used later to determine access
         return view('charts.uservolumeperstore_' . $request->type);
     }
+
+    public function displayAngularPage () {
+        return view('angular.angular');
+    }
 }

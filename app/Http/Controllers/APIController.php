@@ -20,7 +20,6 @@ class APIController extends Controller
 
         $recentTransactions = Transaction::where('date', '>=', $todayMinusMonth)
             ->get();
-
         return response()
             ->json($recentTransactions)
             ->header(self::CORS_KEY, self::CORS_VALUE);
@@ -94,6 +93,35 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
+    public function totalSales () {
+        $totalSales = Store::all()->map(function ($item) {
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'store_id' => $item['id'],
+                'total_sales' => Transaction::where('store_id', '=', $item['id'])
+                        ->sum('total_amount')
+            ];
+        });
+        return response()
+            ->json($totalSales)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+    public function averageSalesPerStore ()
+    {
+        $averages = Store::all()->map(function ($item) {
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'store_id' => $item['id'],
+                'average_transaction_value' => Transaction::where('store_id', '=', $item['id'])
+                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['id'])
+                        ->count()
+            ];
+        });
+        return response()
+            ->json($averages->all())
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
     public function totalByStore()
     {
         return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');

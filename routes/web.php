@@ -41,6 +41,7 @@ $router->group([
 $router->group([
     'middleware' => ['web', 'auth']
 ], function (Router $router) {
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
@@ -52,6 +53,7 @@ $router->group([
 $router->group([
     'middleware' => ['web', 'auth', 'report']
 ], function (Router $router) {
+    $router->get('/data/stores', 'DataController@displayAngularPage')->name('angular');
     $router->get('/data/users/volumeperstore/{type}', 'DataController@userVolumePerStore')->name('user.volumeperstore');
 });
 
