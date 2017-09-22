@@ -25,5 +25,8 @@
         <testsuite name="CSV">
             <directory>./tests/CSV</directory>
         </testsuite>
+        <testsuite name="User">
+            <directory>./tests/User</directory>
+        </testsuite>
     </testsuites>
 </phpunit>
