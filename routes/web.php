@@ -41,7 +41,7 @@ $router->group([
 $router->group([
     'middleware' => ['web', 'auth']
 ], function (Router $router) {
-    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+    $router->post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
