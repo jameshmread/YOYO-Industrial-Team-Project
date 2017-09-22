@@ -168,24 +168,31 @@
                 }).then( response=>
                 {
 
+                    this.dataNames = [];
+                    this.dataLabels = [];
+                    this.dataValues = [];
+                    this.dataColours = [];
+
                     for(var i =0; i < returns.length; i++) {
-                        var Name = null;
-                        var Data = [];
-                        var Colour = null;
-                        var Labels = [];
 
-                        for (var j = 0; j < returns[i].length; j++) {
-                            Name = returns[i][0].outlet_name;
-                            Data.push(returns[i][j].total_amount);
-                            Labels.push(returns[i][j].date);
-                            Colour = returns[i][0].chart_colour;
+                        if(returns[i][0] != null) {
+                            var Name = null;
+                            var Data = [];
+                            var Colour = null;
+                            var Labels = [];
+
+                            for (var j = 0; j < returns[i].length; j++) {
+                                Name = returns[i][0].outlet_name;
+                                Data.push(returns[i][j].total_amount);
+                                Labels.push(returns[i][j].date);
+                                Colour = returns[i][0].chart_colour;
+                            }
+
+                            this.dataNames.push(Name);
+                            this.dataLabels.push(Labels);
+                            this.dataValues.push(Data);
+                            this.dataColours.push(Colour);
                         }
-
-                        this.dataNames.push(Name);
-                        this.dataLabels.push(Labels);
-                        this.dataValues.push(Data);
-                        this.dataColours.push(Colour);
-
                     }
                 }).then(response=>
                 {
