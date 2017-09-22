@@ -20,7 +20,6 @@ class APIController extends Controller
 
         $recentTransactions = Transaction::where('date', '>=', $todayMinusMonth)
             ->get();
-
         return response()
             ->json($recentTransactions)
             ->header(self::CORS_KEY, self::CORS_VALUE);
@@ -65,8 +64,8 @@ class APIController extends Controller
     {
         //Periods follow the format of YYYY-MM-DD HH:MM:SS
 
-        $firstPeriod = Carbon::createFromFormat('Ymdhis', $request->period1);
-        $secondPeriod = Carbon::createFromFormat('Ymdhis', $request->period2);
+        $firstPeriod = Carbon::createFromFormat('YmdHis', $request->period1);
+        $secondPeriod = Carbon::createFromFormat('YmdHis', $request->period2);
 
         $transactionArray = Transaction::where('date', '>=', $firstPeriod)
             ->where('date', '<=', $secondPeriod)
@@ -93,7 +92,6 @@ class APIController extends Controller
             ->json($userVolumeArray)
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
-
     
         public function retainedUsersPerStore()
     {
@@ -133,6 +131,36 @@ class APIController extends Controller
  
     }
 
+    public function totalSales()
+    {
+        $totalSales = Store::all()->map(function ($item) {
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'store_id' => $item['outlet_reference'],
+                'total_sales' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->sum('total_amount')
+            ];
+        });
+        return response()
+            ->json($totalSales)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+    public function averageSalesPerStore()
+    {
+        $averages = Store::all()->map(function ($item) {
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'store_id' => $item['outlet_reference'],
+                'average_transaction_value' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->count()
+            ];
+        });
+        return response()
+            ->json($averages->all())
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
 
     public function totalByStore()
     {
