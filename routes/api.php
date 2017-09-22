@@ -27,6 +27,7 @@ $router->group([
     'as' => 'api.'
 ], function (Router $router) {
     $router->get('/transactions/uniqueUsersPerStore', 'APIController@retainedUsersPerStore')->name('retainedUsersPerStore');
+    $router->get('/unique-users-per-store', 'APIController@uniqueUsersPerStore')->name('uniqueUsersPerStore');
     $router->get('/transactions/averagesales', 'APIController@averageSalesPerStore')->name('averageSales');
     $router->get('/transactions/totalsales', 'APIController@totalSales')->name('totalSales');
     $router->get('/transactions/users/volumeperstore', 'APIController@userVolumePerStore')->name('userVolumePerStore');
