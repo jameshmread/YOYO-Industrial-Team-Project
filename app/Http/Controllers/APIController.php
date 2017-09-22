@@ -128,4 +128,16 @@ class APIController extends Controller
     {
         return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
     }
+
+    public function uniqueUsersPerStore()
+    {
+        $userVolumeArray = Store::all()->map(function ($item) {
+            return [
+                'store' => $item['outlet_name'],
+                'customers' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->pluck('customer_id')->unique()->flatten()->all(),
+            ];
+        });
+        return response()->json($userVolumeArray)->header(self::CORS_KEY, self::CORS_VALUE);
+    }
 }
