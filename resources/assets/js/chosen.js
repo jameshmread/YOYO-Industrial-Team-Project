@@ -4,6 +4,6 @@ $(".urights").chosen({
 
 $(".storeDropDown").chosen({
     no_results_text: "Oops, nothing found!"
-});
+}).trigger("chosen:updated");
 
 $(".reportfrequency").chosen();
