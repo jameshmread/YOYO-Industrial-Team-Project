@@ -26,6 +26,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $router->group([
     'as' => 'api.'
 ], function (Router $router) {
+    $router->get('/transactions/uniqueUsersPerStore', 'APIController@retainedUsersPerStore')->name('retainedUsersPerStore');
     $router->get('/unique-users-per-store', 'APIController@uniqueUsersPerStore')->name('uniqueUsersPerStore');
     $router->get('/transactions/averagesales', 'APIController@averageSalesPerStore')->name('averageSales');
     $router->get('/transactions/totalsales', 'APIController@totalSales')->name('totalSales');
