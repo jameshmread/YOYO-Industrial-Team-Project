@@ -92,4 +92,36 @@ class APIController extends Controller
             ->json($userVolumeArray)
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
+    
+    public function retainedUsersPerStore(){
+        
+               $customers = Transaction::all()->pluck('customer_id')->unique()->flatten();
+
+        $userVolumeArray = Store::all()->map(function ($item) use ($customers) {
+            return [
+                'store' => $item['outlet_name'],
+                'users_rentended' =>
+                    $customers->map(function ($cust) use ($item) {
+                        return [
+                            'customer' => $cust,
+                            'customer_retended' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                                    ->where('customer_id', '=', $cust)->count() > 2
+                        ];
+                    })
+            ];
+        });
+    
+        return response()
+            ->json($userVolumeArray)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+        
+        }
+    
+    
+    
+    
+    
+    public function avgTimeBetweenPurchases(){
+        
+    }
 }
