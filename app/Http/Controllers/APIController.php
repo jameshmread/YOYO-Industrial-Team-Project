@@ -134,8 +134,8 @@ class APIController extends Controller
         $userVolumeArray = Store::all()->map(function ($item) {
             return [
                 'store' => $item['outlet_name'],
-                'customers' => Transaction::where('store_id', '=', $item['outlet_reference'])
-                    ->pluck('customer_id')->unique()->flatten()->all(),
+                'customers' => sizeof(Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->pluck('customer_id')->unique()->all()),
             ];
         });
         return response()->json($userVolumeArray)->header(self::CORS_KEY, self::CORS_VALUE);
