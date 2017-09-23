@@ -21,7 +21,6 @@ class APIController extends Controller
 
         $recentTransactions = Transaction::where('date', '>=', $todayMinusMonth)
             ->get();
-
         return response()
             ->json($recentTransactions)
             ->header(self::CORS_KEY, self::CORS_VALUE);
@@ -66,8 +65,8 @@ class APIController extends Controller
     {
         //Periods follow the format of YYYY-MM-DD HH:MM:SS
 
-        $firstPeriod = Carbon::createFromFormat('Ymdhis', $request->period1);
-        $secondPeriod = Carbon::createFromFormat('Ymdhis', $request->period2);
+        $firstPeriod = Carbon::createFromFormat('YmdHis', $request->period1);
+        $secondPeriod = Carbon::createFromFormat('YmdHis', $request->period2);
 
         $transactionArray = Transaction::where('date', '>=', $firstPeriod)
             ->where('date', '<=', $secondPeriod)
@@ -94,22 +93,80 @@ class APIController extends Controller
             ->json($userVolumeArray)
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
+    
+        public function retainedUsersPerStore()
+    {
+ 
+        $customers = Transaction::all()->pluck('customer_id')->unique()->flatten();
+ 
+        $userVolumeArray = Store::all()->map(function ($item) use ($customers) {
+            return [
+                'store' => $item['outlet_name'],
+                'users_rentended' =>
+                    $customers->map(function ($cust) use ($item) {
+                        return [
+                            'customer' => $cust,
+                            'customer_retended' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                                    ->where('customer_id', '=', $cust)->count() > 2
+                        ];
+                    })
+            ];
+        });
+ 
+        $userVolumeArray = $userVolumeArray->map(function ($item) {
+ 
+            $user = 0;
+            foreach ($item['users_rentended'] as $value) {
+                if ($value['customer_retended']) $user++;
+            }
+ 
+            return [
+                'store' => $item['store'],
+                'total_users_retained' => $user,
+            ];
+        });
+ 
+        return response()
+            ->json($userVolumeArray)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+ 
+    }
+
+    public function totalSales()
+    {
+        $totalSales = Store::all()->map(function ($item) {
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'store_id' => $item['outlet_reference'],
+                'total_sales' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->sum('total_amount')
+            ];
+        });
+        return response()
+            ->json($totalSales)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+    public function averageSalesPerStore()
+    {
+        $averages = Store::all()->map(function ($item) {
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'store_id' => $item['outlet_reference'],
+                'average_transaction_value' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['outlet_reference'])
+                        ->count()
+            ];
+        });
+        return response()
+            ->json($averages->all())
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
 
     public function storesByTime(Request $request)
     {
         $name = $request->name;
         $name = str_replace("-", " ", $name);
-
-
-//        return DB::table('transactions')
-//            ->join('stores', 'transactions.store_id', '=', 'stores.id')
-//            ->join('colours', 'stores.outlet_name', '=', 'colours.store')
-//            ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
-//            ->where('stores.outlet_name', '=', $name)
-//            ->where('colours.store', '=', $name)
-//            ->where('date', '>=', $request->period1)
-//            ->where('date', '<=', $request->period2)
-//            ->get();
 
         if ((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.id')
                 ->select('transactions.total_amount')
@@ -127,6 +184,7 @@ class APIController extends Controller
                 ->get();
         }
     }
+
 
     public function totalStoreSalesByTime(Request $request)
     {
@@ -148,4 +206,18 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
+
+
+    public function uniqueUsersPerStore()
+    {
+        $userVolumeArray = Store::all()->map(function ($item) {
+            return [
+                'store' => $item['outlet_name'],
+                'customers' => sizeof(Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->pluck('customer_id')->unique()->all()),
+            ];
+        });
+        return response()->json($userVolumeArray)->header(self::CORS_KEY, self::CORS_VALUE);
+    }
 }
+
