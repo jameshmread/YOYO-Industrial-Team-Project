@@ -41,9 +41,10 @@ $router->group([
  * AUTH ROUTES
  */
 $router->group([
-    'middlware' => ['web', 'auth']
+    'middleware' => ['web', 'auth']
 ], function (Router $router) {
     $router->get('/stores', function(){ return view('Auth\transactionchart');});
+    $router->get('/total', function(){ return view('Auth\testchart');});
     $router->get('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
