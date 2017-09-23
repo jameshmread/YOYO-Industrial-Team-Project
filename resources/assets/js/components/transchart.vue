@@ -42,6 +42,25 @@
 </template>
 
 <script>
+
+    Date.prototype.addDays = function(days) {
+        var dat = new Date(this.valueOf())
+        dat.setDate(dat.getDate() + days);
+        return dat;
+    }
+
+    function getDates(startDate, stopDate) {
+        var dateArray = new Array();
+        var currentDate = startDate;
+        while (currentDate <= stopDate) {
+            dateArray.push(currentDate)
+            currentDate = currentDate.addDays(1);
+        }
+        return dateArray;
+    }
+
+
+
     import Chart from './linechart';
     import Multiselect from 'vue-multiselect';
     export default {
@@ -71,7 +90,7 @@
                 'Ninewells Shop',
                 'Online DUSA',
                 'Premier Shop',
-    'Premier Shop - Yoyo Accept',
+                'Premier Shop - Yoyo Accept',
                 'Remote Campus Shop',
                 'Spare'],
 
@@ -121,22 +140,11 @@
                     }
                 },
 
-                dataNames:
-                [
-                ],
-
-                dataLabels: [
-                ],
-                dataValues: [
-                ],
-
-                dataColours: [
-                ]
+                graphData: []
             }
         },
 
         methods: {
-
             getStores()
             {
                 if(this.period1== null || this.period2 == null)
@@ -161,38 +169,42 @@
 
                 axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
-                        if(response.data.length > 1 && Array.isArray(response.data)) {
-                            returns.push(response.data);
-                        }
+                        returns.push(response.data);
                     })
                 }).then( response=>
-                {
-                    this.dataNames = [];
-                    this.dataLabels = [];
-                    this.dataValues = [];
-                    this.dataColours = [];
+                {;
                     if(returns.length > 0)
                     {
+
+                        this.graphData = [];
+
+
                         for(var i =0; i < returns.length; i++) {
+                                // loops through each array in the individual response data.
+                                var Label = this.selected[i];
+                                var Colour = 'black';
+                                var Values = [];
 
-                            if (returns[i][0] != null) {
-                                var Name = null;
-                                var Data = [];
-                                var Colour = null;
-                                var Labels = [];
 
-                                for (var j = 0; j < returns[i].length; j++) {
-                                    Name = returns[i][0].outlet_name;
-                                    Data.push(returns[i][j].total_amount);
-                                    Labels.push(returns[i][j].date);
-                                    Colour = returns[i][0].chart_colour;
+
+                                for (var j = 0; j < returns[i].length; j++)
+                                {
+                                    Label = this.selected[i];
+                                    Colour = returns[i][j].chart_colour;
+                                    Values.push(returns[i][j].total_amount);
                                 }
 
-                                this.dataNames.push(Name);
-                                this.dataLabels.push(Labels);
-                                this.dataValues.push(Data);
-                                this.dataColours.push(Colour);
-                            }
+                                if(Values.length === 0)
+                                {
+                                    Values = [0,0,0,0,0];
+                                }
+
+                            this.graphData[i] =
+                                {
+                                    Label: Label,
+                                    Colour: Colour,
+                                    Values: Values
+                                };
                         }
 
                     }
@@ -213,14 +225,24 @@
 
 
 
-                for(var i =0; i < this.dataNames.length; i++)
+                for(var i =0; i < this.graphData.length; i++)
                 {
                     datasetValue[i] =
                         {
-                            label: this.dataNames[i],
-                            borderColor: this.dataColours[i],
-                            data: this.dataValues[i]
+                            label: this.graphData[i].Label,
+                            borderColor: this.graphData[i].Colour,
+                            data: this.graphData[i].Values
                         };
+
+                }
+
+                console.log(datasetValue);
+
+                var dateArray = getDates(new Date(this.period1), (new Date(this.period2)));
+                var displayDateArray = [];
+
+                for(var i =0; i < dateArray.length; i++)
+                {
 
                 }
 
