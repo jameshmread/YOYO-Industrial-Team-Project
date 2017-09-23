@@ -40,6 +40,10 @@ class UserController extends Controller
             $user->email = $request->input('email');
         }
 
+        if (!empty($request->input('reportfrequency'))) {
+            $user->report_frequency = $request->input('reportfrequency');
+        }
+
         $user->save();
 
         return redirect('home');

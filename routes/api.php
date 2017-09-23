@@ -26,12 +26,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 $router->group([
     'as' => 'api.'
 ], function (Router $router) {
+    $router->get('/transactions/uniqueUsersPerStore', 'APIController@retainedUsersPerStore')->name('retainedUsersPerStore');
+    $router->get('/unique-users-per-store', 'APIController@uniqueUsersPerStore')->name('uniqueUsersPerStore');
     $router->get('/transactions/averagesales', 'APIController@averageSalesPerStore')->name('averageSales');
     $router->get('/transactions/totalsales', 'APIController@totalSales')->name('totalSales');
     $router->get('/transactions/users/volumeperstore', 'APIController@userVolumePerStore')->name('userVolumePerStore');
-    $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
+    $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
     $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
     $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
     $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
+    $router->get('/transactions/store/{name}/{period1}/{period2}', 'APIController@storesByTime')->name('storeTime');
+    $router->get('/store/{period1}/{period2}', 'APIController@totalStoreSalesByTime')->name('totalStoreTime');
+
 });
