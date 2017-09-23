@@ -21,6 +21,7 @@ Vue.component('uservolumeperstorelinechart', require('./components/UserVolumePer
 Vue.component('uservolumeperstorepiechart', require('./components/UserVolumePerStorePiechart.vue'));
 
 Vue.component('store', require('./components/transchart.vue'));
+Vue.component('total', require('./components/TotalSalesPerStore.vue'));
 
 const app = new Vue({
     el: '#app'

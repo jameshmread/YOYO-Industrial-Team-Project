@@ -60,7 +60,7 @@
                                     <ul class="dropdown-menu" role="menu">
                                         <li class="dropdown-header"><h5>Stores</h5></li>
                                         <li>
-                                            <a href="{{route('store.revenue')}}">Transaction average per Store</a>
+                                            <a href="{{route('store.revenue')}}">Transaction Average per Store</a>
                                         </li>
 
                                         <li>
@@ -112,6 +112,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/Chart.bundle.js') }}"></script>
+    <script src="{{ asset('js/main.bundle.js') }}"></script>
 </body>
 </html>

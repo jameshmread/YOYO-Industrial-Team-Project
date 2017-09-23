@@ -13,8 +13,6 @@
 
 use Illuminate\Routing\Router;
 
-// TODO Clean our ROUTE:: and $routers
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,21 +31,33 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 $router->group([
     'middleware' => ['web', 'guest']
 ], function (Router $router) {
-    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
-    Route::post('login', 'Auth\LoginController@login');
+    $router->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    $router->post('login', 'Auth\LoginController@login');
 });
 
 /**
  * AUTH ROUTES
  */
 $router->group([
-    'middlware' => ['web', 'auth']
+    'middleware' => ['web', 'auth']
 ], function (Router $router) {
     $router->get('/stores', function(){ return view('Auth\transactionchart');});
-    $router->get('logout', 'Auth\LoginController@logout')->name('logout');
+    $router->get('/total', function(){ return view('Auth\testchart');});
+    $router->post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
-    $router->get('/data/users/volumeperstore/{type}', 'DataController@userVolumePerStore')->name('user.volumeperstore');
+});
+
+/**
+ * DATA ROUTES
+ */
+$router->group([
+    'middleware' => ['web', 'auth', 'report']
+], function (Router $router) {
+    $router->get('/data/stores/revenue', 'DataController@displayAngularPage')->name('store.revenue');
+    $router->get('/data/stores/retained', 'DataController@uniqueUsersPerStore')->name('store.retained');
+    $router->get('/data/stores/unique', 'DataController@retainedUsersPerStore')->name('store.unique');
+    $router->get('/data/users/volumeperstore', 'DataController@userVolumePerStore')->name('user.volumeperstore');
 });
 
 /**

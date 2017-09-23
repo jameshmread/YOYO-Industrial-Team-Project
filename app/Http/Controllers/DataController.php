@@ -7,9 +7,25 @@ use Illuminate\Http\Request;
 
 class DataController extends Controller
 {
-    public function userVolumePerStore(Request $request, User $user)
+    // TODO Add middleware __construct to check if access to this stores data?
+
+    public function userVolumePerStore()
     {
-        // User will be used later to determine access
-        return view('charts.uservolumeperstore_' . $request->type);
+        return view('charts.uservolumeperstore.uservolume');
+    }
+
+    public function displayAngularPage()
+    {
+        return view('angular.angular');
+    }
+
+    public function uniqueUsersPerStore()
+    {
+        return view('angular.unique');
+    }
+
+    public function retainedUsersPerStore()
+    {
+        return view('angular.retained');
     }
 }
