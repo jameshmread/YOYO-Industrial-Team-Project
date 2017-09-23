@@ -4,11 +4,6 @@
         <div class="row">
 
             <div class="col col-md-3 col-lg-3 col-sm-3">
-
-                <!--<select id="DataChoiceSelection" name="selected" v-model="selected"-->
-                        <!--class="storeDropDown form-control" multiple>-->
-                    <!--<option v-for="item in choiceData" :value="item">{{item}}</option>-->
-                <!--</select>-->
                 <multiselect
                 v-model="selected"
                 :options="choiceData"
