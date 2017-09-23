@@ -2,30 +2,30 @@
     <div class="container">
         <br/>
         <div class="row">
-
-            <div class="col col-md-3 col-lg-3 col-sm-3">
+            <div class="col col-md-12 col-lg-12 col-sm-12">
                 <multiselect
                 v-model="selected"
                 :options="choiceData"
                 :searchable="false"
-                :close-on-select="false"
                 :show-labels="false"
+                :close-on-select="false"
                 :hide-selected="true"
                 placeholder="Pick a value"
                 :multiple = "true">
                 </multiselect>
-
             </div>
+        </div>
 
+        <div class="row">
             <div class="col col-md-3 col-lg-3 col-sm-3">
                 <input class="input-group date" v-model="period1" type="text" onfocus="(this.type='date')"
                        onblur="(this.type='text')" placeholder="Start Date">
-            </div>
-            <div class="col col-md-3 col-lg-3 col-sm-3">
                 <input class="input-group date" v-model="period2" type="text" onfocus="(this.type='date')"
                        onblur="(this.type='text')" placeholder="End Date">
             </div>
+        </div>
 
+        <div class="row">
             <button v-on:click="getStores()">Get Data</button>
         </div>
 
@@ -94,6 +94,8 @@
                 period1: null,
                 period2: null,
 
+                dates:[],
+
                 datacollection: {
                     labels: [],
                     datasets: [
@@ -105,6 +107,11 @@
                 },
 
                 options: {
+                    title:
+                        {
+                            display: true,
+                            text: "Bunch of transactions."
+                        },
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
@@ -112,24 +119,22 @@
                             gridLines:
                                 {
                                     display: true,
-                                    color:'rgba(0,0,0,0.2)',
                                     borderDash: [8,4]
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Date'
+                                labelString: 'Date [Days]'
                             }
                         }],
                         yAxes: [{
                             gridLines:
                                 {
                                     display: true,
-                                    color:'rgba(0,0,0,0.2)',
                                     borderDash: [8,4]
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount'
+                                labelString: 'Total Amount [£]'
                             }
                         }]
                     }
@@ -140,6 +145,22 @@
         },
 
         methods: {
+
+            getDates()
+            {
+                var startDate = new Date(this.period1);
+                var endDate = new Date(this.period2);
+                var foundDates = getDates(startDate, endDate);
+
+                var division = Math.ceil    (foundDates.length/7);
+
+                for(var i =0; i < foundDates.length; i++){
+                    if(i % division == 0) {
+                        this.dates.push(foundDates[i]);
+                    }
+                }
+            },
+
             getStores()
             {
                 if(this.period1== null || this.period2 == null)
@@ -149,6 +170,8 @@
 
                 this.period1 = this.period1.replace("/","-");
                 this.period2 = this.period2.replace("/", "-");
+
+                this.getDates();
 
                 var calls =[];
 
@@ -167,10 +190,9 @@
                         returns.push(response.data);
                     })
                 }).then( response=>
-                {;
+                {
                     if(returns.length > 0)
                     {
-
                         this.graphData = [];
 
 
@@ -180,18 +202,29 @@
                                 var Colour = 'black';
                                 var Values = [];
 
-
+                                for(var j =0; j < this.dates.length; j++)
+                                {
+                                    Values.push(0);
+                                }
 
                                 for (var j = 0; j < returns[i].length; j++)
                                 {
                                     Label = this.selected[i];
                                     Colour = returns[i][j].chart_colour;
-                                    Values.push(returns[i][j].total_amount);
-                                }
 
-                                if(Values.length === 0)
-                                {
-                                    Values = [0,0,0,0,0];
+                                    for(var x =0; x < this.dates.length; x++)
+                                    {
+                                        var localDate = new Date(returns[i][j].date);
+                                        var compareDate = new Date(this.dates[x]);
+                                        if(x > 1)
+                                        {
+                                            var previousDate = new Date(this.dates[x-1]);
+                                            if(localDate < compareDate && localDate > previousDate)
+                                            {
+                                                Values[x-1] += parseInt(returns[i][j].total_amount);
+                                            }
+                                        }
+                                    }
                                 }
 
                             this.graphData[i] =
@@ -226,24 +259,27 @@
                         {
                             label: this.graphData[i].Label,
                             borderColor: this.graphData[i].Colour,
+                            backgroundColor: this.graphData.Colour,
                             data: this.graphData[i].Values
                         };
 
                 }
 
-                console.log(datasetValue);
+                var displayDates = [];
 
-                var dateArray = getDates(new Date(this.period1), (new Date(this.period2)));
-                var displayDateArray = [];
-
-                for(var i =0; i < dateArray.length; i++)
+                for(var i =0; i < this.dates.length; i++)
                 {
+                    var date = this.dates[i].getDate() +
+                        '/' + this.dates[i].getMonth() + '/' + this.dates[i].getFullYear() ;
+
+                    displayDates.push(date);
 
                 }
 
+
                 this.datacollection =
                     {
-                        labels: [this.period1, this.period2],
+                        labels: displayDates,
                         datasets : datasetValue
                     }
 
