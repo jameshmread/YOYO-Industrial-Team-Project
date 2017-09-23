@@ -28,4 +28,9 @@ class DataController extends Controller
     {
         return view('angular.retained');
     }
+
+    public function SalesOverDates()
+    {
+        return view('charts.salesovertime.salesdate');
+    }
 }
