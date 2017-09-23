@@ -1,8 +1,30 @@
 <template>
     <div class="container">
             <div class="Chart">
-                <h1 style="text-align:center;">Some data</h1>
-                <BarChart :chart-data="datacollection" :options="options"></BarChart>
+                <h1 style="text-align:center;">Total Revenue Per Store / Time</h1>
+                <h2 style="text-align:center;">Time Period: {{date1}} to {{date2}} </h2>
+
+                <div style = "width: 20%;"><multiselect
+                        v-model="choice"
+                        :options="choices"
+                        :searchable="false"
+                        :close-on-select="false"
+                        :show-labels="false"
+                        :hide-selected="true"
+                        placeholder="Pick a value">
+                </multiselect></div>
+
+                <br>
+
+                <div v-if="choice === 'Horizontal Bar Chart'">
+                    <HorizontalBarChart :chart-data="datacollection" :options="options"></HorizontalBarChart>
+                </div>
+                <div v-else-if="choice === 'Vertical Bar Chart'">
+                    <BarChart :chart-data="datacollection" :options="options"></BarChart>
+                </div>
+                <div v-else-if="choice === 'Pie Chart'">
+                    <PieChart :chart-data="datacollection" :options="options"></PieChart>
+                </div>
                 <button @click="fillData()">Randomize</button>
             </div>
     </div>
@@ -13,24 +35,54 @@
 <script>
     import PieChart from './piechart.js'
     import BarChart from './barchart.js'
+    import HorizontalBarChart from './horizontalbarchart.js'
+    import Multiselect from 'vue-multiselect';
+
+
 
 
     export default {
         components: {
             PieChart,
-            BarChart
+            BarChart,
+            HorizontalBarChart,
+            Multiselect
         },
         data () {
             return {
 
+                choice: 'Horizontal Bar Chart',
+
+                choices: [
+                    'Horizontal Bar Chart',
+                    'Vertical Bar Chart',
+                    'Pie Chart'
+                ],
+
                 options: {
+
+                    legend: {
+                        display: false
+                    },
+
                     scales: {
                         xAxes: [{
-
+                            gridLines:
+                                {
+                                    display: true,
+                                    color:'rgba(0,0,0,0.2)',
+                                    borderDash: [8,4]
+                                },
+                            barThickness : 50
 
                         }],
                         yAxes: [{
-
+                            gridLines:
+                                {
+                                    display: true,
+                                    color:'rgba(0,0,0,0.2)',
+                                    borderDash: [8,4]
+                                },
 
                         }]
                     }
@@ -65,7 +117,7 @@
                         labels: labels,
                         datasets: [
                             {
-                                label: 'Transactions',
+                                label: 'Total Amount (£)',
                                 backgroundColor: colours,
                                 data: values
                             }
@@ -75,12 +127,11 @@
 
 
             },
-            getRandomInt () {
-                return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-            }
         }
     }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
     .container {
