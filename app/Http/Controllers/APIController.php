@@ -115,7 +115,8 @@ class APIController extends Controller
         $returns = Store::all()->map(function ($item) {
             return
                 [
-                    $item['outlet_name'] => Transaction::orderby('date', 'asc')
+                    $item['outlet_name'] => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->orderby('date', 'asc')
                         ->select('total_amount', 'date')
                         ->get()
                 ];
