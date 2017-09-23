@@ -1,7 +1,9 @@
 <template>
     <div class="container">
         <br/>
-        <div class="row">
+        <div class="Chart">
+            <h1 style="text-align:center;">Store Sales over time</h1>
+            <div class="row">
             <div class="col col-md-12 col-lg-12 col-sm-12">
                 <multiselect
                 v-model="selected"
@@ -29,8 +31,6 @@
             <button v-on:click="getStores()">Get Data</button>
         </div>
 
-        <div class="Chart">
-            <h1 style="text-align:center;">Some data</h1>
             <Chart :chart-data="datacollection" :options="options"></Chart>
         </div>
     </div>
@@ -259,7 +259,7 @@
                         {
                             label: this.graphData[i].Label,
                             borderColor: this.graphData[i].Colour,
-                            backgroundColor: this.graphData.Colour,
+                            backgroundColor: 'rgba(0,0,0,0)',
                             data: this.graphData[i].Values
                         };
 
@@ -292,7 +292,7 @@
 
 <style>
     .container {
-        max-width: 800px;
+        max-width: 10000800px;
         margin: 0 auto;
     }
 
