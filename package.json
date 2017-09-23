@@ -21,6 +21,7 @@
   "dependencies": {
     "chart.js": "^2.7.0",
     "chosen-js": "^1.8.2",
-    "vue-chartjs": "^2.8.7"
+    "vue-chartjs": "^2.8.7",
+    "vue-multiselect": "^2.0.2"
   }
 }

@@ -6,6 +6,7 @@ use App\Customer;
 use App\Store;
 use Illuminate\Http\Request;
 use App\Transaction;
+use App\Colours;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -162,10 +163,50 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function totalByStore()
+    public function storesByTime(Request $request)
     {
-        return DB::select('select s.outlet_name as name, SUM(t.total_amount) as total, s.chart_colour as colour from transactions t, stores s where s.id = t.store_id group by t.store_id');
+        $name = $request->name;
+        $name = str_replace("-", " ", $name);
+
+        if ((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.id')
+                ->select('transactions.total_amount')
+                ->where('stores.outlet_name', '=', $name)
+                ->count() >= 1)) {
+
+            return DB::table('transactions')
+                ->join('stores', 'transactions.store_id', '=', 'stores.id')
+                ->join('colours', 'stores.outlet_name', '=', 'colours.store')
+                ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
+                ->where('stores.outlet_name', '=', $name)
+                ->where('colours.store', '=', $name)
+                ->where('date', '>=', $request->period1)
+                ->where('date', '<=', $request->period2)
+                ->get();
+        }
     }
+
+
+    public function totalStoreSalesByTime(Request $request)
+    {
+
+        $period1 = $request->period1;
+        $period2 = $request->period2;
+
+        $var = Store::all()->map(function ($item) use ($request){
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'sum_of_transactions' => Transaction::where('store_id', '=', $item['id'])->where('date', '>=', $request->period1)
+                    ->where('date', '<=', $request->period2)->sum('total_amount'),
+                'color' => Colours::where('store', '=', $item['outlet_name'])->pluck('chart_colour')->first(),
+            ];
+
+        });
+        return response()
+            ->json($var)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+
 
     public function uniqueUsersPerStore()
     {
@@ -179,3 +220,4 @@ class APIController extends Controller
         return response()->json($userVolumeArray)->header(self::CORS_KEY, self::CORS_VALUE);
     }
 }
+
