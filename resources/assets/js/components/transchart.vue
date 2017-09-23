@@ -107,6 +107,7 @@
                 },
 
                 options: {
+                    bezierCurve : false,
                     title:
                         {
                             display: true,
@@ -154,6 +155,8 @@
 
                 var division = Math.ceil    (foundDates.length/7);
 
+                this.dates = [];
+
                 for(var i =0; i < foundDates.length; i++){
                     if(i % division == 0) {
                         this.dates.push(foundDates[i]);
@@ -191,10 +194,10 @@
                     })
                 }).then( response=>
                 {
+                    this.graphData = [];
+
                     if(returns.length > 0)
                     {
-                        this.graphData = [];
-
 
                         for(var i =0; i < returns.length; i++) {
                                 // loops through each array in the individual response data.
@@ -269,8 +272,10 @@
 
                 for(var i =0; i < this.dates.length; i++)
                 {
+
+                    console.log(this.dates[i]);
                     var date = this.dates[i].getDate() +
-                        '/' + this.dates[i].getMonth() + '/' + this.dates[i].getFullYear() ;
+                        '/' + (this.dates[i].getMonth()+ 1) + '/' + this.dates[i].getFullYear() ;
 
                     displayDates.push(date);
 
