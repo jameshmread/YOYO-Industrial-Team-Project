@@ -168,12 +168,12 @@ class APIController extends Controller
         $name = $request->name;
         $name = str_replace("-", " ", $name);
 
-        if ((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.id')
+        if ((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.outlet_reference')
                 ->select('transactions.total_amount')
                 ->where('stores.outlet_name', '=', $name))) {
 
             return DB::table('transactions')
-                ->join('stores', 'transactions.store_id', '=', 'stores.id')
+                ->join('stores', 'transactions.store_id', '=', 'stores.outlet_reference')
                 ->join('colours', 'stores.outlet_name', '=', 'colours.store')
                 ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
                 ->where('stores.outlet_name', '=', $name)
