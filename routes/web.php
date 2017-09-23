@@ -41,8 +41,6 @@ $router->group([
 $router->group([
     'middleware' => ['web', 'auth']
 ], function (Router $router) {
-    $router->get('/stores', function(){ return view('Auth\transactionchart');});
-    $router->get('/total', function(){ return view('Auth\testchart');});
     $router->post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
@@ -54,6 +52,7 @@ $router->group([
 $router->group([
     'middleware' => ['web', 'auth', 'report']
 ], function (Router $router) {
+    $router->get('/data/stores/date', 'DataController@SalesOverDates')->name('store.date');
     $router->get('/data/stores/revenue', 'DataController@displayAngularPage')->name('store.revenue');
     $router->get('/data/stores/retained', 'DataController@uniqueUsersPerStore')->name('store.retained');
     $router->get('/data/stores/unique', 'DataController@retainedUsersPerStore')->name('store.unique');
