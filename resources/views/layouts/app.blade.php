@@ -72,6 +72,10 @@
                                         </li>
 
                                         <li>
+                                            <a href="{{route('store.date')}}">Sales over date range per Store</a>
+                                        </li>
+
+                                        <li>
                                             <a href="{{route('store.total')}}">Total sales per Store</a>
                                         </li>
 

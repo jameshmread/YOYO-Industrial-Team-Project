@@ -170,8 +170,7 @@ class APIController extends Controller
 
         if ((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.id')
                 ->select('transactions.total_amount')
-                ->where('stores.outlet_name', '=', $name)
-                ->count() >= 1)) {
+                ->where('stores.outlet_name', '=', $name))) {
 
             return DB::table('transactions')
                 ->join('stores', 'transactions.store_id', '=', 'stores.id')

@@ -1,47 +1,61 @@
 <template>
     <div class="container">
         <br/>
-        <div class="row">
-
-            <div class="col col-md-3 col-lg-3 col-sm-3">
-
-                <!--<select id="DataChoiceSelection" name="selected" v-model="selected"-->
-                        <!--class="storeDropDown form-control" multiple>-->
-                    <!--<option v-for="item in choiceData" :value="item">{{item}}</option>-->
-                <!--</select>-->
+        <div class="Chart">
+            <h1 style="text-align:center;">Store Sales over time</h1>
+            <div class="row">
+            <div class="col col-md-12 col-lg-12 col-sm-12">
                 <multiselect
                 v-model="selected"
                 :options="choiceData"
                 :searchable="false"
-                :close-on-select="false"
                 :show-labels="false"
+                :close-on-select="false"
                 :hide-selected="true"
                 placeholder="Pick a value"
                 :multiple = "true">
                 </multiselect>
-
             </div>
+        </div>
 
+        <div class="row">
             <div class="col col-md-3 col-lg-3 col-sm-3">
                 <input class="input-group date" v-model="period1" type="text" onfocus="(this.type='date')"
                        onblur="(this.type='text')" placeholder="Start Date">
-            </div>
-            <div class="col col-md-3 col-lg-3 col-sm-3">
                 <input class="input-group date" v-model="period2" type="text" onfocus="(this.type='date')"
                        onblur="(this.type='text')" placeholder="End Date">
             </div>
+        </div>
 
+        <div class="row">
             <button v-on:click="getStores()">Get Data</button>
         </div>
 
-        <div class="Chart">
-            <h1 style="text-align:center;">Some data</h1>
             <Chart :chart-data="datacollection" :options="options"></Chart>
         </div>
     </div>
 </template>
 
 <script>
+
+    Date.prototype.addDays = function(days) {
+        var dat = new Date(this.valueOf())
+        dat.setDate(dat.getDate() + days);
+        return dat;
+    }
+
+    function getDates(startDate, stopDate) {
+        var dateArray = new Array();
+        var currentDate = startDate;
+        while (currentDate <= stopDate) {
+            dateArray.push(currentDate)
+            currentDate = currentDate.addDays(1);
+        }
+        return dateArray;
+    }
+
+
+
     import Chart from './linechart';
     import Multiselect from 'vue-multiselect';
     export default {
@@ -71,7 +85,7 @@
                 'Ninewells Shop',
                 'Online DUSA',
                 'Premier Shop',
-    'Premier Shop - Yoyo Accept',
+                'Premier Shop - Yoyo Accept',
                 'Remote Campus Shop',
                 'Spare'],
 
@@ -79,6 +93,8 @@
 
                 period1: null,
                 period2: null,
+
+                dates:[],
 
                 datacollection: {
                     labels: [],
@@ -91,6 +107,12 @@
                 },
 
                 options: {
+                    bezierCurve : false,
+                    title:
+                        {
+                            display: true,
+                            text: "Bunch of transactions."
+                        },
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
@@ -98,44 +120,49 @@
                             gridLines:
                                 {
                                     display: true,
-                                    color:'rgba(0,0,0,0.2)',
                                     borderDash: [8,4]
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Date'
+                                labelString: 'Date [Days]'
                             }
                         }],
                         yAxes: [{
                             gridLines:
                                 {
                                     display: true,
-                                    color:'rgba(0,0,0,0.2)',
                                     borderDash: [8,4]
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount'
+                                labelString: 'Total Amount [£]'
                             }
                         }]
                     }
                 },
 
-                dataNames:
-                [
-                ],
-
-                dataLabels: [
-                ],
-                dataValues: [
-                ],
-
-                dataColours: [
-                ]
+                graphData: []
             }
         },
 
         methods: {
+
+            getDates()
+            {
+                var startDate = new Date(this.period1);
+                var endDate = new Date(this.period2);
+                var foundDates = getDates(startDate, endDate);
+
+                var division = Math.ceil    (foundDates.length/7);
+
+                this.dates = [];
+
+                for(var i =0; i < foundDates.length; i++){
+                    if(i % division == 0) {
+                        this.dates.push(foundDates[i]);
+                    }
+                }
+            },
 
             getStores()
             {
@@ -146,6 +173,8 @@
 
                 this.period1 = this.period1.replace("/","-");
                 this.period2 = this.period2.replace("/", "-");
+
+                this.getDates();
 
                 var calls =[];
 
@@ -161,38 +190,52 @@
 
                 axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
-                        if(response.data.length > 1 && Array.isArray(response.data)) {
-                            returns.push(response.data);
-                        }
+                        returns.push(response.data);
                     })
                 }).then( response=>
                 {
-                    this.dataNames = [];
-                    this.dataLabels = [];
-                    this.dataValues = [];
-                    this.dataColours = [];
+                    this.graphData = [];
+
                     if(returns.length > 0)
                     {
+
                         for(var i =0; i < returns.length; i++) {
+                                // loops through each array in the individual response data.
+                                var Label = this.selected[i];
+                                var Colour = 'black';
+                                var Values = [];
 
-                            if (returns[i][0] != null) {
-                                var Name = null;
-                                var Data = [];
-                                var Colour = null;
-                                var Labels = [];
-
-                                for (var j = 0; j < returns[i].length; j++) {
-                                    Name = returns[i][0].outlet_name;
-                                    Data.push(returns[i][j].total_amount);
-                                    Labels.push(returns[i][j].date);
-                                    Colour = returns[i][0].chart_colour;
+                                for(var j =0; j < this.dates.length; j++)
+                                {
+                                    Values.push(0);
                                 }
 
-                                this.dataNames.push(Name);
-                                this.dataLabels.push(Labels);
-                                this.dataValues.push(Data);
-                                this.dataColours.push(Colour);
-                            }
+                                for (var j = 0; j < returns[i].length; j++)
+                                {
+                                    Label = this.selected[i];
+                                    Colour = returns[i][j].chart_colour;
+
+                                    for(var x =0; x < this.dates.length; x++)
+                                    {
+                                        var localDate = new Date(returns[i][j].date);
+                                        var compareDate = new Date(this.dates[x]);
+                                        if(x > 1)
+                                        {
+                                            var previousDate = new Date(this.dates[x-1]);
+                                            if(localDate < compareDate && localDate > previousDate)
+                                            {
+                                                Values[x-1] += parseInt(returns[i][j].total_amount);
+                                            }
+                                        }
+                                    }
+                                }
+
+                            this.graphData[i] =
+                                {
+                                    Label: Label,
+                                    Colour: Colour,
+                                    Values: Values
+                                };
                         }
 
                     }
@@ -213,20 +256,35 @@
 
 
 
-                for(var i =0; i < this.dataNames.length; i++)
+                for(var i =0; i < this.graphData.length; i++)
                 {
                     datasetValue[i] =
                         {
-                            label: this.dataNames[i],
-                            borderColor: this.dataColours[i],
-                            data: this.dataValues[i]
+                            label: this.graphData[i].Label,
+                            borderColor: this.graphData[i].Colour,
+                            backgroundColor: 'rgba(0,0,0,0)',
+                            data: this.graphData[i].Values
                         };
 
                 }
 
+                var displayDates = [];
+
+                for(var i =0; i < this.dates.length; i++)
+                {
+
+                    console.log(this.dates[i]);
+                    var date = this.dates[i].getDate() +
+                        '/' + (this.dates[i].getMonth()+ 1) + '/' + this.dates[i].getFullYear() ;
+
+                    displayDates.push(date);
+
+                }
+
+
                 this.datacollection =
                     {
-                        labels: [this.period1, this.period2],
+                        labels: displayDates,
                         datasets : datasetValue
                     }
 
@@ -239,7 +297,7 @@
 
 <style>
     .container {
-        max-width: 800px;
+        max-width: 10000800px;
         margin: 0 auto;
     }
 
