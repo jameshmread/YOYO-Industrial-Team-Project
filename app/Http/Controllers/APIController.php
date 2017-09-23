@@ -195,7 +195,7 @@ class APIController extends Controller
         $var = Store::all()->map(function ($item) use ($request){
             return [
                 'outlet_name' => $item['outlet_name'],
-                'sum_of_transactions' => Transaction::where('store_id', '=', $item['id'])->where('date', '>=', $request->period1)
+                'sum_of_transactions' => Transaction::where('store_id', '=', $item['outlet_reference'])->where('date', '>=', $request->period1)
                     ->where('date', '<=', $request->period2)->sum('total_amount'),
                 'color' => Colours::where('store', '=', $item['outlet_name'])->pluck('chart_colour')->first(),
             ];
