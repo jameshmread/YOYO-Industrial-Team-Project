@@ -104,6 +104,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/Chart.bundle.js') }}"></script>
+    <script src="{{ asset('js/main.bundle.js') }}"></script>
 </body>
 </html>

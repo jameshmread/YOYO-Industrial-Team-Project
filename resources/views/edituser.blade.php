@@ -46,6 +46,30 @@
                                value="{{ Request::old('email', $user->email) }}">
                     </div>
 
+                    @if($user->is_reportable)
+                        <h3>Report Frequency</h3>
+
+                        <select class="reportfrequency form-control" name="reportfrequency">
+                            <option value="none"
+                                    {{ $user->report_frequency === 'none' ? 'selected' : '' }}>
+                                None
+                            </option>
+
+                            <option value="weekly"
+                                    {{ $user->report_frequency === 'weekly' ? 'selected' : '' }}>
+                                Weekly
+                            </option>
+
+                            <option value="monthly"
+                                    {{ $user->report_frequency === 'monthly' ? 'selected' : '' }}>
+                                Monthly
+                            </option>
+                        </select>
+
+                        <br>
+                        <br>
+                    @endif
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Update Profile</button>
                     </div>
