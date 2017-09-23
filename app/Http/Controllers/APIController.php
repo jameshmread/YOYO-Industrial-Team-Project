@@ -6,6 +6,7 @@ use App\Customer;
 use App\Store;
 use Illuminate\Http\Request;
 use App\Transaction;
+use App\Colours;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -110,11 +111,10 @@ class APIController extends Controller
 //            ->where('date', '<=', $request->period2)
 //            ->get();
 
-        if((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.id')
+        if ((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.id')
                 ->select('transactions.total_amount')
                 ->where('stores.outlet_name', '=', $name)
-                ->count() >= 1))
-        {
+                ->count() >= 1)) {
 
             return DB::table('transactions')
                 ->join('stores', 'transactions.store_id', '=', 'stores.id')
@@ -127,4 +127,25 @@ class APIController extends Controller
                 ->get();
         }
     }
+
+    public function totalStoreSalesByTime(Request $request)
+    {
+
+        $period1 = $request->period1;
+        $period2 = $request->period2;
+
+        $var = Store::all()->map(function ($item) use ($request){
+            return [
+                'outlet_name' => $item['outlet_name'],
+                'sum_of_transactions' => Transaction::where('store_id', '=', $item['id'])->where('date', '>=', $request->period1)
+                    ->where('date', '<=', $request->period2)->sum('total_amount'),
+                'color' => Colours::where('store', '=', $item['outlet_name'])->pluck('chart_colour')->first(),
+            ];
+
+        });
+        return response()
+            ->json($var)
+            ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
 }
