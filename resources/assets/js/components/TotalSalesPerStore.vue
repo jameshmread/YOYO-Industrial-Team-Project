@@ -12,6 +12,7 @@
                             :close-on-select="false"
                             :show-labels="false"
                             :hide-selected="true"
+                            @input ="fillData()"
                             placeholder="Pick a value">
                     </multiselect></div>
 
