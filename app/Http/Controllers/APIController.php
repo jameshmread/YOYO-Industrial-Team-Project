@@ -149,17 +149,18 @@ class APIController extends Controller
 
     public function averageSalesPerStore()
     {
-        $averages = Store::all()->map(function ($item) {
-            return [
-                'outlet_name' => $item['outlet_name'],
-                'store_id' => $item['outlet_reference'],
-                'average_transaction_value' => Transaction::where('store_id', '=', $item['outlet_reference'])
-                        ->sum('total_amount') / Transaction::where('store_id', '=', $item['outlet_reference'])
-                        ->count()
-            ];
+        $returns = Store::all()->map(function ($item) {
+            return
+                [
+                    $item['outlet_name'] => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    ->orderby('date', 'asc')
+                        ->select('total_amount', 'date')
+                        ->get()
+                ];
+
         });
         return response()
-            ->json($averages->all())
+            ->json($returns->all())
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
