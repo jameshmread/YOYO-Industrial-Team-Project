@@ -14,6 +14,11 @@ class DataController extends Controller
         return view('charts.uservolumeperstore.uservolume');
     }
 
+    public function totalSalesPerStore()
+    {
+        return view ('charts.totalsalesperstore.totalsales');
+    }
+
     public function displayAngularPage()
     {
         return view('angular.angular');
