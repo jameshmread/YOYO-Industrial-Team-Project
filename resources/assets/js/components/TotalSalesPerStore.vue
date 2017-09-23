@@ -1,19 +1,36 @@
 <template>
     <div class="container">
             <div class="Chart">
-                <h1 style="text-align:center;">Total Revenue Per Store / Time</h1>
+                <h1 style="text-align:center;">Total Revenue Per Store / Time (£)</h1>
                 <h2 style="text-align:center;">Time Period: {{date1}} to {{date2}} </h2>
 
-                <div style = "width: 20%;"><multiselect
-                        v-model="choice"
-                        :options="choices"
-                        :searchable="false"
-                        :close-on-select="false"
-                        :show-labels="false"
-                        :hide-selected="true"
-                        placeholder="Pick a value">
-                </multiselect></div>
+                <div class="row">
+                    <div class="col col-md-3 col-lg-3 col-sm-3" style = "width: 20%;"><multiselect
+                            v-model="choice"
+                            :options="choices"
+                            :searchable="false"
+                            :close-on-select="false"
+                            :show-labels="false"
+                            :hide-selected="true"
+                            placeholder="Pick a value">
+                    </multiselect></div>
 
+                    <br>
+
+                    <div class="col col-md-3 col-lg-3 col-sm-3">
+                        <input class="input-group date" v-model="date1" type="text" onfocus="(this.type='date')"
+                               onblur="(this.type='text')" placeholder="Start Date">
+                    </div>
+
+                    <div class="col col-md-3 col-lg-3 col-sm-3">
+                        <input class="input-group date" v-model="date2" type="text" onfocus="(this.type='date')"
+                               onblur="(this.type='text')" placeholder="End Date">
+                    </div>
+
+                    <div class="col col-md-3 col-lg-3 col-sm-3">
+                        <button @click="fillData()">Refresh</button>
+                    </div>
+                </div>
                 <br>
 
                 <div v-if="choice === 'Horizontal Bar Chart'">
@@ -25,7 +42,7 @@
                 <div v-else-if="choice === 'Pie Chart'">
                     <PieChart :chart-data="datacollection" :options="options"></PieChart>
                 </div>
-                <button @click="fillData()">Randomize</button>
+
             </div>
     </div>
 
@@ -59,8 +76,10 @@
                     'Pie Chart'
                 ],
 
+
                 options: {
 
+                    //Help with if statement for this
                     legend: {
                         display: false
                     },
@@ -73,7 +92,12 @@
                                     color:'rgba(0,0,0,0.2)',
                                     borderDash: [8,4]
                                 },
-                            barThickness : 50
+                            barThickness : 50,
+
+                            ticks: {
+                                min: 0,
+                                autoSkip: false
+                            },
 
                         }],
                         yAxes: [{
@@ -90,8 +114,8 @@
 
                 datacollection: null,
 
-                date1 : '2017-09-01',
-                date2 : '2017-09-30'
+                date1 : null,
+                date2 : null,
             }
         },
         mounted () {
@@ -106,6 +130,7 @@
                     var labels = [];
                     var values = [];
                     var colours = [];
+                    var label;
 
 
                     labels = response.data.map(x => {return x.outlet_name});
@@ -113,12 +138,31 @@
                     colours = response.data.map(x => {return x.color});
 
 
+                    if(this.choice === 'Vertical Bar Chart' || this.choice === 'Horizontal Bar Chart'){
+
+                        label = 'Total Amount (£)';
+                        this.options.legend.display = false;
+
+
+                    }
+
+                    else if (this.choice === 'Pie Chart'){
+
+                        label = labels;
+                        this.options.legend.display = true;
+
+
+                    }
+
                     this.datacollection = {
                         labels: labels,
                         datasets: [
                             {
-                                label: 'Total Amount (£)',
+                                //Help with if statement for this
+                                label: label,
+
                                 backgroundColor: colours,
+
                                 data: values
                             }
                         ],
