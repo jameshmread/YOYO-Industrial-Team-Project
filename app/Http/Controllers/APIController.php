@@ -76,16 +76,16 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function userVolumePerStore()
+    public function userVolumePerStore(Request $request)
     {
-        // Will need a limit on returned transactions
-        // Likely pass in day or set two method for week/month/year
-
-        $userVolumeArray = Store::all()->map(function ($item) {
+        $userVolumeArray = Store::all()->map(function ($item) use ($request) {
             return [
                 'store' => $item['outlet_name'],
                 'customers' => Transaction::where('outlet_name', '=', $item['outlet_name'])
+                    ->where('date', '>=', $request->period1)
+                    ->where('date', '<=', $request->period2)
                     ->count(),
+                'color' => Colours::where('store', '=', $item['outlet_name'])->pluck('chart_colour')->first(),
             ];
         });
 
