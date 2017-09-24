@@ -79,6 +79,7 @@ class TransactionBuilder
         $transaction = Transaction::firstOrCreate([
             'customer_id' => $customer->id,
             'store_id' => $storeId,
+            'outlet_name' => $store_name,
             'date' => $date,
             'transaction_type' => $transactionType,
             'cash_spent' => $cashSpent,
