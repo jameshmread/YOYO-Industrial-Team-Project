@@ -7,7 +7,6 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     </head>
     <app-root>
-        <script src="{{ asset('js/Chart.bundle.js') }}"></script>
     </app-root>
 </div>
 @endsection()
