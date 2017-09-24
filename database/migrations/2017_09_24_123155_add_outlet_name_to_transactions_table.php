@@ -14,7 +14,7 @@ class AddOutletNameToTransactionsTable extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->string('outlet_name');
+            $table->string('outlet_name')->default('NULL');
         });
     }
 
