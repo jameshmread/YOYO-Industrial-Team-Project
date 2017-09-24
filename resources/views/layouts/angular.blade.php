@@ -122,5 +122,10 @@
     <!-- Scripts -->
     <script src="{{ asset('js/Chart.bundle.js') }}"></script>
     <script src="{{ asset('js/main.bundle.js') }}"></script>
+    <script type="text/javascript" src="inline.bundle.js"></script>
+    <script type="text/javascript" src="polyfills.bundle.js"></script>
+    <script type="text/javascript" src="styles.bundle.js"></script>
+    <script type="text/javascript" src="vendor.bundle.js"></script>
+    <script type="text/javascript" src="main.bundle.js"></script>
 </body>
 </html>
