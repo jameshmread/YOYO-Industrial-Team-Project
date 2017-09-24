@@ -16,9 +16,7 @@ window.Vue = require('vue');
 
 Vue.component('example', require('./components/Example.vue'));
 
-Vue.component('uservolumeperstorebarchart', require('./components/UserVolumePerStoreBarchart.vue'));
-Vue.component('uservolumeperstorelinechart', require('./components/UserVolumePerStoreLinechart.vue'));
-Vue.component('uservolumeperstorepiechart', require('./components/UserVolumePerStorePiechart.vue'));
+Vue.component('uservolume', require('./components/UserVolumePerStore.vue'));
 
 Vue.component('store', require('./components/transchart.vue'));
 Vue.component('total', require('./components/TotalSalesPerStore.vue'));
