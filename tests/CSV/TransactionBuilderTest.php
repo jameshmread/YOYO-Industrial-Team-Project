@@ -43,7 +43,6 @@ class TransactionBuilderTest extends DatabaseTestCase
         $this->assertEquals(0.50, $transactions['fed4ad8118913b381f331464f307cb18']->total_amount);
         $this->assertEquals(0.80, $transactions['54bd1daeef281a7177ddfed48e785fda']->cash_spent);
         $this->assertEquals('239', $transactions['73772429cd3bca77fd0c3b6b8c2eff52']->store_id);
-        $this->assertEquals('Spare', $transactions['ae6a5f0d6a5511f8349916f775238658']->outlet_name);
         $this->assertEquals('9', $transactions['91d2379e3e69c6a4e6d500984ba43403']->customer_id);
         $this->assertEquals('2015-08-25 12:49:44', $transactions['db8f1d15adebfdb329094f7e3ef635d4']->date);
         $this->assertEquals(0.00, $transactions['9d7bcf7dc6faec68447e5860f3115e50']->discount_amount);
@@ -64,7 +63,6 @@ class TransactionBuilderTest extends DatabaseTestCase
         $this->assertEquals(0.50, $this->getTransactionWithHash($transactions_collection, 'fed4ad8118913b381f331464f307cb18')->total_amount);
         $this->assertEquals(0.80, $this->getTransactionWithHash($transactions_collection, '54bd1daeef281a7177ddfed48e785fda')->cash_spent);
         $this->assertEquals('239', $this->getTransactionWithHash($transactions_collection, '73772429cd3bca77fd0c3b6b8c2eff52')->store_id);
-        $this->assertEquals('Spare', $this->getTransactionWithHash($transactions_collection,'ae6a5f0d6a5511f8349916f775238658')->outlet_name);
         $this->assertEquals('9', $this->getTransactionWithHash($transactions_collection, '91d2379e3e69c6a4e6d500984ba43403')->customer_id);
         $this->assertEquals('2015-08-25 12:49:44', $this->getTransactionWithHash($transactions_collection, 'db8f1d15adebfdb329094f7e3ef635d4')->date);
         $this->assertEquals(0.00, $this->getTransactionWithHash($transactions_collection, '9d7bcf7dc6faec68447e5860f3115e50')->discount_amount);
