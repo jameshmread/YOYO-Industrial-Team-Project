@@ -76,16 +76,16 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function userVolumePerStore()
+    public function userVolumePerStore(Request $request)
     {
-        // Will need a limit on returned transactions
-        // Likely pass in day or set two method for week/month/year
-
-        $userVolumeArray = Store::all()->map(function ($item) {
+        $userVolumeArray = Store::all()->map(function ($item) use ($request) {
             return [
                 'store' => $item['outlet_name'],
-                'customers' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                'customers' => Transaction::where('outlet_name', '=', $item['outlet_name'])
+                    ->where('date', '>=', $request->period1)
+                    ->where('date', '<=', $request->period2)
                     ->count(),
+                'color' => Colours::where('store', '=', $item['outlet_name'])->pluck('chart_colour')->first(),
             ];
         });
 
@@ -106,7 +106,7 @@ class APIController extends Controller
                     $customers->map(function ($cust) use ($item) {
                         return [
                             'customer' => $cust,
-                            'customer_retended' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                            'customer_retended' => Transaction::where('outlet_name', '=', $item['outlet_name'])
                                     ->where('customer_id', '=', $cust)->count() > 2
                         ];
                     })
@@ -138,7 +138,7 @@ class APIController extends Controller
             return [
                 'outlet_name' => $item['outlet_name'],
                 'store_id' => $item['outlet_reference'],
-                'total_sales' => Transaction::where('store_id', '=', $item['outlet_reference'])
+                'total_sales' => Transaction::where('outlet_name', '=', $item['outlet_name'])
                     ->sum('total_amount')
             ];
         });
@@ -152,7 +152,7 @@ class APIController extends Controller
         $returns = Store::all()->map(function ($item) {
             return
                 [
-                    $item['outlet_name'] => Transaction::where('store_id', '=', $item['outlet_reference'])
+                    $item['outlet_name'] => Transaction::where('outlet_name', '=', $item['outlet_name'])
                     ->orderby('date', 'asc')
                         ->select('total_amount', 'date')
                         ->get()
@@ -169,12 +169,12 @@ class APIController extends Controller
         $name = $request->name;
         $name = str_replace("-", " ", $name);
 
-        if ((DB::table('transactions')->join('stores', 'transactions.store_id', '=', 'stores.outlet_reference')
+        if ((DB::table('transactions')->join('stores', 'transactions.outlet_name', '=', 'stores.outlet_name')
                 ->select('transactions.total_amount')
                 ->where('stores.outlet_name', '=', $name))) {
 
             return DB::table('transactions')
-                ->join('stores', 'transactions.store_id', '=', 'stores.outlet_reference')
+                ->join('stores', 'transactions.outlet_name', '=', 'stores.outlet_name')
                 ->join('colours', 'stores.outlet_name', '=', 'colours.store')
                 ->select('stores.outlet_name', 'transactions.date', 'transactions.total_amount', 'colours.chart_colour')
                 ->where('stores.outlet_name', '=', $name)
@@ -195,7 +195,7 @@ class APIController extends Controller
         $var = Store::all()->map(function ($item) use ($request){
             return [
                 'outlet_name' => $item['outlet_name'],
-                'sum_of_transactions' => Transaction::where('store_id', '=', $item['outlet_reference'])->where('date', '>=', $request->period1)
+                'sum_of_transactions' => Transaction::where('outlet_name', '=', $item['outlet_name'])->where('date', '>=', $request->period1)
                     ->where('date', '<=', $request->period2)->sum('total_amount'),
                 'color' => Colours::where('store', '=', $item['outlet_name'])->pluck('chart_colour')->first(),
             ];
@@ -213,7 +213,7 @@ class APIController extends Controller
         $userVolumeArray = Store::all()->map(function ($item) {
             return [
                 'store' => $item['outlet_name'],
-                'customers' => sizeof(Transaction::where('store_id', '=', $item['outlet_reference'])
+                'customers' => sizeof(Transaction::where('outlet_name', '=', $item['outlet_name'])
                     ->pluck('customer_id')->unique()->all()),
             ];
         });
