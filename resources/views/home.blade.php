@@ -3,17 +3,36 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Dashboard</div>
+                <div class="panel-heading">Dashboard - Statistics</div>
                 <div class="panel-body">
-                    @if (session('status'))
-                        <div class="alert alert-success">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+                   <div class="container">
+                       <div class="col-md-6">
+                           <div class="panel-heading">Last Month</div>
+                            <div class="panel-body">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Sales</dt>
+                                    <dd class="col-sm-7"> £{{$recentTransactions}}</dd>
 
-                        You are logged in!
+                                    <dt class="col-sm-5">Number of Unique Users</dt>
+                                    <dd class="col-sm-7"> {{$recentCustomerVolume}}</dd>
+                                </dl>
+                            </div>
+                       </div>
+                       <div class="col-md-6">
+                           <div class="panel-heading">This Month</div>
+                            <div class="panel-body ">
+                                <dl class="row">
+                                    <dt class="col-sm-5">Sales</dt>
+                                    <dd class="col-sm-7"> £{{$recentTransactions}}</dd>
+
+                                    <dt class="col-sm-5">Number of Unique Users</dt>
+                                    <dd class="col-sm-7"> {{$recentCustomerVolume}}</dd>
+                                </dl>
+                            </div>
+                       </div>
+                   </div>
                 </div>
             </div>
         </div>
