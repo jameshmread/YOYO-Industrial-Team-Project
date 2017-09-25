@@ -48,12 +48,20 @@
                             </td>
 
                             <td width="20%">
+                                <?php if ($user->is_admin != 1){?>
                                 <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
                                     {{ csrf_field() }}
                                     {{ method_field('DELETE') }}
 
                                     <button type="submit" class="btn btn-primary">Delete</button>
                                 </form>
+                                <?php } 
+                                else{?>
+                                <button class="btn btn-primary" title="Admin accounts can not be deleted!" type="submit" disabled>Delete</button>
+                                
+                                <?php  
+                                }
+                                ?>
                             </td>
 
                         </tr>
