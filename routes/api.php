@@ -30,5 +30,4 @@ $router->group([
     $router->get('/stores/{store_name}/unique-customers/{period1}/{period2}', 'APIController@uniqueCustomers')->name('stores.unique_customers');
     $router->get('/stores/{store_name}/retained-customers/{period1}/{period2}', 'APIController@retainedCustomers')->name('stores.retained_customers');
     $router->post('/reports/transactions', 'APIController@generateTransactionsReport')->name('reports.transactions');
-    $router->post('/reports/sales', 'APIController@generateSalesReport')->name('reports.sales');
 });
