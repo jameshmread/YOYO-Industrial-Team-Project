@@ -203,30 +203,5 @@ class APIController extends Controller
                 ->where('outlet_name', '=', $request->store_name)
                 ->get()));
     }
-
-    /**
-     * Will generate a sales report for the user based on the request details
-     *
-     * @param Request $request
-     */
-    public function generateSalesReport(Request $request)
-    {
-        $averageSalesValue = Transaction::where('date', '>=', $request->period1)
-            ->where('date', '<=', $request->period2)
-            ->where('outlet_name', '=', $request->store_name)
-            ->get();
-
-        $averageSalesValue = $averageSalesValue->map(function ($item) use ($averageSalesValue) {
-            return [
-                'store_name' => $item['outlet_name'],
-                'store_colour' => Colours::where('store', '=',
-                    $item['outlet_name'])->pluck('chart_colour')->first(),
-                'average_sales_value' => $item['total_amount'] / $averageSalesValue->pluck('total_amount')->sum(),
-            ];
-        });
-
-        Mail::to(User::find($request->user_id))
-            ->send(new SalesReport(collect($averageSalesValue->all())));
-    }
 }
 

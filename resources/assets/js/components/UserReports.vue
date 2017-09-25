@@ -14,7 +14,6 @@
                 <select class="form-control" id="report-type-selection" name="report-type-selection"
                         v-model="reportTypeSelection">
                     <option>Transactions</option>
-                    <option>Average Sales</option>
                 </select>
 
                 <br>
@@ -60,20 +59,7 @@
                     'period2': currentDate,
                     'store_name': this.reportStoreSelection
                 })
-            },
-
-            generateSalesReport() {
-
-                var currentDate = new Date();
-                var previousMonth = currentDate.setMonth(currentDate.getMonth() - 1);
-
-                axios.post('/api/reports/sales/', {
-                    'user_id': this.userid,
-                    'period1': previousMonth,
-                    'period2': currentDate,
-                    'store_name': this.reportStoreSelection
-                })
-            },
+            }
         }
     }
 </script>
