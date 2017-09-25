@@ -158,7 +158,7 @@ class APIController extends Controller
                     'store_name' => $item['outlet_name'],
                     'store_colour' => Colours::where('store', '=',
                         $item['outlet_name'])->pluck('chart_colour')->first(),
-                    'users_retained' =>
+                    'customers_retained' =>
                         $uniqueCustomers->map(function ($customer) use ($item) {
                             return [
                                 'customer_retained' => Transaction::where('outlet_name', '=', $item['outlet_name'])
@@ -171,7 +171,7 @@ class APIController extends Controller
         $retainedCustomers = $retainedCustomers->map(function ($item) {
             $user = 0;
 
-            foreach ($item['users_retained'] as $value) {
+            foreach ($item['customers_retained'] as $value) {
                 if ($value['customer_retained']) {
                     $user++;
                 }
@@ -179,7 +179,7 @@ class APIController extends Controller
                 return [
                     'store_name' => $item['store_name'],
                     'store_colour' => $item['store_colour'],
-                    'total_users_retained' => $user,
+                    'customers_retained' => $user,
                 ];
             }
         });
