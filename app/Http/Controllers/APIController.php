@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Customer;
 use App\Store;
-use function foo\func;
 use Illuminate\Http\Request;
 use App\Transaction;
 use App\Colours;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
 {
