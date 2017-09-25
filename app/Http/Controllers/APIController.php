@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SalesReport;
 use App\Store;
+use App\User;
 use Illuminate\Http\Request;
 use App\Transaction;
 use App\Colours;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TransactionsReport;
 
 class APIController extends Controller
 {
@@ -183,6 +188,45 @@ class APIController extends Controller
         return response()
             ->json($retainedCustomers)
             ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+    /**
+     * Will generate a transactions report for the user based on the request details
+     *
+     * @param Request $request
+     */
+    public function generateTransactionsReport(Request $request)
+    {
+        Mail::to(User::find($request->user_id))
+            ->send(new TransactionsReport(Transaction::where('date', '>=', $request->period1)
+                ->where('date', '<=', $request->period2)
+                ->where('outlet_name', '=', $request->store_name)
+                ->get()));
+    }
+
+    /**
+     * Will generate a sales report for the user based on the request details
+     *
+     * @param Request $request
+     */
+    public function generateSalesReport(Request $request)
+    {
+        $averageSalesValue = Transaction::where('date', '>=', $request->period1)
+            ->where('date', '<=', $request->period2)
+            ->where('outlet_name', '=', $request->store_name)
+            ->get();
+
+        $averageSalesValue = $averageSalesValue->map(function ($item) use ($averageSalesValue) {
+            return [
+                'store_name' => $item['outlet_name'],
+                'store_colour' => Colours::where('store', '=',
+                    $item['outlet_name'])->pluck('chart_colour')->first(),
+                'average_sales_value' => $item['total_amount'] / $averageSalesValue->pluck('total_amount')->sum(),
+            ];
+        });
+
+        Mail::to(User::find($request->user_id))
+            ->send(new SalesReport(collect($averageSalesValue->all())));
     }
 }
 

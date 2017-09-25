@@ -7,20 +7,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class TransactionsReport extends Mailable
+class SalesReport extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $transactions;
+    public $sales;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($transactions)
+    public function __construct($sales)
     {
-        $this->transactions = $transactions;
+        $this->sales = $sales;
     }
 
     /**
@@ -30,9 +30,9 @@ class TransactionsReport extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.transactions')
+        return $this->markdown('emails.sales')
             ->with([
-                'transactions' => $this->transactions,
+                'sales' => $this->sales,
             ]);
     }
 }
