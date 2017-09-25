@@ -20,23 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 /**
  * API ROUTES
- * 
- * @todo add an authentication mechanism
  */
 $router->group([
     'as' => 'api.'
 ], function (Router $router) {
-    $router->get('/transactions/uniqueUsersPerStore', 'APIController@retainedUsersPerStore')->name('retainedUsersPerStore');
-    $router->get('/unique-users-per-store', 'APIController@uniqueUsersPerStore')->name('uniqueUsersPerStore');
-    $router->get('/transactions/averagesales', 'APIController@averageSalesPerStore')->name('averageSales');
-    $router->get('/transactions/totalsales', 'APIController@totalSales')->name('totalSales');
-    $router->get('/transactions/recent', 'APIController@recentTransactions')->name('recentTransactions');
-    $router->get('/transactions/users/volumeperstore/{period1}/{period2}', 'APIController@userVolumePerStore')->name('userVolumePerStore');
-    $router->get('/transactions/period/{period1}/{period2}', 'APIController@periodToPeriod')->name('periodToPeriod');
-    $router->get('/transactions/{year}', 'APIController@dmyListing')->name('yearlyListing');
-    $router->get('/transactions/{year}/{month}', 'APIController@dmyListing')->name('monthlyListing');
-    $router->get('/transactions/{year}/{month}/{day}', 'APIController@dmyListing')->name('dailyListing');
-    $router->get('/transactions/store/{name}/{period1}/{period2}', 'APIController@storesByTime')->name('storeTime');
-    $router->get('/store/{period1}/{period2}', 'APIController@totalStoreSalesByTime')->name('totalStoreTime');
-
+    $router->get('/stores/{store_name}/total-sales-value/{period1}/{period2}', 'APIController@totalSalesValue')->name('stores.total_sales_value');
+    $router->get('/stores/{store_name}/average-sales-value/{period1}/{period2}', 'APIController@averageSalesValue')->name('stores.average_sales_value');
+    $router->get('/stores/{store_name}/total-customers/{period1}/{period2}', 'APIController@totalCustomers')->name('stores.total_customers');
+    $router->get('/stores/{store_name}/unique-customers/{period1}/{period2}', 'APIController@uniqueCustomers')->name('stores.unique_customers');
+    $router->get('/stores/{store_name}/retained-customers/{period1}/{period2}', 'APIController@retainedCustomers')->name('stores.retained_customers');
 });
