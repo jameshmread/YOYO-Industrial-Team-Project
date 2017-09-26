@@ -6,6 +6,7 @@ use App\Store;
 use Illuminate\Http\Request;
 use App\Transaction;
 use App\Colours;
+use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
 {
@@ -183,6 +184,23 @@ class APIController extends Controller
         return response()
             ->json($retainedCustomers)
             ->header(self::CORS_KEY, self::CORS_VALUE);
+    }
+
+    public function getStores(){
+
+        return DB::select('select outlet_name from stores order by outlet_name asc');
+
+    }
+
+    public function updateColour(Request $request){
+
+
+        DB::table('colours')
+            ->where('store', $request->store_name)
+            ->update(['chart_colour' => '#'.$request->colour]);
+
+        return;
+
     }
 }
 

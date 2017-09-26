@@ -25,6 +25,12 @@
                     <button type="submit" class="btn btn-primary">Upload CSV File</button>
                 </form>
             </div>
+
+            <div class="col-md-3">
+                <form action="{{route('admin.store.colour')}}" method="GET">
+                    <button type="submit" class="btn btn-primary">Change Store Colours</button>
+                </form>
+            </div>
         </div>
     </div>
 
