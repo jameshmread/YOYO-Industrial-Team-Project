@@ -58,6 +58,7 @@ $router->group([
     $router->get('/data/stores/unique', 'DataController@displayAngularPage')->name('store.unique');
     $router->get('/data/stores/total', 'DataController@totalSalesPerStore')->name('store.total');
     $router->get('/data/users/volumeperstore', 'DataController@userVolumePerStore')->name('user.volumeperstore');
+    $router->get('/data/stores/average', 'DataController@AverageSales')->name('store.avgSales');
 });
 
 /**
