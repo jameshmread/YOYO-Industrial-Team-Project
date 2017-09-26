@@ -32,6 +32,7 @@ class APIController extends Controller
                     'store_colour' => Colours::where('store', '=',
                         $item['outlet_name'])->pluck('chart_colour')->first(),
                     'transaction_total_amount' => $item['total_amount'],
+                    'date' => $item['date'],
                 ];
             });
 
