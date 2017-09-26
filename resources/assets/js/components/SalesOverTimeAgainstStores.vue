@@ -54,8 +54,6 @@
         return dateArray;
     }
 
-
-
     import Chart from './linechart';
     import Multiselect from 'vue-multiselect';
     export default {
@@ -63,6 +61,8 @@
             'Chart': Chart,
             Multiselect
         },
+
+        props:['stores'],
 
         data() {
             return {
@@ -153,7 +153,7 @@
                 var endDate = new Date(this.period2);
                 var foundDates = getDates(startDate, endDate);
 
-                var division = Math.ceil    (foundDates.length/7);
+                var division = Math.ceil(foundDates.length/7);
 
                 this.dates = [];
 
@@ -179,8 +179,8 @@
                 var calls =[];
 
                 for(var i = 0; i< this.selected.length; i++) {
-                    var address = ('/api/transactions/store/' + this.selected[i] + '/' + this.period1 + '/' +
-                        this.period2 + ' 23:59:59');
+                    var address = ('/api/stores/' + this.selected[i] +'/average-sales-value/' + this.period1 + '/'
+                        + this.period2);
 
                     calls.push(axios.get(address));
                 }
@@ -191,6 +191,7 @@
                 axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
                         returns.push(response.data);
+                        console.log(returns);
                     })
                 }).then( response=>
                 {
@@ -273,7 +274,6 @@
                 for(var i =0; i < this.dates.length; i++)
                 {
 
-                    console.log(this.dates[i]);
                     var date = this.dates[i].getDate() +
                         '/' + (this.dates[i].getMonth()+ 1) + '/' + this.dates[i].getFullYear() ;
 

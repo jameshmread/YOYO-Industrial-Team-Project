@@ -18,8 +18,10 @@ Vue.component('example', require('./components/Example.vue'));
 
 Vue.component('uservolume', require('./components/UserVolumePerStore.vue'));
 
-Vue.component('store', require('./components/transchart.vue'));
+Vue.component('sales-over-time-against-stores', require('./components/SalesOverTimeAgainstStores.vue'));
 Vue.component('total', require('./components/TotalSalesPerStore.vue'));
+
+Vue.component('avg-sales-over-time', require('./components/AverageSalesOverTime.vue'));
 
 const app = new Vue({
     el: '#app'
