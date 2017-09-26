@@ -4,6 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @todo outlet_name should be changed for outlet_slug
+ * @todo store_id should be removed
+ */
 class Transaction extends Model
 {
     public static function calculateHash(array $properties): string
