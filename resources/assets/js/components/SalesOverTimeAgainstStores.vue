@@ -179,7 +179,7 @@
                 var calls =[];
 
                 for(var i = 0; i< this.selected.length; i++) {
-                    var address = ('/api/stores/' + this.selected[i] +'/average-sales-value/' + this.period1 + '/'
+                    var address = ('/api/stores/' + this.selected[i] +'/total-sales-value/' + this.period1 + '/'
                         + this.period2);
 
                     calls.push(axios.get(address));
@@ -191,18 +191,16 @@
                 axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
                         returns.push(response.data);
-                        console.log(returns);
                     })
                 }).then( response=>
                 {
                     this.graphData = [];
-
+                    console.log(returns);
                     if(returns.length > 0)
                     {
 
                         for(var i =0; i < returns.length; i++) {
-                                // loops through each array in the individual response data.
-                                var Label = this.selected[i];
+                            var Label = this.selected[i];
                                 var Colour = 'black';
                                 var Values = [];
 
@@ -211,21 +209,28 @@
                                     Values.push(0);
                                 }
 
+
+                                console.log(returns[i].length);
                                 for (var j = 0; j < returns[i].length; j++)
                                 {
                                     Label = this.selected[i];
-                                    Colour = returns[i][j].chart_colour;
+                                    Colour = returns[i][j].store_colour;
 
                                     for(var x =0; x < this.dates.length; x++)
                                     {
                                         var localDate = new Date(returns[i][j].date);
                                         var compareDate = new Date(this.dates[x]);
-                                        if(x > 1)
+                                        console.log('Local: ' + localDate);
+                                        console.log('thisdate: ' + this.dates[x]);
+
+
+                                        if(x >= 1)
                                         {
                                             var previousDate = new Date(this.dates[x-1]);
                                             if(localDate < compareDate && localDate > previousDate)
                                             {
-                                                Values[x-1] += parseInt(returns[i][j].total_amount);
+                                                console.log(returns[i][j].transaction_total_amount);
+                                                Values[x-1] += parseInt(returns[i][j].transaction_total_amount);
                                             }
                                         }
                                     }
@@ -238,6 +243,8 @@
                                     Values: Values
                                 };
                         }
+
+                        console.log(this.graphData);
 
                     }
                 }).then( response=> {
@@ -297,7 +304,7 @@
 
 <style>
     .container {
-        max-width: 10000800px;
+        max-width: 800px;
         margin: 0 auto;
     }
 
