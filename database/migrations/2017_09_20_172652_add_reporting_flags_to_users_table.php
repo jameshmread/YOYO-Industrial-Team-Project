@@ -15,7 +15,6 @@ class AddReportingFlagsToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('is_reportable')->default(0);
-            $table->string('report_frequency')->default('none');
             $table->timestamp('last_report_send')->nullable();
         });
     }
