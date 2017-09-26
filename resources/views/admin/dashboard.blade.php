@@ -21,12 +21,10 @@
                                 <button type="submit" class="btn btn-primary">Upload CSV File</button>
                             </form>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
 @endsection
