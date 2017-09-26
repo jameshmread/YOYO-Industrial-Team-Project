@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading">Dashboard - Statistics</div>
+                <div class="panel-heading">Dashboard - Sales Statistics</div>
                 <div class="panel-body">
                    <div class="container">
                        <div class="col-md-6">
@@ -40,10 +40,27 @@
             </div>
         </div>
     </div>
-    <d1 class="row">
-        <dt class="col-sm-5 panel-heading">Number of Unique Users</dt>
-        <dd class="col-sm-7 panel-body"> {{$customerVolume}}</dd>
-    </d1>
-</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Dashboard - User Statistics</div>
+                <div class="panel-body">
+                    <div class="container">
+                        <div class="col-md-6">
+                            <div class="panel-body">
+                                <dl class="row">
+                                    <dt class="col-sm-6 display-1">Number of Unique Users</dt>
+                                    <dd class="col-sm-6 display-1"> {{$customerVolume}}</dd>
+
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ </div>
 
 @endsection
