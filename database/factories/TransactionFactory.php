@@ -18,7 +18,7 @@ $factory->define(App\Transaction::class, function (Faker $faker) {
         'transaction_type' => $faker->randomElement(['Payment', 'Refund', 'Redemption']),
         'cash_spent' => $cash,
         'discount_amount' => $discount,
-        'total_amount' => $cash + $discount,
+        'total_amount' => $cash,
         'transaction_hash' => $faker->md5
     ];
 });
