@@ -11,6 +11,7 @@ use App\Colours;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TransactionsReport;
+use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
 {
@@ -202,6 +203,24 @@ class APIController extends Controller
                 ->where('date', '<=', $request->period2)
                 ->where('outlet_name', '=', $request->store_name)
                 ->get()));
+    }
+
+    public function getStores()
+    {
+
+        return DB::select('select outlet_name from stores order by outlet_name asc');
+
+    }
+
+    public function updateColour(Request $request)
+    {
+
+
+        DB::table('colours')
+            ->where('store', $request->store_name)
+            ->update(['chart_colour' => '#' . $request->colour]);
+
+        return;
     }
 }
 
