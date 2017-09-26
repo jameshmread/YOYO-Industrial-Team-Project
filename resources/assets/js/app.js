@@ -23,6 +23,7 @@ Vue.component('total', require('./components/TotalSalesPerStore.vue'));
 
 Vue.component('avg-sales-over-time', require('./components/AverageSalesOverTime.vue'));
 
+Vue.component('user-retention', require('./components/UserRetentionRate.vue'));
 const app = new Vue({
     el: '#app'
 });
