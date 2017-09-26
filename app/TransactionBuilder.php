@@ -2,6 +2,11 @@
 
 namespace App;
 
+/**
+ * @todo PHPDoc
+ * @todo snake_case
+ * @todo use convert store name to slug
+ */
 class TransactionBuilder
 {
     public function createFromFile(string $filePath): array
