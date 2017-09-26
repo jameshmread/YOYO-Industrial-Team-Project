@@ -7,18 +7,17 @@ use InvalidArgumentException;
 
 /**
  * @todo PHPDoc
- * @todo snake_case
  * @todo use convert store name to slug
  */
 class TransactionBuilder
 {
-    public function createFromFile(string $filePath): array
+    public function createFromFile(string $file_path): array
     {
-        $lines = file($filePath, FILE_IGNORE_NEW_LINES);
+        $lines = file($file_path, FILE_IGNORE_NEW_LINES);
         $transactions = array();
-        foreach ($lines as $currentLine) {
+        foreach ($lines as $current_line) {
             try {
-                $transaction = $this->extractTransactionFromLine($currentLine);
+                $transaction = $this->extractTransactionFromLine($current_line);
                 // Adds the extracted transaction to the array, using its hash
                 // as its key.
                 $transactions[$transaction->transaction_hash] = $transaction;
@@ -29,9 +28,9 @@ class TransactionBuilder
         return $transactions;
     }
 
-    public function copyTransactionsFromCsvToDb(string $filePath)
+    public function copyTransactionsFromCsvToDb(string $file_path)
     {
-        $file_handle = fopen($filePath, 'r');
+        $file_handle = fopen($file_path, 'r');
         while (!feof($file_handle)) {
             $line = fgets($file_handle);
             try {
@@ -55,42 +54,42 @@ class TransactionBuilder
         $date = $this->extractDate($array[0], false);
         // I assumed the store id in the model and the outlet reference in the
         // model are the same - LM.
-        $storeId = $array[2];
+        $store_id = $array[2];
 
         $store_name = $array[4];
 
-        if (null === Store::where('outlet_reference', $storeId)->first()) {
+        if (null === Store::where('outlet_reference', $store_id)->first()) {
             Store::create([
-                'outlet_reference' => $storeId,
+                'outlet_reference' => $store_id,
                 'outlet_name' => $store_name,
             ]);
         }
 
-        $customerReference = $array[5];
-        $customer = Customer::where('customer_reference', $customerReference)->first();
+        $customer_reference = $array[5];
+        $customer = Customer::where('customer_reference', $customer_reference)->first();
         if (null === $customer) {
             $customer = new Customer();
-            $customer->customer_reference = $customerReference;
+            $customer->customer_reference = $customer_reference;
             $customer->save();
         }
-        $transactionType = $array[6];
+        $transaction_type = $array[6];
         try {
-            $cashSpent = $this->extractPrice($array[7]);
-            $discountAmount = $this->extractPrice($array[8]);
-            $totalAmount = $this->extractPrice($array[9]);
+            $cash_spent = $this->extractPrice($array[7]);
+            $discount_amount = $this->extractPrice($array[8]);
+            $total_amount = $this->extractPrice($array[9]);
         } catch (InvalidArgumentException $e) {
             throw new InvalidLineException();
         }
 
         $transaction = $this->firstOrCreateTransaction([
             'customer_id' => $customer->id,
-            'store_id' => $storeId,
+            'store_id' => $store_id,
             'outlet_name' => $store_name,
             'date' => $date,
-            'transaction_type' => $transactionType,
-            'cash_spent' => $cashSpent,
-            'discount_amount' => $discountAmount,
-            'total_amount' => $totalAmount,
+            'transaction_type' => $transaction_type,
+            'cash_spent' => $cash_spent,
+            'discount_amount' => $discount_amount,
+            'total_amount' => $total_amount,
         ]);
         return $transaction;
     }
@@ -103,30 +102,30 @@ class TransactionBuilder
      * could not be extracted from the string, and complete the missing
      * component with the corresponding component from the current time.
      */
-    public function extractDate(string $csvCell, bool $strict = true): string
+    public function extractDate(string $csv_cell, bool $strict = true): string
     {
-        $cellArray = explode(' ', str_replace(array('/', ':'), ' ', $csvCell));
-        if ($strict && 6 !== sizeof($cellArray)) {
+        $cell_array = explode(' ', str_replace(array('/', ':'), ' ', $csv_cell));
+        if ($strict && 6 !== sizeof($cell_array)) {
             throw new InvalidArgumentException();
         } else {
-            $day = isset($cellArray[0]) ? $cellArray[0] : date('d');
-            $month = isset($cellArray[1]) ? $cellArray[1] : date('m');
-            $year = isset($cellArray[2]) ? $cellArray[2] : date('Y');
-            $hour = isset($cellArray[3]) ? $cellArray[3] : date('H');
-            $minute = isset($cellArray[4]) ? $cellArray[4] : date('i');
-            $second = isset($cellArray[5]) ? $cellArray[5] : date('s');
+            $day = isset($cell_array[0]) ? $cell_array[0] : date('d');
+            $month = isset($cell_array[1]) ? $cell_array[1] : date('m');
+            $year = isset($cell_array[2]) ? $cell_array[2] : date('Y');
+            $hour = isset($cell_array[3]) ? $cell_array[3] : date('H');
+            $minute = isset($cell_array[4]) ? $cell_array[4] : date('i');
+            $second = isset($cell_array[5]) ? $cell_array[5] : date('s');
             return "$year-$month-$day $hour:$minute:$second";
         }
     }
 
-    public function extractPrice(string $csvCell): float
+    public function extractPrice(string $csv_cell): float
     {
         $prices = array();
-        preg_match('/\d(\.(\d)?(\d)?)?/', $csvCell, $prices);
+        preg_match('/\d(\.(\d)?(\d)?)?/', $csv_cell, $prices);
         if (sizeof($prices) > 0) {
             $price = floatval($prices[0]);
-            $isPositive = strpos($csvCell, '-') === false;
-            if (!$isPositive) {
+            $is_positive = strpos($csv_cell, '-') === false;
+            if (!$is_positive) {
                 $price *= -1;
             }
             return $price;
