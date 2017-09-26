@@ -11,6 +11,7 @@ use App\Colours;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TransactionsReport;
+use Carbon\Carbon;
 
 class APIController extends Controller
 {
@@ -197,10 +198,13 @@ class APIController extends Controller
      */
     public function generateTransactionsReport(Request $request)
     {
+        $currentMonth = Carbon::now();
+        $previousMonth = Carbon::now()->subMonth();
+
         Mail::to(User::find($request->user_id))
-            ->send(new TransactionsReport(Transaction::where('date', '>=', $request->period1)
-                ->where('date', '<=', $request->period2)
-                ->where('outlet_name', '=', $request->store_name)
+            ->send(new TransactionsReport(Transaction::where('outlet_name', '=', $request->store_name)
+                ->where('date', '>=', $previousMonth)
+                ->where('date', '<=', $currentMonth)
                 ->get()));
     }
 }

@@ -50,13 +50,8 @@
             },
             generateTransactionReport() {
 
-                var currentDate = new Date();
-                var previousMonth = currentDate.setMonth(currentDate.getMonth() - 1);
-
                 axios.post('/api/reports/transactions/', {
                     'user_id': this.userid,
-                    'period1': previousMonth,
-                    'period2': currentDate,
                     'store_name': this.reportStoreSelection
                 })
             }

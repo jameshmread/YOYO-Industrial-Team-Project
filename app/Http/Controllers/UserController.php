@@ -26,7 +26,7 @@ class UserController extends Controller
         'Ninewells Shop',
         'Premier Shop',
         'Remote Campus',
-        'Spare Shop',
+        'Spare',
     ];
 
     public function edit($id)
