@@ -123,7 +123,6 @@ class AdminUserController extends Controller
         $user->fill($request->all());
 
         $user->is_admin = $request->input('admin') ? 1 : 0;
-        $user->report_frequency = $request->input('reportfrequency');
 
         if (!empty($request->input('password'))) {
             $pass = trim($request->input('password'));
