@@ -9,7 +9,6 @@
         @endif
     </div>
     <div class="container">
-
         <div class="panel panel-default">
             <div class="panel-heading h1">@yield('title')</div>
                 <div class="col-md-offset-1">

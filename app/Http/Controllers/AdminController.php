@@ -10,4 +10,11 @@ class AdminController extends Controller
     {
         return view('admin.dashboard');
     }
+
+    public function storeColourPicker(){
+
+        return view('admin.store_colour');
+
+    }
+
 }

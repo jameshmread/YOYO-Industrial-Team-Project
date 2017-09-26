@@ -74,7 +74,7 @@
 
                     <div class="row">
                         <div class="col-md-4">
-                            <h3>Rights to view:</h3>
+                            <h3>User Rights:</h3>
 
                             <select class="urights form-control" name="rights[]" multiple>
                                 @foreach ($user_rights as $key => $label)
@@ -85,27 +85,6 @@
                                         </option>
                                     @endif
                                 @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-4">
-                            <h3>Report Frequency</h3>
-
-                            <select class="reportfrequency form-control" name="reportfrequency">
-                                <option value="none"
-                                        {{ $user->report_frequency === 'none' ? 'selected' : '' }}>
-                                    None
-                                </option>
-
-                                <option value="weekly"
-                                        {{ $user->report_frequency === 'weekly' ? 'selected' : '' }}>
-                                    Weekly
-                                </option>
-
-                                <option value="monthly"
-                                        {{ $user->report_frequency === 'monthly' ? 'selected' : '' }}>
-                                    Monthly
-                                </option>
                             </select>
                         </div>
                     </div>

@@ -1,11 +1,11 @@
 @component('mail::message')
-# Transactions reports
+# Your Months Transactions Breakdown
 
 @component('mail::table')
-| Store ID       | Type         | Total Cost  |
-|:-------------:|:-------------:| --------:|
+|   Type    |   Cash Spent  |   Discount Amount     | Total Amount  |
+|:-----------:||:-----------:||:-----------:||:-----------:|
 @foreach($transactions as $transaction)
-| {{$transaction->store_id}} | {{$transaction->transaction_type}} | {{$transaction->total_amount}} |
+| {{$transaction->transaction_type}} | {{$transaction->cash_spent}} | {{$transaction->discount_amount}} | {{$transaction->total_amount}} |
 @endforeach
 @endcomponent
 
