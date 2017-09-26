@@ -38,4 +38,9 @@ class DataController extends Controller
     {
         return view('charts.salesovertime.salesdate');
     }
+
+    public function AverageSales()
+    {
+        return view('charts.avgsales');
+    }
 }
