@@ -16,7 +16,7 @@ class TransactionBuilder
             try {
                 $transaction = $this->extractTransactionFromLine($currentLine);
                 $transactions[$transaction->transaction_hash] = $transaction; // What does this line do?
-            } catch (\exception $e) { // @todo custom exception
+            } catch (\Exception $e) { // @todo custom exception
                 continue;
             }
         }
@@ -25,33 +25,28 @@ class TransactionBuilder
 
     public function copyTransactionsFromCsvToDb(string $filePath)
     {
-        // if (false === set_time_limit(1000)) {
-        //     throw new \exception; // @todo
-        // }
         $file_handle = fopen($filePath, 'r');
         while (!feof($file_handle)) {
             $line = fgets($file_handle);
             try {
                 $transaction = $this->extractTransactionFromLine($line);
-                if (!$transaction->wasRecentlyCreated()) {
+                if (!$transaction->wasRecentlyCreated) {
                     $transaction->save();
                 }
-            } catch (\exception $e) { // @todo custom exception
+            } catch (\Exception $e) { // @todo custom exception
                 continue;
             }
         }
         fclose($file_handle);
     }
 
-    public function extractTransactionFromLine(string $line)
+    public function extractTransactionFromLine(string $line): Transaction
     {
         $array = str_getcsv($line);
-
         if (!is_array($array) || sizeof($array) < 10) {
             throw new \exception; // @todo
         }
-
-        $date = $this->extractDate($array[0]);
+        $date = $this->extractDate($array[0], false);
         // I assumed the store id in the model and the outlet reference in the
         // model are the same - LM.
         $storeId = $array[2];
@@ -76,7 +71,7 @@ class TransactionBuilder
         $cashSpent = $this->extractPrice($array[7]);
         $discountAmount = $this->extractPrice($array[8]);
         $totalAmount = $this->extractPrice($array[9]);
-        $transaction = Transaction::firstOrCreate([
+        $transaction = $this->firstOrCreateTransaction([
             'customer_id' => $customer->id,
             'store_id' => $storeId,
             'outlet_name' => $store_name,
@@ -85,25 +80,31 @@ class TransactionBuilder
             'cash_spent' => $cashSpent,
             'discount_amount' => $discountAmount,
             'total_amount' => $totalAmount,
-            'transaction_hash' => hash('md5',
-                "$cashSpent$customer->id$date$discountAmount$storeId$totalAmount$transactionType"),
         ]);
         return $transaction;
     }
 
-    public function extractDate(string $csvCell): string
+    /**
+     * Extract a date from a string with the following format:
+     * DD/MM/YYYY HH:MM:SS.
+     *
+     * @param bool strict Do not throw an exception for any time component that
+     * could not be extracted from the string, and complete the missing
+     * component with the corresponding component from the current time.
+     */
+    public function extractDate(string $csvCell, bool $strict = true): string
     {
         $cellArray = explode(' ', str_replace(array('/', ':'), ' ', $csvCell));
-        if (6 === sizeof($cellArray)) {
-            $day = $cellArray[0];
-            $month = $cellArray[1];
-            $year = $cellArray[2];
-            $hour = $cellArray[3];
-            $minute = $cellArray[4];
-            $second = $cellArray[5];
-            return "$year-$month-$day $hour:$minute:$second";
-        } else {
+        if ($strict && 6 !== sizeof($cellArray)) {
             throw new \ErrorException;
+        } else {
+            $day = isset($cellArray[0]) ? $cellArray[0] : date('d');
+            $month = isset($cellArray[1]) ? $cellArray[1] : date('m');
+            $year = isset($cellArray[2]) ? $cellArray[2] : date('Y');
+            $hour = isset($cellArray[3]) ? $cellArray[3] : date('H');
+            $minute = isset($cellArray[4]) ? $cellArray[4] : date('i');
+            $second = isset($cellArray[5]) ? $cellArray[5] : date('s');
+            return "$year-$month-$day $hour:$minute:$second";
         }
     }
 
@@ -121,5 +122,13 @@ class TransactionBuilder
         } else {
             throw new \ErrorException;
         }
+    }
+
+    
+    public function firstOrCreateTransaction(array $properties): Transaction
+    {
+        $hash = Transaction::calculateHash($properties);
+        $properties['transaction_hash'] = $hash;
+        return Transaction::firstOrCreate($properties);
     }
 }
