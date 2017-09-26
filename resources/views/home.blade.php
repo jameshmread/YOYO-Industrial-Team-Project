@@ -18,6 +18,7 @@
             </div>
         </div>
     </div>
+    <avg-sales-over-time v-bind:stores = "['Air Bar', 'Libary']"> </avg-sales-over-time>
 </div>
 
 @endsection
