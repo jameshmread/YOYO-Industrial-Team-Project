@@ -109,7 +109,6 @@
                             text: "Average Sales over Time"
                         },
                     responsive: true,
-                        scales: {
                     maintainAspectRatio: false,
                     scales: {
                         xAxes: [{
