@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Transaction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -12,16 +11,16 @@ class TransactionsReport extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $trasactions;
+    public $transactions;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($trasactions)
+    public function __construct($transactions)
     {
-        $this->trasactions = $trasactions;
+        $this->transactions = $transactions;
     }
 
     /**
@@ -33,7 +32,7 @@ class TransactionsReport extends Mailable
     {
         return $this->markdown('emails.transactions')
             ->with([
-                'transactions' => $this->trasactions,
+                'transactions' => $this->transactions,
             ]);
     }
 }

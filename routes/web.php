@@ -44,6 +44,7 @@ $router->group([
     $router->post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
+    $router->get('/user/reports', 'UserController@reports')->name('user.reports');
 });
 
 /**

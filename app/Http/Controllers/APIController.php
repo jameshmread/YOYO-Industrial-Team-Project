@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SalesReport;
 use App\Store;
+use App\User;
 use Illuminate\Http\Request;
 use App\Transaction;
 use App\Colours;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TransactionsReport;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class APIController extends Controller
@@ -186,21 +192,39 @@ class APIController extends Controller
             ->header(self::CORS_KEY, self::CORS_VALUE);
     }
 
-    public function getStores(){
+    /**
+     * Will generate a transactions report for the user based on the request details
+     *
+     * @param Request $request
+     */
+    public function generateTransactionsReport(Request $request)
+    {
+        $currentMonth = Carbon::now();
+        $previousMonth = Carbon::now()->subMonth();
+
+        Mail::to(User::find($request->user_id))
+            ->send(new TransactionsReport(Transaction::where('outlet_name', '=', $request->store_name)
+                ->where('date', '>=', $previousMonth)
+                ->where('date', '<=', $currentMonth)
+                ->get()));
+    }
+
+    public function getStores()
+    {
 
         return DB::select('select outlet_name from stores order by outlet_name asc');
 
     }
 
-    public function updateColour(Request $request){
+    public function updateColour(Request $request)
+    {
 
 
         DB::table('colours')
             ->where('store', $request->store_name)
-            ->update(['chart_colour' => '#'.$request->colour]);
+            ->update(['chart_colour' => '#' . $request->colour]);
 
         return;
-
     }
 }
 
