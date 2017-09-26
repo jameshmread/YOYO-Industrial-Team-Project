@@ -46,7 +46,7 @@
                     hex: '#194d33',
                 },
 
-                selected: [],
+                selected: null,
                 choiceData: [],
             }
         },
@@ -77,11 +77,23 @@
                 console.log(this.selected);
                 console.log(this.colors.hex);
 
-                var colour = this.colors.hex.slice(1, this.colors.hex.length);
+                if(this.selected === null ){
 
-                axios.get('/api/colours/'+ this.selected + '/update-colours/' + colour);
+                    alert('Please select a store');
 
-            }
+                }
+
+                else {
+                    var colour = this.colors.hex.slice(1, this.colors.hex.length);
+
+                    axios.get('/api/colours/' + this.selected + '/update-colours/' + colour);
+
+                    alert('Store colour has been updated');
+
+                }
+                return;
+            },
+
         }
     }
 </script>
