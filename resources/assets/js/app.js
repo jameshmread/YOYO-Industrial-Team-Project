@@ -21,6 +21,7 @@ Vue.component('uservolume', require('./components/UserVolumePerStore.vue'));
 Vue.component('store', require('./components/transchart.vue'));
 Vue.component('total', require('./components/TotalSalesPerStore.vue'));
 Vue.component('reports', require('./components/UserReports.vue'));
+Vue.component('colour', require('./components/ColourPicker.vue'));
 
 const app = new Vue({
     el: '#app'

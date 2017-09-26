@@ -73,4 +73,6 @@ $router->group([
     $router->resource('/users', 'AdminUserController')->except('show');
     $router->get('/csvupload', 'CSVController@index')->name('upload.index');
     $router->post('/csvupload', 'CSVController@upload')->name('upload');
+    $router->get('/colours', 'AdminController@storeColourPicker')->name('store.colour');
+
 });
