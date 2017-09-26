@@ -17,8 +17,8 @@
                 </div>
             </div>
         </div>
+        <user-retention :stores="['Library', 'Spare', 'Air Bar']"></user-retention>
     </div>
-    <avg-sales-over-time v-bind:stores = "['Air Bar', 'Libary']"> </avg-sales-over-time>
 </div>
 
 @endsection
