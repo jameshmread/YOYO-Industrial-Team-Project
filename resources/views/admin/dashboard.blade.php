@@ -3,27 +3,27 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
-
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h1>@yield('title')</h1>
-            </div>
-        </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">@yield('title')</div>
+                <div class="panel-body">
+                    <div class="container">
 
-        <br>
+                        <div class="col-md-6">
+                            <form action="{{route('admin.users.index')}}" method="GET">
+                                <button type="submit" class="btn btn-primary">Users Panel</button>
+                            </form>
+                        </div>
 
-        <div class="row">
-            <div class="col-md-3">
-                <form action="{{route('admin.users.index')}}" method="GET">
-                    <button type="submit" class="btn btn-primary">Users Panel</button>
-                </form>
-            </div>
-
-            <div class="col-md-3">
-                <form action="{{route('admin.upload.index')}}" method="GET">
-                    <button type="submit" class="btn btn-primary">Upload CSV File</button>
-                </form>
+                        <div class="col-md-6">
+                            <form action="{{route('admin.upload.index')}}" method="GET">
+                                <button type="submit" class="btn btn-primary">Upload CSV File</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
     </div>
