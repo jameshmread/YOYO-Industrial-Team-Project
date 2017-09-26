@@ -101,33 +101,33 @@
 
         methods: {
 
-            setOptions()
-            {
+            setOptions() {
                 this.options = {
                     title:
-                    {
-                        display: true,
+                        {
+                            display: true,
                             text: "Average Sales over Time"
-                    },
+                        },
                     responsive: true,
-                        maintainAspectRatio: false,
                         scales: {
+                    maintainAspectRatio: false,
+                    scales: {
                         xAxes: [{
                             gridLines:
                                 {
                                     display: true,
-                                    borderDash: [8,4]
+                                    borderDash: [8, 4]
                                 },
                             scaleLabel: {
                                 display: true,
                                 labelString: 'Stores'
                             }
                         }],
-                            yAxes: [{
+                        yAxes: [{
                             gridLines:
                                 {
                                     display: true,
-                                    borderDash: [8,4]
+                                    borderDash: [8, 4]
                                 },
                             scaleLabel: {
                                 display: true,
@@ -139,40 +139,40 @@
             },
 
 
-            getData()
-            {
-                var calls =[];
+            getData() {
+                var calls = [];
 
-                for(var i = 0; i< this.stores.length; i++) {
-                    var address = ('api/stores/' + this.stores[i] +'/average-sales-value/'+ this.dateStart + '/' +
-                    this.dateEnd);
+                for (var i = 0; i < this.stores.length; i++) {
+                    var address = ('/api/stores/' + this.stores[i] + '/average-sales-value/' + this.dateStart + '/' +
+                        this.dateEnd);
                     calls.push(axios.get(address));
                 }
 
                 var returns = [];
 
-                axios.all(calls).then(function(results) {
+                axios.all(calls).then(function (results) {
                     results.forEach(function (response) {
                         returns.push(response.data);
                     })
-                }).then( response=>
-                {
+                }).then(response => {
                     this.graphData = [];
-                    if(returns.length > 0)
-                    {
+                    if (returns.length > 0) {
 
-                        for(var i =0; i < returns.length; i++) {
+                        for (var i = 0; i < returns.length; i++) {
                             // loops through each array in the individual response data.
                             var Label = this.stores[i];
                             var Colour = 'black';
                             var Values = [];
+                            var sales = 0;
 
-                            for(var j = 0; j < returns[i].length; j++)
-                            {
+                            for (var j = 0; j < returns[i].length; j++) {
+                                console.log(returns[i]);
                                 Label = returns[i][j].store_name;
                                 Colour = returns[i][j].store_colour;
-                                Values.push(returns[i][j].average_sales_value)
+                                sales += parseFloat(returns[i][j].average_sales_value);
                             }
+
+                            Values.push(sales);
 
                             this.graphData[i] =
                                 {
@@ -183,17 +183,15 @@
                         }
 
                     }
-                }).then( response=> {
+                }).then(response => {
                     this.fillData();
                 });
             },
 
-            fillData()
-            {
+            fillData() {
                 var datasetValue = [];
 
-                for(var i =0; i < this.graphData.length; i++)
-                {
+                for (var i = 0; i < this.graphData.length; i++) {
                     datasetValue[i] =
                         {
                             label: this.graphData[i].Label,
@@ -206,36 +204,10 @@
 
                 this.datacollection =
                     {
-                        labels: this.stores,
-                        datasets : datasetValue
+                        datasets: datasetValue
                     }
 
             },
-
-
-            getData2()
-            {
-                axios.get('api/stores/' + this.store +'/average-sales-value/'+ this.dateStart + '/' + this.dateEnd).then(response =>{
-
-                    labels = response.data.map(x => {return x.store_name});
-                    values = response.data.map(x => {return x.average_sales_value});
-                    colours = response.data.map(x => {return x.store_colour});
-
-
-
-                    this.datacollection = {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: label,
-                                data: values,
-                                backgroundColor: colours
-                            }
-                        ],
-                    };
-                })
-            }
-
         }
     }
 </script>
