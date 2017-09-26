@@ -13,7 +13,6 @@
                             :close-on-select="false"
                             :show-labels="false"
                             :hide-selected="true"
-                            @input="fillData()"
                             placeholder="Pick a value">
                     </multiselect>
                 </div>
@@ -31,7 +30,7 @@
                 </div>
 
                 <div class="col col-md-3 col-lg-3 col-sm-3">
-                    <button @click="fillData()">Refresh</button>
+                    <button @click="getData()">Refresh</button>
                 </div>
             </div>
             <br>
@@ -59,6 +58,8 @@
             BarChart,
             Multiselect
         },
+
+        props: ['stores'],
         data() {
             return {
                 choice: 'Bar Chart',
@@ -107,56 +108,77 @@
                 date2: null,
             }
         },
-        mounted() {
-            this.fillData()
-        },
+
         methods: {
-            fillData() {
-                axios.get('/api/transactions/users/volumeperstore/' + this.date1 + '/' + this.date2 + ' 23:59:59')
-                    .then(response => {
+            getData()
+            {
+                var calls = [];
+                for (var i = 0; i < this.stores.length; i++) {
+                    var address = ('/api/stores/' + this.stores[i] + '/total-customers/' + this.date1 + '/' +
+                        this.date2);
 
-                        var labels = [];
-                        var values = [];
-                        var colours = [];
-                        var label;
+                    calls.push(axios.get(address));
+                }
 
+                var returns = [];
 
-                        labels = response.data.map(x => {return x.store});
-                        values = response.data.map(x => {return x.customers});
-                        colours = response.data.map(x => {return x.color});
-
-
-                        if(this.choice === 'Bar Chart'){
-
-                            label = 'Total Amount (£)';
-                            this.options.legend.display = false;
-
-
-                        }
-
-                        else if (this.choice === 'Pie Chart'){
-
-                            label = labels;
-                            this.options.legend.display = true;
-
-
-                        }
-
-                        this.datacollection = {
-                            labels: labels,
-                            datasets: [
-                                {
-                                    //Help with if statement for this
-                                    label: label,
-
-                                    backgroundColor: colours,
-
-                                    data: values
-                                }
-                            ],
-                        };
+                axios.all(calls).then(function (results) {
+                    results.forEach(function (response) {
+                        returns.push(response.data);
+                        console.log(response.data);
                     })
+                }).then(response => {
+                    this.graphData = [];
+                    if (returns.length > 0) {
 
+                        for (var i = 0; i < returns.length; i++) {
+                            // loops through each array in the individual response data.
+                            var Label = this.stores[i];
+                            var Colour = 'black';
+                            var Values = [];
+
+                            for (var j = 0; j < returns[i].length; j++) {
+                                Label = returns[i][j].store_name;
+                                Colour = returns[i][j].store_colour;
+                                Values.push(returns[i][j].transaction_total_amount);
+                            }
+
+                            this.graphData[i] =
+                                {
+                                    Label: Label,
+                                    Colour: Colour,
+                                    Values: Values
+                                };
+                            console.log(this.graphData[i]);
+                        }
+
+                    }
+                }).then(response => {
+                    this.fillData();
+                });
+            },
+
+            fillData()
+            {
+                var datasetValue = [];
+
+                for(var i =0; i < this.graphData.length; i++)
+                {
+                    datasetValue[i] =
+                        {
+                            label: this.graphData[i].Label,
+                            borderColor: this.graphData[i].Colour,
+                            backgroundColor: this.graphData[i].Colour,
+                            data: this.graphData[i].Values
+                        };
+
+                }
+
+                this.datacollection =
+                    {
+                        labels: this.stores,
+                        datasets : datasetValue
+                    }
 
             },
         }
