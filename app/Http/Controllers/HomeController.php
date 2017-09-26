@@ -11,11 +11,18 @@ class HomeController extends Controller
 
     public function recentTransactions()
     {
-        $todayMinusMonth = Carbon::now()->subMonth();
-
-        return Transaction::where('date', '>=', $todayMinusMonth)
+        $data = array();
+        //2 months ago
+        $data[0] = Transaction::where('date', '>=',  new Carbon('first day of'.Carbon::now()->subMonths(2)))
+            ->where('date', '<=', new Carbon('first day of'.Carbon::now()->subMonth()))
             ->sum('total_amount');
 
+        //most recent month
+        $data[1] = Transaction::where('date', '>=', new Carbon('first day of'.Carbon::now()))
+            ->where('date', '<=', Carbon::now())
+            ->sum('total_amount');
+
+        return $data;
     }
 
     public function recentCustomerVolume()
@@ -29,7 +36,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+//        $this->middleware('auth');
     }
 
     /**
@@ -39,9 +46,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $recentTransactions = $this->recentTransactions();
-        $recentCustomerVolume = $this->recentCustomerVolume();
+        $customerVolume = $this->recentCustomerVolume();
 
-        return view('home', compact('recentTransactions', 'recentCustomerVolume'));
+        $thisMonthTransactions = $this->recentTransactions()[1];
+        $lastMonthTransactions = $this->recentTransactions()[0];
+        $difference = $thisMonthTransactions - $lastMonthTransactions;
+
+        return view('home', compact('thisMonthTransactions',
+            'customerVolume',
+            'lastMonthTransactions',
+            'difference'));
     }
 }

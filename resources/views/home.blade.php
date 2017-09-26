@@ -13,10 +13,8 @@
                             <div class="panel-body">
                                 <dl class="row">
                                     <dt class="col-sm-5">Sales</dt>
-                                    <dd class="col-sm-7"> £{{$recentTransactions}}</dd>
+                                    <dd class="col-sm-7"> £{{$lastMonthTransactions}}</dd>
 
-                                    <dt class="col-sm-5">Number of Unique Users</dt>
-                                    <dd class="col-sm-7"> {{$recentCustomerVolume}}</dd>
                                 </dl>
                             </div>
                        </div>
@@ -25,10 +23,15 @@
                             <div class="panel-body ">
                                 <dl class="row">
                                     <dt class="col-sm-5">Sales</dt>
-                                    <dd class="col-sm-7"> £{{$recentTransactions}}</dd>
-
-                                    <dt class="col-sm-5">Number of Unique Users</dt>
-                                    <dd class="col-sm-7"> {{$recentCustomerVolume}}</dd>
+                                    <dd class="col-sm-7"> £{{$thisMonthTransactions}}</dd>
+                                </dl>
+                                <dl class="row">
+                                    <dt class="col-sm-5">Difference</dt>
+                                    @if($difference > 0)
+                                        <dd class="col-sm-7 green"> + £{{$difference}}</dd>
+                                    @else
+                                        <dd class="col-sm-7 red"> - £{{$difference}}</dd>
+                                    @endif
                                 </dl>
                             </div>
                        </div>
@@ -37,6 +40,10 @@
             </div>
         </div>
     </div>
+    <d1 class="row">
+        <dt class="col-sm-5 panel-heading">Number of Unique Users</dt>
+        <dd class="col-sm-7 panel-body"> {{$customerVolume}}</dd>
+    </d1>
 </div>
 
 @endsection
