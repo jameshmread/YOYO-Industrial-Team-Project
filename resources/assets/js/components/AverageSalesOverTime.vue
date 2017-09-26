@@ -1,45 +1,84 @@
 <template>
     <div class="container">
-        <h1 style="text-align:center;">Average Sales over Time</h1>
-        <div class="row">
-            <div class="col col-md-12 col-lg-12 col-sm-12">
-                <multiselect
-                        v-model="chartType"
-                        :options="chartChoices"
-                        :show-labels="false"
-                        :close-on-select="false"
-                        :hide-selected="true"
-                        placeholder="Pick a chart type">
-                </multiselect>
+        <div class="chart">
+            <h1 style="text-align:center;">Average Sales over Time</h1>
+                <div class="row">
+                    <div class="col col-md-3 col-lg-3 col-sm-3">
+                        <multiselect
+                                v-model="chartType"
+                                :options="chartChoices"
+                                :show-labels="false"
+                                :close-on-select="true"
+                                :hide-selected="true"
+                                placeholder="Pick a chart type">
+                        </multiselect>
+                    </div>
+
+                <div class="col col-md-3 col-lg-3 col-sm-3">
+                    <input class="input-group date" v-model="dateStart" type="text" onfocus="(this.type='date')"
+                           onblur="(this.type='text')" placeholder="Start Date">
+                </div>
+
+                <div class="col col-md-3 col-lg-3 col-sm-3">
+                    <input class="input-group date" v-model="dateEnd" type="text" onfocus="(this.type='date')"
+                           onblur="(this.type='text')" placeholder="End Date">
+                </div>
+            </div>
+
+            <div class="col col-md-3 col-lg-3 col-sm-3">
+                <button v-on:click="getData()">Get Data</button>
+            </div>
+
+            <div v-if="chartType === 'Bar'">
+                <BarChart :chart-data="datacollection" :options="options"></BarChart>
+            </div>
+            <div v-else-if="chartType === 'Line'">
+                <LineChart :chart-data="datacollection" :options="options"></LineChart>
+            </div>
+            <div v-else-if="chartType === 'Pie'">
+                <PieChart :chart-data="datacollection" :options="options"></PieChart>
+            </div>
+            <div v-else-if="chartType === 'Doughnut'">
+                <DoughnutChart :chart-data="datacollection" :options="options"></DoughnutChart>
+            </div>
+            <div v-else-if="chartType === 'Polar Area'">
+                <PolarAreaChart :chart-data="datacollection" :options="options"></PolarAreaChart>
+            </div>
+            <div v-else-if="chartType === 'Radar'">
+                <RadarChart :chart-data="datacollection" :options="options"></RadarChart>
             </div>
         </div>
-
-        <div class="row">
-            <input class="input-group date" v-model="period1" type="text" onfocus="(this.type='date')"
-                   onblur="(this.type='text')" placeholder="Start Date">
-            <input class="input-group date" v-model="period2" type="text" onfocus="(this.type='date')"
-                   onblur="(this.type='text')" placeholder="End Date">
-        </div>
-
-        <div class="row">
-            <button v-on:click="getStores()">Get Data</button>
-        </div>
-
-        <Chart :chart-data="datacollection" :options="options"></Chart>
     </div>
 </template>
 
 <script>
-    import Chart from './linechart';
+    import LineChart from './linechart';
+    import BarChart from './barchart';
+    import PieChart from './piechart';
+    import DoughnutChart  from './doughnutchart ';
+    import PolarAreaChart from './polarareachart';
+    import RadarChart from './radarchart';
     import Multiselect from 'vue-multiselect';
     export default {
         components: {
-            'Chart': Chart,
-            Multiselect
+            Multiselect,
+            LineChart,
+            BarChart,
+            PieChart,
+            DoughnutChart,
+            PolarAreaChart,
+            RadarChart,
         },
+
+        props: ['stores'],
 
         data() {
             return {
+
+                chartType: 'Bar',
+                chartChoices: ['Bar', 'Pie', 'Line', 'Doughnut', 'Polar Area', 'Radar'],
+                dateStart : '',
+                dateEnd: '',
 
                 datacollection: {
                     labels: [],
@@ -51,16 +90,28 @@
                     ]
                 },
 
-                options: {
-                    bezierCurve : false,
+                options: [],
+            }
+        },
+
+        created()
+        {
+            this.setOptions();
+        },
+
+        methods: {
+
+            setOptions()
+            {
+                this.options = {
                     title:
-                        {
-                            display: true,
-                            text: "Bunch of transactions."
-                        },
+                    {
+                        display: true,
+                            text: "Average Sales over Time"
+                    },
                     responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
+                        maintainAspectRatio: false,
+                        scales: {
                         xAxes: [{
                             gridLines:
                                 {
@@ -69,10 +120,10 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Date [Days]'
+                                labelString: 'Stores'
                             }
                         }],
-                        yAxes: [{
+                            yAxes: [{
                             gridLines:
                                 {
                                     display: true,
@@ -80,15 +131,110 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount [£]'
+                                labelString: 'Average Sales [£]'
                             }
                         }]
                     }
                 }
-            }
-        },
+            },
 
-        methods: {
+
+            getData()
+            {
+                var calls =[];
+
+                for(var i = 0; i< this.stores.length; i++) {
+                    var address = ('api/stores/' + this.stores[i] +'/average-sales-value/'+ this.dateStart + '/' +
+                    this.dateEnd);
+                    calls.push(axios.get(address));
+                }
+
+                var returns = [];
+
+                axios.all(calls).then(function(results) {
+                    results.forEach(function (response) {
+                        returns.push(response.data);
+                    })
+                }).then( response=>
+                {
+                    this.graphData = [];
+                    if(returns.length > 0)
+                    {
+
+                        for(var i =0; i < returns.length; i++) {
+                            // loops through each array in the individual response data.
+                            var Label = this.stores[i];
+                            var Colour = 'black';
+                            var Values = [];
+
+                            for(var j = 0; j < returns[i].length; j++)
+                            {
+                                Label = returns[i][j].store_name;
+                                Colour = returns[i][j].store_colour;
+                                Values.push(returns[i][j].average_sales_value)
+                            }
+
+                            this.graphData[i] =
+                                {
+                                    Label: Label,
+                                    Colour: Colour,
+                                    Values: Values
+                                };
+                        }
+
+                    }
+                }).then( response=> {
+                    this.fillData();
+                });
+            },
+
+            fillData()
+            {
+                var datasetValue = [];
+
+                for(var i =0; i < this.graphData.length; i++)
+                {
+                    datasetValue[i] =
+                        {
+                            label: this.graphData[i].Label,
+                            borderColor: this.graphData[i].Colour,
+                            backgroundColor: this.graphData[i].Colour,
+                            data: this.graphData[i].Values
+                        };
+
+                }
+
+                this.datacollection =
+                    {
+                        labels: this.stores,
+                        datasets : datasetValue
+                    }
+
+            },
+
+
+            getData2()
+            {
+                axios.get('api/stores/' + this.store +'/average-sales-value/'+ this.dateStart + '/' + this.dateEnd).then(response =>{
+
+                    labels = response.data.map(x => {return x.store_name});
+                    values = response.data.map(x => {return x.average_sales_value});
+                    colours = response.data.map(x => {return x.store_colour});
+
+
+
+                    this.datacollection = {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: label,
+                                data: values,
+                                backgroundColor: colours
+                            }
+                        ],
+                    };
+                })
+            }
 
         }
     }
