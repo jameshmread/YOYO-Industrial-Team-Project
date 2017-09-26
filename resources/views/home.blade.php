@@ -34,6 +34,17 @@
                                             <dd class="col-sm-7 red"> - £{{$difference}}</dd>
                                         @endif
                                     </dl>
+
+                                    @foreach($managersStoreSalesPrevious as $previousSale)
+                                    <d1 class="row">
+                                        {{$previousSale}}
+                                    </d1>
+                                    @endforeach
+                                    {{--<d1 class="row">--}}
+                                        {{--@foreach($managersStoreSalesCurrent as $currentSale)--}}
+                                        {{--{{$currentSale}}--}}
+                                        {{--@endforeach--}}
+                                    {{--</d1>--}}
                                 </div>
                             </div>
                         </div>
