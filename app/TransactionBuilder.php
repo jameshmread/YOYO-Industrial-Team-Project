@@ -2,6 +2,9 @@
 
 namespace App;
 
+use App\Exceptions\InvalidLineException;
+use InvalidArgumentException;
+
 /**
  * @todo PHPDoc
  * @todo snake_case
@@ -19,7 +22,7 @@ class TransactionBuilder
                 // Adds the extracted transaction to the array, using its hash
                 // as its key.
                 $transactions[$transaction->transaction_hash] = $transaction;
-            } catch (\Exception $e) { // @todo custom exception
+            } catch (InvalidLineException $e) {
                 continue;
             }
         }
@@ -36,7 +39,7 @@ class TransactionBuilder
                 if (!$transaction->wasRecentlyCreated) {
                     $transaction->save();
                 }
-            } catch (\Exception $e) { // @todo custom exception
+            } catch (InvalidLineException $e) {
                 continue;
             }
         }
@@ -47,7 +50,7 @@ class TransactionBuilder
     {
         $array = str_getcsv($line);
         if (!is_array($array) || sizeof($array) < 10) {
-            throw new \exception; // @todo
+            throw new InvalidLineException;
         }
         $date = $this->extractDate($array[0], false);
         // I assumed the store id in the model and the outlet reference in the
@@ -71,9 +74,14 @@ class TransactionBuilder
             $customer->save();
         }
         $transactionType = $array[6];
-        $cashSpent = $this->extractPrice($array[7]);
-        $discountAmount = $this->extractPrice($array[8]);
-        $totalAmount = $this->extractPrice($array[9]);
+        try {
+            $cashSpent = $this->extractPrice($array[7]);
+            $discountAmount = $this->extractPrice($array[8]);
+            $totalAmount = $this->extractPrice($array[9]);
+        } catch (InvalidArgumentException $e) {
+            throw new InvalidLineException();
+        }
+
         $transaction = $this->firstOrCreateTransaction([
             'customer_id' => $customer->id,
             'store_id' => $storeId,
@@ -99,7 +107,7 @@ class TransactionBuilder
     {
         $cellArray = explode(' ', str_replace(array('/', ':'), ' ', $csvCell));
         if ($strict && 6 !== sizeof($cellArray)) {
-            throw new \ErrorException;
+            throw new InvalidArgumentException();
         } else {
             $day = isset($cellArray[0]) ? $cellArray[0] : date('d');
             $month = isset($cellArray[1]) ? $cellArray[1] : date('m');
@@ -123,7 +131,7 @@ class TransactionBuilder
             }
             return $price;
         } else {
-            throw new \ErrorException;
+            throw new InvalidArgumentException();
         }
     }
 
