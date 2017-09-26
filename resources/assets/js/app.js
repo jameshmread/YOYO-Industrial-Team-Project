@@ -23,7 +23,7 @@ Vue.component('total', require('./components/TotalSalesPerStore.vue'));
 Vue.component('colour', require('./components/ColourPicker.vue'));
 
 const app = new Vue({
-    el: '#app',
+    el: '#app'
 });
 
 require('./chosen');
