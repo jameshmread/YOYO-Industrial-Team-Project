@@ -11,7 +11,9 @@ class TransactionBuilder
         foreach ($lines as $currentLine) {
             try {
                 $transaction = $this->extractTransactionFromLine($currentLine);
-                $transactions[$transaction->transaction_hash] = $transaction; // What does this line do?
+                // Adds the extracted transaction to the array, using its hash
+                // as its key.
+                $transactions[$transaction->transaction_hash] = $transaction;
             } catch (\Exception $e) { // @todo custom exception
                 continue;
             }
