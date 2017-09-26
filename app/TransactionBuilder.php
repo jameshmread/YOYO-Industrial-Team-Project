@@ -4,10 +4,6 @@ namespace App;
 
 class TransactionBuilder
 {
-    /**
-     * @todo could probably use some refactoring - array_map makes the
-     * removeNullValuesFromArray method necessary.
-     */
     public function createFromFile(string $filePath): array
     {
         $lines = file($filePath, FILE_IGNORE_NEW_LINES);
