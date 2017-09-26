@@ -40,11 +40,19 @@
                                     </td>
 
                                     <td width="20%">
+
                                         <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST">
                                             {{ csrf_field() }}
                                             {{ method_field('DELETE') }}
-
-                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                            @if ($user->is_admin == 1)
+                                            <button
+                                                    type="submit"
+                                                    class="btn btn-danger"
+                                                    title="Admin users cannot be deleted. Contact an Administrator."
+                                                    disabled>Delete</button>
+                                            @else
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            @endif
                                         </form>
                                     </td>
 
