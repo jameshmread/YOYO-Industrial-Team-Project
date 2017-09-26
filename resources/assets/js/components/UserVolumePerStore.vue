@@ -42,7 +42,6 @@
             <div v-else-if="choice === 'Pie Chart'">
                 <PieChart :chart-data="datacollection" :options="options"></PieChart>
             </div>
-
         </div>
     </div>
 
