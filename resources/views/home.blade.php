@@ -36,15 +36,15 @@
                                     </dl>
 
                                     @foreach($managersStoreSalesPrevious as $previousSale)
-                                    <d1 class="row">
-                                        {{$previousSale}}
-                                    </d1>
+                                        <d1 class="row">
+                                            {{$previousSale}}
+                                        </d1>
                                     @endforeach
-                                    {{--<d1 class="row">--}}
-                                        {{--@foreach($managersStoreSalesCurrent as $currentSale)--}}
-                                        {{--{{$currentSale}}--}}
-                                        {{--@endforeach--}}
-                                    {{--</d1>--}}
+                                    <d1 class="row">
+                                        @foreach($managersStoreSalesCurrent as $currentSale)
+                                            {{$currentSale}}
+                                        @endforeach
+                                    </d1>
                                 </div>
                             </div>
                         </div>
@@ -70,6 +70,46 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="col-sm-3">Individual Store Breakdown</div>
+                    <div class="col-md-offset-11">
+                        <div class="glyphicon glyphicon-menu-hamburger"
+                             data-toggle="collapse"
+                             data-parent="#accordion"
+                             href="#collapse1">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-body">
+                <div id="collapse1" class="panel-collapse collapse in">
+
+                        @for($i = 0; $i < sizeof($rights); $i++)
+                            <div class="container">
+                                <div class="row">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading">{{$rights[$i]}}</div>
+                                        <div class="panel-body">
+                                            <div class="col-md-6">
+                                                Previous
+                                                {{$managersStoreSalesPrevious[$i]}}
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                Current
+                                                {{$managersStoreSalesCurrent[$i]}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        @endfor
+                    </div>
+            </div>
             </div>
         </div>
     </div>

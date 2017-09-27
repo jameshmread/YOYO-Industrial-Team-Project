@@ -48,7 +48,7 @@ class HomeController extends Controller
                 ->where('outlet_name', '=', $outlet)
                 ->sum('total_amount'));
         }
-        return [$storeSalesPrevious, $storeSalesCurrent];
+        return [$storeSalesPrevious, $storeSalesCurrent, $rights];
     }
     /**
      * Create a new controller instance.
@@ -67,20 +67,26 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $managersStoreSalesPrevious = $this->totalSalesValue()[0];
-        $managersStoreSalesCurrent = $this->totalSalesValue()[1];
+//        $managersStoreSalesPrevious = $this->totalSalesValue()[0];
+//        $managersStoreSalesCurrent = $this->totalSalesValue()[1];
+        //DUMMY
+        $managersStoreSalesPrevious = [200, 300, 400];
+        $managersStoreSalesCurrent = [100, 300, 550];
+        $rights = ["Air Bar", "Mono", "Premier Shop"];
+        //END DUMMY
         $customerVolume = $this->recentCustomerVolume();
 
         $thisMonthTransactions = $this->recentTransactions()[1];
         $lastMonthTransactions = $this->recentTransactions()[0];
         $difference = $thisMonthTransactions - $lastMonthTransactions;
-//        return $this->totalSalesValue();
+
         return view('home', compact('thisMonthTransactions',
             'customerVolume',
             'lastMonthTransactions',
             'difference',
             'managersStoreSalesPrevious',
-            'managersStoreSalesCurrent'
+            'managersStoreSalesCurrent',
+            'rights'
             ));
     }
 }
