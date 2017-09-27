@@ -42,6 +42,7 @@ if (!defined('PHPEXCEL_ROOT')) {
  * @category   PHPExcel
  * @package    PHPExcel_Cell
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
+ * @todo use a custom value binder instead or don't use Laravel Excel
  */
 class PHPExcel_Cell_DefaultValueBinder implements PHPExcel_Cell_IValueBinder
 {

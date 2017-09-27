@@ -10,6 +10,7 @@ use App\UserTransactionsValueBinder;
 /**
  * @todo PHPDoc
  * @todo use convert store name to slug
+ * @todo process excel dates correctly
  */
 class TransactionBuilder
 {
