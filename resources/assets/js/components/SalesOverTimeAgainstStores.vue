@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label>Compare to</label>
+                    <label>Compare by</label>
                     <multiselect
                             v-model="dateRangeChoice"
                             :options="dateRangeChoices"
@@ -65,8 +65,8 @@
                     }
                 },
                 showChart: false,
-                dateRangeChoice: 'Last Week',
-                dateRangeChoices: ['Last Week', 'Last Month', 'Last Year'],
+                dateRangeChoice: 'Week',
+                dateRangeChoices: ['Week', 'Month', 'Year'],
 
                 storeChoice: null,
 
@@ -142,7 +142,7 @@
                 var startDate2 = null;
                 var endDate2 = null;
 
-                if(this.dateRangeChoice == 'Last Week')
+                if(this.dateRangeChoice == 'Week')
                 {
                     this.OriginDate.startDate = moment().startOf("isoWeek");
                     this.OriginDate.endDate = moment().endOf("isoWeek");
@@ -168,7 +168,7 @@
 
                     return [startDate, endDate, startDate2, endDate2];
                 }
-                else if(this.dateRangeChoice == 'Last Month')
+                else if(this.dateRangeChoice == 'Month')
                 {
                     this.OriginDate.startDate = moment().startOf("month");
                     this.OriginDate.endDate = moment().endOf("month");
@@ -194,7 +194,7 @@
                     console.log(startDate2 + ' to ' + endDate2);
                     return [startDate, endDate, startDate2, endDate2];
                 }
-                else if(this.dateRangeChoice == 'Last Year')
+                else if(this.dateRangeChoice == 'Year')
                 {
                     this.OriginDate.startDate = moment().startOf("year");
                     this.OriginDate.endDate = moment().endOf("year");
@@ -285,8 +285,12 @@
 
                     if(i % 2 != 0)
                     {
-                        dataSet.name = dataSet.name + " (" + this.dateRangeChoice + ")";
+                        dataSet.name = dataSet.name + " ( Last " + this.dateRangeChoice + ")";
                         dataSet.colour = '#'+Math.floor(Math.random()*16777215).toString(16);
+                    }
+                    else
+                    {
+                        dataSet.name = data[i][0].store_name + "(This " + this.dateRangeChoice + ")";
                     }
 
 
@@ -366,14 +370,14 @@
         while (now.isBefore(endDate) || now.isSame(endDate)) {
 
             dates.push(now.format('YYYY-MM-DD HH:mm:ss'));
-            if(type == "Last Week") {
+            if(type == "Week") {
                 now.add(1, 'days');
             }
-            if(type == "Last Month")
+            if(type == "Month")
             {
                 now.add(1, "weeks");
             }
-            if(type == "Last Year")
+            if(type == "Year")
             {
                 now.add(1, "months");
             }
