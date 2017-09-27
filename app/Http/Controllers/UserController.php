@@ -50,6 +50,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'alpha',
             'email' => 'email',
+            'password' => 'confirmed'
         ]);
 
         if (!empty($request->input('name'))) {
@@ -58,6 +59,11 @@ class UserController extends Controller
 
         if (!empty($request->input('email'))) {
             $user->email = $request->input('email');
+        }
+
+        if (!empty($request->input('password'))) {
+            $pass = trim($request->input('password'));
+            $user->password = bcrypt($pass);
         }
 
         $user->save();
