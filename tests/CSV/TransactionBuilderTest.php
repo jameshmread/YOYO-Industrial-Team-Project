@@ -21,20 +21,6 @@ class TransactionBuilderTest extends DatabaseTestCase
     /**
      * @dataProvider filePathsProvider
      */
-    public function testCreateFromFile(string $file_path, int $transactions_n)
-    {
-        $transactions_array = $this->tb->createFromFile($file_path);
-
-        $this->assertEquals($transactions_n, sizeof($transactions_array));
-
-        foreach ($transactions_array as $current_transaction) {
-            $this->assertEquals('App\Transaction', get_class($current_transaction));
-        }
-    }
-
-    /**
-     * @dataProvider filePathsProvider
-     */
     public function testCopyTransactionsFromCsvToDb(
         string $file_path,
         int $transactions_n
@@ -54,6 +40,8 @@ class TransactionBuilderTest extends DatabaseTestCase
         return [
             [__DIR__.'/../../resources/csv/test.csv', 16],
             [__DIR__.'/../../resources/csv/test2016.csv', 51],
+            [__DIR__.'/../../resources/excel/example0.xlsx', 50],
+            [__DIR__.'/../../resources/excel/example1.xlsx', 50],
             //[__DIR__.'/../../resources/csv/Disbursals.csv'],
         ];
     }

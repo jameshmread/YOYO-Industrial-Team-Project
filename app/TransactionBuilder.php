@@ -13,6 +13,10 @@ use App\UserTransactionsValueBinder;
  */
 class TransactionBuilder
 {
+    /**
+    * @deprecated It cannot read Excel files as it is not using Laravel Excel's
+    * API.
+    */
     public function createFromFile(string $file_path): array
     {
         $lines = file($file_path, FILE_IGNORE_NEW_LINES);
