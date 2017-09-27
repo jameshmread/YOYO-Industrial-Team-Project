@@ -6,6 +6,7 @@ use Tests\DatabaseTestCase;
 use App\Transaction;
 use App\TransactionBuilder;
 use App\TransactionFinder;
+use App\UserTransactionsImport;
 
 class TransactionBuilderTest extends DatabaseTestCase
 {
@@ -13,7 +14,7 @@ class TransactionBuilderTest extends DatabaseTestCase
 
     protected function setUp()
     {
-        $this->tb = new TransactionBuilder;
+        $this->tb = new TransactionBuilder();
         parent::setUp();
     }
 

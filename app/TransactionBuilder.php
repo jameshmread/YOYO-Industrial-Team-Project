@@ -4,6 +4,8 @@ namespace App;
 
 use App\Exceptions\InvalidLineException;
 use InvalidArgumentException;
+use Maatwebsite\Excel\Facades\Excel;
+use App\UserTransactionsValueBinder;
 
 /**
  * @todo PHPDoc
@@ -30,19 +32,32 @@ class TransactionBuilder
 
     public function copyTransactionsFromCsvToDb(string $file_path)
     {
-        $file_handle = fopen($file_path, 'r');
-        while (!feof($file_handle)) {
-            $line = fgets($file_handle);
-            try {
-                $transaction = $this->extractTransactionFromLine($line);
-                if (!$transaction->wasRecentlyCreated) {
-                    $transaction->save();
+        $binder = new UserTransactionsValueBinder();
+        Excel::filter('chunk')->load($file_path)->chunk(250, function($sheets_collection)
+        {
+            foreach ($sheets_collection as $current_sheet) {
+                foreach ($current_sheet as $current_row) {
+                    try {
+                        $line = $current_row[0].','.
+                                $current_row[1].','.
+                                $current_row[2].','.
+                                $current_row[3].','.
+                                $current_row[4].','.
+                                $current_row[5].','.
+                                $current_row[6].','.
+                                $current_row[7].','.
+                                $current_row[8].','.
+                                $current_row[9];
+                        $transaction = $this->extractTransactionFromLine($line);
+                        if (!$transaction->wasRecentlyCreated) {
+                            $transaction->save();
+                        }
+                    } catch (InvalidLineException $e) {
+                        continue;
+                    }
                 }
-            } catch (InvalidLineException $e) {
-                continue;
             }
-        }
-        fclose($file_handle);
+        }, 'UTF-8');
     }
 
     public function extractTransactionFromLine(string $line): Transaction
