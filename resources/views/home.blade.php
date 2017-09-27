@@ -2,18 +2,18 @@
 
 @section('content')
     <div class="container">
-        <h1 class="col-md-6 display-1">
+        <h1 class="col-md-6" style="font-size: x-large">
             <div class="row">Last Month</div>
             <div class="row">{{$lastMonthStart}} - {{$lastMonthEnd}}</div>
         </h1>
-        <h1 class="col-md-6 display-1" style="text-align: right">
+        <h1 class="col-md-6" style="text-align: right; font-size: x-large">
             <div class="row">This Month</div>
             <div class="row">{{$startOfThisMonth}} - {{$currentDate}}</div>
         </h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Home - Sales Statistics</div>
+                    <div class="panel-heading">Combined Sales Statistics for All Stores</div>
                     <div class="panel-body">
                         <div class="container">
                             <div class="col-md-6">
@@ -52,7 +52,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Home - User Statistics</div>
+                    <div class="panel-heading">User Statistics</div>
                     <div class="panel-body">
                         <div class="container">
                             <div class="col-md-6">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="panel panel-body">
-                    <div id="collapse1" class="panel-collapse collapse in" style="padding: 10px">
+                    <div id="collapse1" class="panel-collapse collapse out" style="padding: 10px">
                         @for($i = 0; $i < sizeof($rights); $i++)
                             <div class="row panel panel-default">
                                 <div class="panel panel-heading">{{$rights[$i]}}</div>
