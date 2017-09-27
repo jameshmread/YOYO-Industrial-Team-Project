@@ -2,7 +2,14 @@
 
 @section('content')
     <div class="container">
-
+        <h1 class="col-md-6 display-1">
+            <div class="row">Last Month</div>
+            <div class="row">{{$lastMonthStart}} - {{$lastMonthEnd}}</div>
+        </h1>
+        <h1 class="col-md-6 display-1" style="text-align: right">
+            <div class="row">This Month</div>
+            <div class="row">{{$lastMonthEnd}} - {{$currentDate}}</div>
+        </h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
@@ -34,17 +41,6 @@
                                             <dd class="col-sm-7 red"> - £{{$difference}}</dd>
                                         @endif
                                     </dl>
-
-                                    @foreach($managersStoreSalesPrevious as $previousSale)
-                                        <d1 class="row">
-                                            {{$previousSale}}
-                                        </d1>
-                                    @endforeach
-                                    <d1 class="row">
-                                        @foreach($managersStoreSalesCurrent as $currentSale)
-                                            {{$currentSale}}
-                                        @endforeach
-                                    </d1>
                                 </div>
                             </div>
                         </div>
@@ -72,8 +68,9 @@
                 </div>
             </div>
         </div>
+
         <div class="panel-group" id="accordion">
-            <div class="panel panel-default">
+            <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="col-sm-3">Individual Store Breakdown</div>
                     <div class="col-md-offset-11">
@@ -85,30 +82,30 @@
                     </div>
                 </div>
                 <div class="panel panel-body">
-                <div id="collapse1" class="panel-collapse collapse in">
-
+                    <div id="collapse1" class="panel-collapse collapse in" style="padding: 10px">
                         @for($i = 0; $i < sizeof($rights); $i++)
-                            <div class="container">
-                                <div class="row">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">{{$rights[$i]}}</div>
-                                        <div class="panel-body">
-                                            <div class="col-md-6">
-                                                Previous
-                                                {{$managersStoreSalesPrevious[$i]}}
-
-                                            </div>
-                                            <div class="col-md-6">
-                                                Current
-                                                {{$managersStoreSalesCurrent[$i]}}
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="row panel panel-default">
+                                <div class="panel panel-heading">{{$rights[$i]}}</div>
+                                <div class="col-md-6">
+                                    <div class="panel-heading">Last Month</div>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Sales</dt>
+                                        <dd class="col-sm-7"> £{{$managersStoreSalesPrevious[$i]}}</dd>
+                                    </dl>
                                 </div>
-
+                                <div class="col-md-6">
+                                    <div class="panel-heading">This Month</div>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Sales</dt>
+                                        <dd class="col-sm-7"> £{{$managersStoreSalesCurrent[$i]}}</dd>
+                                    </dl>
+                                </div>
                             </div>
+                            <br>
                         @endfor
                     </div>
+
+                </div>
             </div>
             </div>
         </div>

@@ -67,26 +67,31 @@ class HomeController extends Controller
      */
     public function index()
     {
-//        $managersStoreSalesPrevious = $this->totalSalesValue()[0];
-//        $managersStoreSalesCurrent = $this->totalSalesValue()[1];
-        //DUMMY
-        $managersStoreSalesPrevious = [200, 300, 400];
-        $managersStoreSalesCurrent = [100, 300, 550];
-        $rights = ["Air Bar", "Mono", "Premier Shop"];
-        //END DUMMY
+        $managersStoreSalesPrevious = $this->totalSalesValue()[0];
+        $managersStoreSalesCurrent = $this->totalSalesValue()[1];
+        $rights = $this->totalSalesValue()[2];
+        //still need to do difference for all sales
+
+
         $customerVolume = $this->recentCustomerVolume();
 
         $thisMonthTransactions = $this->recentTransactions()[1];
         $lastMonthTransactions = $this->recentTransactions()[0];
         $difference = $thisMonthTransactions - $lastMonthTransactions;
 
+        $lastMonthStart = new Carbon('first day of'.Carbon::now()->subMonths(2));
+        $lastMonthEnd = new Carbon('first day of'.Carbon::now()->subMonth());
+        $currentDate = Carbon::now();
         return view('home', compact('thisMonthTransactions',
             'customerVolume',
             'lastMonthTransactions',
             'difference',
             'managersStoreSalesPrevious',
             'managersStoreSalesCurrent',
-            'rights'
+            'rights',
+            'lastMonthStart',
+            'lastMonthEnd',
+            'currentDate'
             ));
     }
 }
