@@ -1,84 +1,86 @@
 <template>
     <div class="container">
-        <div class="chart">
-            <h1 style="text-align:center;">Average Sales over Time</h1>
-                <div class="row">
-                    <div class="col col-md-3 col-lg-3 col-sm-3">
-                        <multiselect
-                                v-model="chartType"
-                                :options="chartChoices"
-                                :show-labels="false"
-                                :close-on-select="true"
-                                :hide-selected="true"
-                                placeholder="Pick a chart type">
-                        </multiselect>
-                    </div>
-
-                <div class="col col-md-3 col-lg-3 col-sm-3">
-                    <input class="input-group date" v-model="dateStart" type="text" onfocus="(this.type='date')"
-                           onblur="(this.type='text')" placeholder="Start Date">
+        <br/>
+        <div class="Chart">
+            <h1 style="text-align:center;">Average Sales by Store</h1>
+            <div class="row">
+                <div  v-if="stores.length > 0" class="col-md-3">
+                    <label>Store Selector</label>
+                    <multiselect
+                            v-model="storeChoice"
+                            :options="stores"
+                            :show-labels="false"
+                            :close-on-select="true"
+                            :hide-selected="false"
+                            :multiple="true">
+                    </multiselect>
                 </div>
 
-                <div class="col col-md-3 col-lg-3 col-sm-3">
-                    <input class="input-group date" v-model="dateEnd" type="text" onfocus="(this.type='date')"
-                           onblur="(this.type='text')" placeholder="End Date">
+                <div class="col-md-3">
+                    <label>Compare by</label>
+                    <multiselect
+                            v-model="dateRangeChoice"
+                            :options="dateRangeChoices"
+                            :show-labels="false"
+                            :close-on-select="true"
+                            :hide-selected="false">
+                    </multiselect>
+                </div>
+
+                <div class="col-md-4">
+                    <button v-on:click="getStores()">Get Data</button>
                 </div>
             </div>
-
-            <div class="col col-md-3 col-lg-3 col-sm-3">
-                <button v-on:click="getData()">Get Data</button>
-            </div>
-
-            <div v-if="chartType === 'Bar'">
-                <BarChart :chart-data="datacollection" :options="options"></BarChart>
-            </div>
-            <div v-else-if="chartType === 'Line'">
-                <LineChart :chart-data="datacollection" :options="options"></LineChart>
-            </div>
-            <div v-else-if="chartType === 'Pie'">
-                <PieChart :chart-data="datacollection" :options="options"></PieChart>
-            </div>
-            <div v-else-if="chartType === 'Doughnut'">
-                <DoughnutChart :chart-data="datacollection" :options="options"></DoughnutChart>
-            </div>
-            <div v-else-if="chartType === 'Polar Area'">
-                <PolarAreaChart :chart-data="datacollection" :options="options"></PolarAreaChart>
-            </div>
-            <div v-else-if="chartType === 'Radar'">
-                <RadarChart :chart-data="datacollection" :options="options"></RadarChart>
-            </div>
+            <Chart :chart-data="datacollection" :options="options"></Chart>
         </div>
     </div>
 </template>
 
 <script>
-    import LineChart from './linechart';
-    import BarChart from './barchart';
-    import PieChart from './piechart';
-    import DoughnutChart  from './doughnutchart ';
-    import PolarAreaChart from './polarareachart';
-    import RadarChart from './radarchart';
+
+    import Chart from './barchart';
     import Multiselect from 'vue-multiselect';
+    import datePicker from 'vue-bootstrap-datetimepicker';
+    import moment from 'moment';
+    import 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';
+
+
     export default {
         components: {
+            'Chart': Chart,
             Multiselect,
-            LineChart,
-            BarChart,
-            PieChart,
-            DoughnutChart,
-            PolarAreaChart,
-            RadarChart,
+            datePicker
         },
 
-        props: ['stores'],
+        props:['stores'],
 
         data() {
             return {
+                configs: {
+                    range: {
+                        format: 'DD-MM-YYYY',
+                        useCurrent: false,
+                        showClear: true,
+                        showClose: true,
+                    }
+                },
+                showChart: false,
+                dateRangeChoice: 'Week',
+                dateRangeChoices: ['Week', 'Month', 'Year'],
 
-                chartType: 'Bar',
-                chartChoices: ['Bar', 'Pie', 'Line', 'Doughnut', 'Polar Area', 'Radar'],
-                dateStart : '',
-                dateEnd: '',
+                storeChoice: null,
+
+                OriginDate:
+                    {
+                        startDate: null,
+                        endDate: null,
+                    },
+
+                CompareDate:
+                    {
+                        startDate: null,
+                        endDate: null,
+                    },
 
                 datacollection: {
                     labels: [],
@@ -90,23 +92,12 @@
                     ]
                 },
 
-                options: [],
-            }
-        },
-
-        created()
-        {
-            this.setOptions();
-        },
-
-        methods: {
-
-            setOptions() {
-                this.options = {
+                options: {
+                    bezierCurve : false,
                     title:
                         {
                             display: true,
-                            text: "Average Sales over Time"
+                            text: "Bunch of transactions."
                         },
                     responsive: true,
                     maintainAspectRatio: false,
@@ -115,7 +106,7 @@
                             gridLines:
                                 {
                                     display: true,
-                                    borderDash: [8, 4]
+                                    borderDash: [8,4]
                                 },
                             scaleLabel: {
                                 display: true,
@@ -126,96 +117,269 @@
                             gridLines:
                                 {
                                     display: true,
-                                    borderDash: [8, 4]
+                                    borderDash: [8,4]
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Average Sales [£]'
+                                labelString: 'Total Amount [£]'
                             }
                         }]
                     }
+                },
+
+                graphData: [],
+                dates: [],
+            }
+        },
+
+        methods: {
+
+            getDateRange()
+            {
+                var startDate = null;
+                var endDate = null;
+
+                var startDate2 = null;
+                var endDate2 = null;
+
+                if(this.dateRangeChoice == 'Week')
+                {
+                    this.OriginDate.startDate = moment().startOf("isoWeek");
+                    this.OriginDate.endDate = moment().endOf("isoWeek");
+
+                    startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
+                        this.OriginDate.startDate.get('date');
+                    endDate = this.OriginDate.endDate.get('year') + '-' + (this.OriginDate.endDate.get('month')+1) +
+                        '-' + this.OriginDate.endDate.get('date') + ' 23:59:59';
+
+                    // subtract isnt actally deprecated.
+                    // Moment docs say to use it.
+                    this.CompareDate.startDate = moment().subtract(1, 'days').startOf("isoWeek");
+                    this.CompareDate.endDate = moment().subtract(1, 'days').endOf("isoWeek");
+                    startDate2 = this.CompareDate.startDate.get('year') + '-' + (this.CompareDate.startDate.get('month')+1) + '-' +
+                        this.CompareDate.startDate.get('date');
+
+                    endDate2 = this.CompareDate.endDate.get('year') + '-' +
+                        (this.CompareDate.endDate.get('month')+1) + '-' +
+                        this.CompareDate.endDate.get('date') + ' 23:59:59';
+
+                    console.log(startDate + ' to ' + endDate);
+                    console.log(startDate2 + ' to ' + endDate2);
+
+                    return [startDate, endDate, startDate2, endDate2];
+                }
+                else if(this.dateRangeChoice == 'Month')
+                {
+                    this.OriginDate.startDate = moment().startOf("month");
+                    this.OriginDate.endDate = moment().endOf("month");
+
+                    startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
+                        this.OriginDate.startDate.get('date');
+                    endDate = this.OriginDate.endDate.get('year') + '-' + (this.OriginDate.endDate.get('month')+1) +
+                        '-' + this.OriginDate.endDate.get('date') + ' 23:59:59';
+
+                    // subtract isnt actally deprecated.
+                    // Moment docs say to use it.
+                    this.CompareDate.startDate = moment().subtract(1, 'months').startOf("month");
+                    this.CompareDate.endDate = moment().subtract(1, 'months').endOf("month");
+                    startDate2 = this.CompareDate.startDate.get('year') + '-' +
+                        (this.CompareDate.startDate.get('month')+1) + '-' +
+                        this.CompareDate.startDate.get('date');
+
+                    endDate2 = this.CompareDate.endDate.get('year') + '-' +
+                        (this.CompareDate.endDate.get('month')+1) + '-' +
+                        this.CompareDate.endDate.get('date') + ' 23:59:59';
+
+                    console.log(startDate + ' to ' + endDate);
+                    console.log(startDate2 + ' to ' + endDate2);
+                    return [startDate, endDate, startDate2, endDate2];
+                }
+                else if(this.dateRangeChoice == 'Year')
+                {
+                    this.OriginDate.startDate = moment().startOf("year");
+                    this.OriginDate.endDate = moment().endOf("year");
+
+                    startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
+                        this.OriginDate.startDate.get('date');
+                    endDate = this.OriginDate.endDate.get('year') + '-' + (this.OriginDate.endDate.get('month')+1) +
+                        '-' + this.OriginDate.endDate.get('date') + ' 23:59:59';
+
+                    // subtract isnt actally deprecated.
+                    // Moment docs say to use it.
+                    this.CompareDate.startDate = moment().subtract(1, 'years').startOf("year");
+                    this.CompareDate.endDate = moment().subtract(1, 'years').endOf("year");
+                    startDate2 = this.CompareDate.startDate.get('year') + '-' + (this.CompareDate.startDate.get('month')+1) + '-' +
+                        this.CompareDate.startDate.get('date');
+
+                    endDate2 = this.CompareDate.endDate.get('year') + '-' +
+                        (this.CompareDate.endDate.get('month')+1) + '-' +
+                        this.CompareDate.endDate.get('date') + ' 23:59:59';
+
+                    console.log(startDate + ' to ' + endDate);
+                    console.log(startDate2 + ' to ' + endDate2);
+                    return [startDate, endDate, startDate2, endDate2];
                 }
             },
 
 
-            getData() {
-                var calls = [];
+            getStores()
+            {
+                this.graphData = [];
+                var dateRange = this.getDateRange();
 
-                for (var i = 0; i < this.stores.length; i++) {
-                    var address = ('/api/stores/' + this.stores[i] + '/average-sales-value/' + this.dateStart + '/' +
-                        this.dateEnd);
-                    calls.push(axios.get(address));
+                this.dates = enumerateBetweenDates(this.OriginDate.startDate,
+                    this.OriginDate.endDate, this.dateRangeChoice);
+
+
+                if(this.storeChoice == null || this.storeChoice.length == 0)
+                {
+                    return;
                 }
 
-                var returns = [];
+                var calls =[];
 
-                axios.all(calls).then(function (results) {
+                for(var i = 0; i< this.storeChoice.length; i++) {
+                    var address = ('/api/stores/' + this.storeChoice[i] +'/average-sales-value/' +
+                        dateRange[0] + '/'
+                        + dateRange[1]);
+                    var prev = ('/api/stores/' + this.storeChoice[i] +'/average-sales-value/' +
+                        dateRange[2] + '/'
+                        + dateRange[3]);
+
+                    calls.push(axios.get(address));
+                    calls.push(axios.get(prev));
+                }
+
+                var data = [];
+
+                axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
-                        returns.push(response.data);
+                        data.push(response.data);
                     })
-                }).then(response => {
-                    this.graphData = [];
-                    if (returns.length > 0) {
+                }).then( response=>
+                {
+                    console.log(data);
+                    this.checkData(data);
 
-                        for (var i = 0; i < returns.length; i++) {
-                            // loops through each array in the individual response data.
-                            var Label = this.stores[i];
-                            var Colour = 'black';
-                            var Values = [];
-                            var sales = 0;
-
-                            for (var j = 0; j < returns[i].length; j++) {
-                                console.log(returns[i]);
-                                Label = returns[i][j].store_name;
-                                Colour = returns[i][j].store_colour;
-                                sales += parseFloat(returns[i][j].average_sales_value);
-                            }
-
-                            Values.push(sales);
-
-                            this.graphData[i] =
-                                {
-                                    Label: Label,
-                                    Colour: Colour,
-                                    Values: Values
-                                };
-                        }
-
-                    }
-                }).then(response => {
-                    this.fillData();
                 });
             },
 
-            fillData() {
-                var datasetValue = [];
-
-                for (var i = 0; i < this.graphData.length; i++) {
-                    datasetValue[i] =
-                        {
-                            label: this.graphData[i].Label,
-                            borderColor: this.graphData[i].Colour,
-                            backgroundColor: this.graphData[i].Colour,
-                            data: this.graphData[i].Values
-                        };
-
+            checkData(data)
+            {
+                console.log(data.length);
+                if(data.length < 1)
+                {
+                    return;
                 }
+
+                for(var i = 0; i < data.length; i++)
+                {
+                    var dataSet = [];
+                    dataSet.name = null;
+                    dataSet.colour = null;
+                    dataSet.date = [];
+                    dataSet.total = [];
+
+                    dataSet.name = data[i][0].store_name;
+                    dataSet.colour = data[i][0].store_colour;
+
+                    if(i % 2 != 0)
+                    {
+                        dataSet.name = dataSet.name + " ( Last " + this.dateRangeChoice + ")";
+                        dataSet.colour = '#'+Math.floor(Math.random()*16777215).toString(16);
+                    }
+                    else
+                    {
+                        dataSet.name = data[i][0].store_name + "(This " + this.dateRangeChoice + ")";
+                    }
+
+
+                    for(var j= 0; j < data[i].length; j++)
+                    {
+                        dataSet.date.push(data[i][j].date);
+                        dataSet.total.push(data[i][j].transaction_total_amount);
+                    }
+                    this.sortData(dataSet);
+                }
+
+                this.displayData();
+            },
+
+            sortData(dataSet)
+            {
+
+                // split up values of this dataset by date.
+                var splitData = [0];
+
+                for(var i = 0; i < dataSet.total.length; i++)
+                {
+                    splitData[0] += Math.round(parseFloat(dataSet.total[i]) * 100)/100;
+                }
+
+                this.graphData.push({
+                    label: dataSet.name,
+                    borderColor: dataSet.colour,
+                    backgroundColor: dataSet.colour,
+                    data: splitData
+                })
+
+
+            },
+
+            displayData()
+            {
+                var displayDates = [];
+
+                for(var x = 0; x < this.dates.length; x++)
+                {
+                    var date = this.dates[x].substring(8, 10) + "-" + this.dates[x].substring(5, 7) + "-" +
+                        this.dates[x].substring(0, 4);
+                    displayDates.push(date);
+                }
+
+                console.log(this.graphData);
 
                 this.datacollection =
                     {
-                        datasets: datasetValue
+                        datasets : this.graphData
                     }
-
+                this.showChart = true;
             },
         }
     }
+
+    var enumerateBetweenDates = function(startDate, endDate, type) {
+        var now = startDate;
+        now.add(23, "hours");
+        now.add(59, "minutes");
+        now.add(59, "seconds");
+
+        var dates = [];
+
+        while (now.isBefore(endDate) || now.isSame(endDate)) {
+
+            dates.push(now.format('YYYY-MM-DD HH:mm:ss'));
+            if(type == "Week") {
+                now.add(1, 'days');
+            }
+            if(type == "Month")
+            {
+                now.add(1, "weeks");
+            }
+            if(type == "Year")
+            {
+                now.add(1, "months");
+            }
+        }
+        return dates;
+    };
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
     .container {
-        max-width: 10000800px;
+        max-width: 800px;
         margin: 0 auto;
     }
 
