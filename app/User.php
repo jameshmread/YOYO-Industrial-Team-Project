@@ -79,7 +79,6 @@ class User extends Authenticatable
         {
             array_push($rights,'DJCAD Cantina');
         }
-
         if($this->is_doj_catering_staff || $this->is_admin)
         {
             array_push($rights,'DOJ Catering');
@@ -139,33 +138,5 @@ class User extends Authenticatable
         }
 
         return $rights;
-    }
-
-
-    /**
-     * @return bool
-     * returns true or false (1 or 0) depending on if the user is admin or not.
-     */
-    public function isAdmin()
-    {
-        return $this->is_admin;
-    }
-
-    /**
-     * @return bool
-     * returns true or false (1 or 0) depending on if the user has reportable permissions or not.
-     */
-    public function isReportable()
-    {
-        return $this->is_reportable;
-    }
-
-    /**
-     * @return bool
-     * returns true or false (1 or 0) depending on if the user only has reportable permissions or not.
-     */
-    public function isReportableOnly()
-    {
-        return $this->is_reportable_only;
     }
 }
