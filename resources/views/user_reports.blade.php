@@ -11,7 +11,7 @@
                 <hr>
             </div>
         </div>
-            <reports :stores="{{json_encode($user_rights)}}" :userid="{{Auth::user()->id}}"></reports>
+            <reports :stores="{{json_encode(Auth::user()->GetRights())}}" :userid="{{Auth::user()->id}}"></reports>
     </div>
     </div>
 @endsection
