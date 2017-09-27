@@ -58,7 +58,7 @@ class ColoursTableSeeder extends Seeder
             ]);
         DB::table('colours')->insert(
             [
-                'store' => 'Dental Cafe',
+                'store' => 'Dental Café',
                 'chart_colour' => '#ff9966'
             ]);
         DB::table('colours')->insert(
@@ -98,7 +98,7 @@ class ColoursTableSeeder extends Seeder
             ]);
         DB::table('colours')->insert(
             [
-                'store' => 'Online DUSA',
+                'store' => 'Online Dundee University Students Association',
                 'chart_colour' => '#003399'
             ]);
         DB::table('colours')->insert(

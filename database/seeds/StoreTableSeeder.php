@@ -59,7 +59,7 @@ class StoreTableSeeder extends Seeder
         DB::table('stores')->insert(
             [
                 'outlet_reference' => 239,
-                'outlet_name' => 'Dental Cafe',
+                'outlet_name' => 'Dental Café',
             ]);
         DB::table('stores')->insert(
             [
@@ -99,7 +99,7 @@ class StoreTableSeeder extends Seeder
         DB::table('stores')->insert(
             [
                 'outlet_reference' => 456,
-                'outlet_name' => 'Online DUSA',
+                'outlet_name' => 'Online Dundee University Students Association',
             ]);
         DB::table('stores')->insert(
             [
