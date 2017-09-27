@@ -12,6 +12,7 @@ YOYO-Industrial-Team-Project
 PHP 7.0 and later  
 Composer Package Manager  
 NodeJS + npm  
+MariaDB (or MySQL)
 
 ## Installation
 
