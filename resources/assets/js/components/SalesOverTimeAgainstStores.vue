@@ -64,7 +64,7 @@
                         showClose: true,
                     }
                 },
-
+                showChart: false,
                 dateRangeChoice: 'Last Week',
                 dateRangeChoices: ['Last Week', 'Last Month', 'Last Year'],
 
@@ -242,8 +242,12 @@
                     var address = ('/api/stores/' + this.storeChoice[i] +'/total-sales-value/' +
                         dateRange[0] + '/'
                         + dateRange[1]);
+                    var prev = ('/api/stores/' + this.storeChoice[i] +'/total-sales-value/' +
+                        dateRange[2] + '/'
+                        + dateRange[3]);
 
                     calls.push(axios.get(address));
+                    calls.push(axios.get(prev));
                 }
 
                 var data = [];
@@ -279,6 +283,13 @@
                     dataSet.name = data[i][0].store_name;
                     dataSet.colour = data[i][0].store_colour;
 
+                    if(i % 2 != 0)
+                    {
+                        dataSet.name = dataSet.name + " (" + this.dateRangeChoice + ")";
+                        dataSet.colour = '#'+Math.floor(Math.random()*16777215).toString(16);
+                    }
+
+
                     for(var j= 0; j < data[i].length; j++)
                     {
                         dataSet.date.push(data[i][j].date);
@@ -307,7 +318,7 @@
                     {
                         if(moment(dataSet.date[i]).isBefore(this.dates[j]))
                         {
-                            splitData[j] += parseFloat(dataSet.total[i]);
+                            splitData[j] += Math.round(parseFloat(dataSet.total[i]) * 100)/100;
                             break;
                         }
                     }
@@ -324,11 +335,11 @@
             displayData()
             {
                 var displayDates = [];
-                console.log(this.dates);
+
                 for(var x = 0; x < this.dates.length; x++)
                 {
-                    var date = this.dates[x].substring(8, 10) + "-" + this.dates[x].substring(5,7) + "-" +
-                            this.dates[x].substring(0,4);
+                    var date = this.dates[x].substring(8, 10) + "-" + this.dates[x].substring(5, 7) + "-" +
+                        this.dates[x].substring(0, 4);
                     displayDates.push(date);
                 }
 
@@ -339,6 +350,7 @@
                         labels: displayDates,
                         datasets : this.graphData
                     }
+                    this.showChart = true;
             },
         }
     }
