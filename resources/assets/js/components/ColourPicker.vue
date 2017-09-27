@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="col col-md-3 col-lg-3 col-sm-3">
-                    <button v-on:click="updateColour()">Update</button>
+                    <button class="btn btn-primary btn-lg" v-on:click="updateColour()">Update</button>
                 </div>
 
             </div>
