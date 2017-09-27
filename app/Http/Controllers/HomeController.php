@@ -78,9 +78,10 @@ class HomeController extends Controller
         $thisMonthTransactions = $this->recentTransactions()[1];
         $lastMonthTransactions = $this->recentTransactions()[0];
         $difference = $thisMonthTransactions - $lastMonthTransactions;
-
-        $lastMonthStart = new Carbon('first day of'.Carbon::now()->subMonths(2));
-        $lastMonthEnd = new Carbon('first day of'.Carbon::now()->subMonth());
+        Carbon::setToStringFormat('d/m/y');
+        $lastMonthStart = new Carbon('first day of'.Carbon::now()->subMonths(2)->toDateString());
+        $lastMonthEnd = new Carbon('first day of'.Carbon::now()->subMonth()->toDateString());
+//        $lastMonthStart->toFormattedDateString();
         $currentDate = Carbon::now();
         return view('home', compact('thisMonthTransactions',
             'customerVolume',
