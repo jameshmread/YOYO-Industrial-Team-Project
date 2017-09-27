@@ -8,6 +8,27 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    protected static $user_rights = [
+        'Air Bar',
+        'College Shop',
+        'Dental Cafe',
+        'DJAD Cantina',
+        'DOJ Catering',
+        'DUSA Marketplace',
+        'DUSA Online',
+        'DUSA Entrance',
+        'Floor Five',
+        'Food on Four',
+        'Level 2 Reception',
+        'Liar Bar',
+        'Library',
+        'Mono',
+        'Ninewells Shop',
+        'Premier Shop',
+        'Remote Campus',
+        'Spare',
+    ];
+
     public function edit($id)
     {
         // TODO There is a better way to do this, but I forget late at night
@@ -22,7 +43,6 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // TODO There is a better way to do this, but I forget late at night
         if (Auth::user()->id != $user->id) {
             return redirect('home');
         }
@@ -40,12 +60,15 @@ class UserController extends Controller
             $user->email = $request->input('email');
         }
 
-        if (!empty($request->input('reportfrequency'))) {
-            $user->report_frequency = $request->input('reportfrequency');
-        }
-
         $user->save();
 
         return redirect('home');
+    }
+
+    public function reports()
+    {
+        $user_rights = self::$user_rights;
+
+        return view('user_reports', compact('user_rights'));
     }
 }

@@ -20,6 +20,8 @@ Vue.component('uservolume', require('./components/UserVolumePerStore.vue'));
 
 Vue.component('sales-over-time-against-stores', require('./components/SalesOverTimeAgainstStores.vue'));
 Vue.component('total', require('./components/TotalSalesPerStore.vue'));
+Vue.component('reports', require('./components/UserReports.vue'));
+Vue.component('colour', require('./components/ColourPicker.vue'));
 
 Vue.component('avg-sales-over-time', require('./components/AverageSalesOverTime.vue'));
 
