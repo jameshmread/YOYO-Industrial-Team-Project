@@ -26,6 +26,7 @@ Vue.component('colour', require('./components/ColourPicker.vue'));
 Vue.component('avg-sales-over-time', require('./components/AverageSalesOverTime.vue'));
 
 Vue.component('user-retention', require('./components/UserRetentionRate.vue'));
+Vue.component('unique-users', require('./components/UniqueUsers.vue'));
 const app = new Vue({
     el: '#app'
 });
