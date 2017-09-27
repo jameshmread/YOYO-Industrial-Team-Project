@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\TransactionsReport;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Mockery\Exception;
 
 class APIController extends Controller
 {
@@ -202,11 +203,19 @@ class APIController extends Controller
         $currentMonth = Carbon::now();
         $previousMonth = Carbon::now()->subMonth();
 
-        Mail::to(User::find($request->user_id))
-            ->send(new TransactionsReport(Transaction::where('outlet_name', '=', $request->store_name)
-                ->where('date', '>=', $previousMonth)
-                ->where('date', '<=', $currentMonth)
-                ->get()));
+        try {
+
+            Mail::to(User::find($request->user_id))
+                ->send(new TransactionsReport(Transaction::where('outlet_name', '=', $request->store_name)
+                    ->where('date', '>=', $previousMonth)
+                    ->where('date', '<=', $currentMonth)
+                    ->get()));
+
+            return response('Report generated successfully!');
+
+        } catch (Exception $e) {
+            return response('Report generation failed!');
+        }
     }
 
     public function getStores()
@@ -214,7 +223,8 @@ class APIController extends Controller
         return DB::select('select outlet_name from stores order by outlet_name asc');
     }
 
-    public function getColour(Request $request){
+    public function getColour(Request $request)
+    {
 
 
         return DB::table('colours')
