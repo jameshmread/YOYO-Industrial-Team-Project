@@ -44,6 +44,7 @@ $router->group([
     $router->post('logout', 'Auth\LoginController@logout')->name('logout');
     $router->get('/profile/{user}/edit', 'UserController@edit')->name('user.edit');
     $router->put('/profile/{user}', 'UserController@update')->name('user.update');
+    $router->get('/user/reports', 'UserController@reports')->name('user.reports');
 });
 
 /**
@@ -72,4 +73,6 @@ $router->group([
     $router->resource('/users', 'AdminUserController')->except('show');
     $router->get('/csvupload', 'CSVController@index')->name('upload.index');
     $router->post('/csvupload', 'CSVController@upload')->name('upload');
+    $router->get('/colours', 'AdminController@storeColourPicker')->name('store.colour');
+
 });
