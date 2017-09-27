@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">User Rentention Rate Per Store</h1>
+            <h1 style="text-align:center;">User Retention Rate Per Store</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-3">
                     <label>Store Selector</label>
@@ -64,7 +64,6 @@
                         showClose: true,
                     }
                 },
-                showChart: false,
                 dateRangeChoice: 'Week',
                 dateRangeChoices: ['Week', 'Month', 'Year'],
 
@@ -141,7 +140,7 @@
                 var startDate2 = null;
                 var endDate2 = null;
 
-                if(this.dateRangeChoice == 'Last Week')
+                if(this.dateRangeChoice == 'Week')
                 {
                     this.OriginDate.startDate = moment().startOf("isoWeek");
                     this.OriginDate.endDate = moment().endOf("isoWeek");
@@ -167,7 +166,7 @@
 
                     return [startDate, endDate, startDate2, endDate2];
                 }
-                else if(this.dateRangeChoice == 'Last Month')
+                else if(this.dateRangeChoice == 'Month')
                 {
                     this.OriginDate.startDate = moment().startOf("month");
                     this.OriginDate.endDate = moment().endOf("month");
@@ -193,7 +192,7 @@
                     console.log(startDate2 + ' to ' + endDate2);
                     return [startDate, endDate, startDate2, endDate2];
                 }
-                else if(this.dateRangeChoice == 'Last Year')
+                else if(this.dateRangeChoice == 'Year')
                 {
                     this.OriginDate.startDate = moment().startOf("year");
                     this.OriginDate.endDate = moment().endOf("year");
@@ -250,10 +249,11 @@
 
                 axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
-                        data.push(response.data);;
+                        data.push(response.data);
                     })
                 }).then( response=>
                 {
+                    console.log(data);
                     this.checkData(data);
 
                 });
@@ -261,7 +261,6 @@
 
             checkData(data)
             {
-                console.log(data.length);
                 if(data.length < 1)
                 {
                     return;
@@ -314,8 +313,7 @@
                     label: dataSet.name,
                     borderColor: dataSet.colour,
                     backgroundColor: dataSet.colour,
-                    data: splitData,
-                    type: 'line'
+                    data: splitData
                 })
 
 
@@ -323,12 +321,10 @@
 
             displayData()
             {
-                console.log(this.graphData);
-
                 this.datacollection =
                     {
                         datasets : this.graphData
-                    }
+                    };
             },
         }
     }
