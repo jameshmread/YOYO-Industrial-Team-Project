@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <user-retention :stores="['Library', 'Spare', 'Air Bar']"></user-retention>
+        <user-retention :stores="{{json_encode(Auth::user()->GetRights())}}"> </user-retention>
     </div>
 </div>
 
