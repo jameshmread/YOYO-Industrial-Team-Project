@@ -214,6 +214,15 @@ class APIController extends Controller
         return DB::select('select outlet_name from stores order by outlet_name asc');
     }
 
+    public function getColour(Request $request){
+
+
+        return DB::table('colours')
+            ->select('chart_colour')
+            ->where('store', '=', $request->store_name)
+            ->get();
+    }
+
     public function updateColour(Request $request)
     {
         DB::table('colours')
