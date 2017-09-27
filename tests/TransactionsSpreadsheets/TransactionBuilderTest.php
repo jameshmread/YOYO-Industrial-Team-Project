@@ -40,8 +40,6 @@ class TransactionBuilderTest extends DatabaseTestCase
         return [
             [__DIR__.'/../../resources/csv/test.csv', 16],
             [__DIR__.'/../../resources/csv/test2016.csv', 51],
-            [__DIR__.'/../../resources/excel/example0.xlsx', 50],
-            [__DIR__.'/../../resources/excel/example1.xlsx', 50],
             //[__DIR__.'/../../resources/csv/Disbursals.csv'],
         ];
     }

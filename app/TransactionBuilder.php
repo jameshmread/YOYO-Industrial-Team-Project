@@ -34,8 +34,25 @@ class TransactionBuilder
         }
         return $transactions;
     }
-
+    
     public function copyTransactionsFromCsvToDb(string $file_path)
+    {
+        $file_handle = fopen($file_path, 'r');
+        while (!feof($file_handle)) {
+            $line = fgets($file_handle);
+            try {
+                $transaction = $this->extractTransactionFromLine($line);
+                if (!$transaction->wasRecentlyCreated) {
+                    $transaction->save();
+                }
+            } catch (InvalidLineException $e) {
+                continue;
+            }
+        }
+        fclose($file_handle);
+    }
+
+    public function copyTransactionsFromSpreadsheetToDb(string $file_path)
     {
         $binder = new UserTransactionsValueBinder();
         Excel::filter('chunk')->load($file_path)->chunk(250, function($sheets_collection)
@@ -154,7 +171,6 @@ class TransactionBuilder
         }
     }
 
-    
     public function firstOrCreateTransaction(array $properties): Transaction
     {
         $hash = Transaction::calculateHash($properties);
