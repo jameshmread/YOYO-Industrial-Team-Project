@@ -9,16 +9,28 @@ use App\Transaction;
 use Illuminate\Http\Request;
 class HomeController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+//        $this->$startOfLastMonth = new Carbon('first day of last month');
+//        $endOfLastMonth = new Carbon('last day of last month');
+//        $startOfCurrentMonth = new Carbon('first day of this month');
+        $this->middleware('auth');
+    }
     public function recentTransactions()
     {
         $data = array();
         //2 months ago
-        $data[0] = Transaction::where('date', '>=',  new Carbon('first day of'.Carbon::now()->subMonths(2)))
-            ->where('date', '<=', new Carbon('first day of'.Carbon::now()->subMonth()))
+        $data[0] = Transaction::where('date', '>=',  new Carbon('first day of last month'))
+            ->where('date', '<=', new Carbon('last day of last month'))
             ->sum('total_amount');
 
         //most recent month
-        $data[1] = Transaction::where('date', '>=', new Carbon('first day of'.Carbon::now()))
+        $data[1] = Transaction::where('date', '>=', new Carbon('first day of this month'))
             ->where('date', '<=', Carbon::now())
             ->sum('total_amount');
 
@@ -34,31 +46,27 @@ class HomeController extends Controller
     {
         $storeSalesPrevious = [];
         $storeSalesCurrent = [];
+        $multiStoresSalesDifference = [];
         $rights = Auth::User()->GetRights();
-//        return $rights;
+        $index = 0;
         foreach ($rights as $outlet) {
             #two months ago
-            array_push($storeSalesPrevious, Transaction::where('date', '>=',  new Carbon('first day of'.Carbon::now()->subMonths(2)))
-                ->where('date', '<=', new Carbon('first day of'.Carbon::now()->subMonth()))
+
+            array_push($storeSalesPrevious, Transaction::where('date', '>=', new Carbon('first day of last month'))
+                ->where('date', '<=', new Carbon('last day of last month'))
                 ->where('outlet_name', '=', $outlet)
                 ->sum('total_amount'));
             #last month
-            array_push($storeSalesCurrent, Transaction::where('date', '>=',  new Carbon('first day of'.Carbon::now()))
+            array_push($storeSalesCurrent, Transaction::where('date', '>=',  new Carbon('first day of this month'))
                 ->where('date', '<=', Carbon::now())
                 ->where('outlet_name', '=', $outlet)
                 ->sum('total_amount'));
+            array_push($multiStoresSalesDifference, ($storeSalesCurrent[$index]-$storeSalesPrevious[$index]));
+            $index++;
         }
-        return [$storeSalesPrevious, $storeSalesCurrent, $rights];
+        return [$storeSalesPrevious, $storeSalesCurrent, $rights, $multiStoresSalesDifference];
     }
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+
 
     /**
      * Show the application dashboard.
@@ -70,19 +78,20 @@ class HomeController extends Controller
         $managersStoreSalesPrevious = $this->totalSalesValue()[0];
         $managersStoreSalesCurrent = $this->totalSalesValue()[1];
         $rights = $this->totalSalesValue()[2];
-        //still need to do difference for all sales
-
+        $multiStoresSalesDifference = $this->totalSalesValue()[3];
 
         $customerVolume = $this->recentCustomerVolume();
 
         $thisMonthTransactions = $this->recentTransactions()[1];
         $lastMonthTransactions = $this->recentTransactions()[0];
         $difference = $thisMonthTransactions - $lastMonthTransactions;
+
         Carbon::setToStringFormat('d/m/y');
-        $lastMonthStart = new Carbon('first day of'.Carbon::now()->subMonths(2)->toDateString());
-        $lastMonthEnd = new Carbon('first day of'.Carbon::now()->subMonth()->toDateString());
-//        $lastMonthStart->toFormattedDateString();
+        $lastMonthStart = new Carbon('first day of last month');
+        $lastMonthEnd = new Carbon('last day of last month');
+        $startOfThisMonth = new Carbon('first day of this month');
         $currentDate = Carbon::now();
+
         return view('home', compact('thisMonthTransactions',
             'customerVolume',
             'lastMonthTransactions',
@@ -92,7 +101,9 @@ class HomeController extends Controller
             'rights',
             'lastMonthStart',
             'lastMonthEnd',
-            'currentDate'
+            'startOfThisMonth',
+            'currentDate',
+            'multiStoresSalesDifference'
             ));
     }
 }

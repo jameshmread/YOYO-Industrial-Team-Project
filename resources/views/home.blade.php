@@ -8,7 +8,7 @@
         </h1>
         <h1 class="col-md-6 display-1" style="text-align: right">
             <div class="row">This Month</div>
-            <div class="row">{{$lastMonthEnd}} - {{$currentDate}}</div>
+            <div class="row">{{$startOfThisMonth}} - {{$currentDate}}</div>
         </h1>
         <div class="row">
             <div class="col-md-12">
@@ -98,6 +98,14 @@
                                     <dl class="row">
                                         <dt class="col-sm-5">Sales</dt>
                                         <dd class="col-sm-7"> £{{$managersStoreSalesCurrent[$i]}}</dd>
+                                    </dl>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Difference</dt>
+                                        @if($multiStoresSalesDifference[$i] > 0)
+                                            <dd class="col-sm-7 green"> + £{{$multiStoresSalesDifference[$i]}}</dd>
+                                        @else
+                                            <dd class="col-sm-7 red"> - £{{$multiStoresSalesDifference[$i]}}</dd>
+                                        @endif
                                     </dl>
                                 </div>
                             </div>
