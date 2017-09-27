@@ -211,15 +211,11 @@ class APIController extends Controller
 
     public function getStores()
     {
-
         return DB::select('select outlet_name from stores order by outlet_name asc');
-
     }
 
     public function updateColour(Request $request)
     {
-
-
         DB::table('colours')
             ->where('store', $request->store_name)
             ->update(['chart_colour' => '#' . $request->colour]);
