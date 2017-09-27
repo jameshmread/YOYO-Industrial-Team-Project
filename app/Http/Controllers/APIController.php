@@ -43,6 +43,20 @@ class APIController extends Controller
                 ];
             });
 
+        if($totalSalesValue->count() == 0)
+        {
+            $data = [];
+            array_push($data, [
+                "store_name" => $request->store_name,
+                "store_colour" =>Colours::where('store', '=',
+                    $request->store_name)->pluck('chart_colour')->first(),
+                "transaction_total_amount"=> "0.00",
+                "date"=> ""
+            ]);
+
+            return $data;
+        }
+
         return response()
             ->json($totalSalesValue)
             ->header(self::CORS_KEY, self::CORS_VALUE);
