@@ -1,6 +1,7 @@
 <template>
-    <div class="row">
-        <div class="col-md-3">
+<div class="panel panel-default">
+<div class="panel panel-body">
+            <div class="row-md-6">
             <div class="form-group">
                 <label for="report-store-selection">Select a store to retrieve details on</label>
                 <select class="form-control" id="report-store-selection" name="report-store-selection"
@@ -8,24 +9,22 @@
                     <option v-for="store in stores">{{store}}</option>
                 </select>
 
-                <br>
-
                 <label for="report-type-selection">Select a report type to generate</label>
                 <select class="form-control" id="report-type-selection" name="report-type-selection"
                         v-model="reportTypeSelection">
                     <option>Transactions</option>
                 </select>
-
-                <br>
-
+            </div>
+            <div class="row-md-6">
                 <button class="btn btn-primary"
                         name="Generate"
                         @click="generateReport()">
                     Generate Report for this Month
                 </button>
             </div>
-        </div>
-    </div>
+            </div>
+            </div>
+</div>
 </template>
 
 <script>

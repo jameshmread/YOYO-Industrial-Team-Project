@@ -3,6 +3,8 @@
 /vendor
 /.idea
 /.vagrant
+/public/js/app.js
+/public/css/app.css
 Homestead.json
 Homestead.yaml
 npm-debug.log

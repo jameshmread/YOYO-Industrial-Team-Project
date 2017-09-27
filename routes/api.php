@@ -31,5 +31,6 @@ $router->group([
     $router->get('/stores/{store_name}/retained-customers/{period1}/{period2}', 'APIController@retainedCustomers')->name('stores.retained_customers');
     $router->post('/reports/transactions', 'APIController@generateTransactionsReport')->name('reports.transactions');
     $router->get('/stores', 'APIController@getStores')->name('stores');
+    $router->get('/colours/{store_name}/get-colours', 'APIController@getColour')->name('colours.get');
     $router->get('/colours/{store_name}/update-colours/{colour}', 'APIController@updateColour')->name('colours.update');
 });
