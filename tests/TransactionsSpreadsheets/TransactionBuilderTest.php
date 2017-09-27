@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\CSV;
+namespace Tests\TransactionSpreadsheets;
 
 use Tests\DatabaseTestCase;
 use App\Transaction;
