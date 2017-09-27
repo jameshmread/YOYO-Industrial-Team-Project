@@ -4,8 +4,25 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @todo outlet_name should be changed for outlet_slug
+ * @todo store_id should be removed
+ */
 class Transaction extends Model
 {
+    public static function calculateHash(array $properties): string
+    {
+        return hash('md5', $properties['cash_spent'].
+                           $properties['customer_id'].
+                           $properties['date'].
+                           $properties['discount_amount'].
+                           $properties['store_id'].
+                           $properties['outlet_name'].
+                           $properties['total_amount'].
+                           $properties['transaction_type']
+        );
+    }
+
     protected $fillable = [
         'customer_id',
         'store_id',

@@ -23,7 +23,7 @@
     </php>
     <testsuites>
         <testsuite name="CSV">
-            <directory>./tests/CSV</directory>
+            <directory>./tests/TransactionsSpreadsheets</directory>
         </testsuite>
         <testsuite name="User">
             <directory>./tests/User</directory>
