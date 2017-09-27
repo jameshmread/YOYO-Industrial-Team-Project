@@ -130,19 +130,6 @@ class APIController extends Controller
                 ];
             });
 
-        if($totalCustomers->count() == 0)
-        {
-            $data = [];
-            array_push($data, [
-                "store_name" => $request->store_name,
-                "store_colour" =>Colours::where('store', '=',
-                    $request->store_name)->pluck('chart_colour')->first(),
-                "unique_customers"=> "0",
-            ]);
-
-            return $data;
-        }
-
         return response()
             ->json($totalCustomers)
             ->header(self::CORS_KEY, self::CORS_VALUE);
@@ -173,19 +160,6 @@ class APIController extends Controller
                         ->count()
                 ];
             });
-
-//        if($uniqueCustomers->count() == 0 || $uniqueCustomers->isEmpty())
-//        {
-//            $data = [];
-//            array_push($data, [
-//                "store_name" => $request->store_name,
-//                "store_colour" =>Colours::where('store', '=',
-//                    $request->store_name)->pluck('chart_colour')->first(),
-//                "unique_customers"=> "0",
-//            ]);
-//
-//            return $data;
-//        }
 
         return response()
             ->json($uniqueCustomers)
