@@ -44,7 +44,7 @@ class HomeController extends Controller
         $storeSalesPrevious = [];
         $storeSalesCurrent = [];
         $multiStoresSalesDifference = [];
-        $rights = Auth::User()->GetRights();
+        $rights = Auth::user()->GetRights();
         $index = 0;
         foreach ($rights as $outlet) {
             #two months ago
