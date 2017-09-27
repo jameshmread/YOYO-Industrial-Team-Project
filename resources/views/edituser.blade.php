@@ -46,6 +46,19 @@
                                value="{{ Request::old('email', $user->email) }}">
                     </div>
 
+                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                               placeholder="Password">
+                    </div>
+
+                    <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" class="form-control" id="password_confirmation"
+                               name="password_confirmation"
+                               placeholder="Confirm Password">
+                    </div>
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Update Profile</button>
                     </div>

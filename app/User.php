@@ -4,8 +4,6 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-
-
 class User extends Authenticatable
 {
     use Notifiable;
@@ -41,8 +39,7 @@ class User extends Authenticatable
         'is_reportable',
         'is_reportable_only',
     ];
-
-    /**
+      /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -90,6 +87,7 @@ class User extends Authenticatable
         if($this->is_dusa_union_online_staff || $this->is_admin)
         {
             array_push($rights,'DUSA The Union: Online');
+            array_push($rights,'Online Dundee University Students Association');
         }
         if($this->is_dusa_ents_staff || $this->is_admin)
         {

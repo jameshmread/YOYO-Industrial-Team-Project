@@ -18,7 +18,7 @@ class CSVController extends Controller
         // TODO AG Add $request validation
 
         $file = $request->file('inputFile');
-
+        $request->validate(['inputFile' => 'required']);
         if ($file->isValid()) {
             $tb = new TransactionBuilder;
             $tb->copyTransactionsFromCsvToDb($file);
