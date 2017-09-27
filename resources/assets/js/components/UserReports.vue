@@ -52,9 +52,12 @@
                 axios.post('/api/reports/transactions/', {
                     'user_id': this.userid,
                     'store_name': this.reportStoreSelection
-                }).then(response =>
-                    alert(response.data)
-                )
+                }).then(response => {
+                        if (response.status == 200) alert('Report Generation Successful!');
+                    }
+                ).catch(function (error) {
+                    alert('Report Generation Failed');
+                })
             }
         }
     }
