@@ -89,18 +89,18 @@
                                 <div class="col-md-6">
                                     <div class="panel-heading">Last Month</div>
                                     <dl class="row">
-                                        <dt class="col-sm-5">Sales</dt>
+                                        <dt class="col-sm-5" style="padding-left: 30px">Sales</dt>
                                         <dd class="col-sm-7"> £{{$managersStoreSalesPrevious[$i]}}</dd>
                                     </dl>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="panel-heading">This Month</div>
                                     <dl class="row">
-                                        <dt class="col-sm-5">Sales</dt>
+                                        <dt class="col-sm-5" style="padding-left: 30px">Sales</dt>
                                         <dd class="col-sm-7"> £{{$managersStoreSalesCurrent[$i]}}</dd>
                                     </dl>
                                     <dl class="row">
-                                        <dt class="col-sm-5">Difference</dt>
+                                        <dt class="col-sm-5" style="padding-left: 30px">Difference</dt>
                                         @if($multiStoresSalesDifference[$i] > 0)
                                             <dd class="col-sm-7 green"> + £{{$multiStoresSalesDifference[$i]}}</dd>
                                         @else

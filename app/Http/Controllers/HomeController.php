@@ -16,9 +16,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-//        $this->$startOfLastMonth = new Carbon('first day of last month');
-//        $endOfLastMonth = new Carbon('last day of last month');
-//        $startOfCurrentMonth = new Carbon('first day of this month');
         $this->middleware('auth');
     }
     public function recentTransactions()
