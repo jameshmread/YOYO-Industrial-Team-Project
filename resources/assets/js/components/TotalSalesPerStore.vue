@@ -140,7 +140,7 @@
                 var startDate2 = null;
                 var endDate2 = null;
 
-                if(this.dateRangeChoice == 'Last Week')
+                if(this.dateRangeChoice == 'Week')
                 {
                     this.OriginDate.startDate = moment().startOf("isoWeek");
                     this.OriginDate.endDate = moment().endOf("isoWeek");
@@ -166,7 +166,7 @@
 
                     return [startDate, endDate, startDate2, endDate2];
                 }
-                else if(this.dateRangeChoice == 'Last Month')
+                else if(this.dateRangeChoice == 'Month')
                 {
                     this.OriginDate.startDate = moment().startOf("month");
                     this.OriginDate.endDate = moment().endOf("month");
@@ -192,7 +192,7 @@
                     console.log(startDate2 + ' to ' + endDate2);
                     return [startDate, endDate, startDate2, endDate2];
                 }
-                else if(this.dateRangeChoice == 'Last Year')
+                else if(this.dateRangeChoice == 'Year')
                 {
                     this.OriginDate.startDate = moment().startOf("year");
                     this.OriginDate.endDate = moment().endOf("year");
@@ -223,6 +223,7 @@
             getStores()
             {
                 this.graphData = [];
+
                 var dateRange = this.getDateRange();
 
 
@@ -233,6 +234,7 @@
 
                 var calls =[];
 
+                console.log('going through calls');
                 for(var i = 0; i< this.storeChoice.length; i++) {
                     var address = ('/api/stores/' + this.storeChoice[i] +'/total-sales-value/' +
                         dateRange[0] + '/'
@@ -244,6 +246,7 @@
                     calls.push(axios.get(address));
                     calls.push(axios.get(prev));
                 }
+                console.log('done going through calls');
 
                 var data = [];
 
