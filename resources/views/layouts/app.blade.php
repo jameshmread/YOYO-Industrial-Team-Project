@@ -29,6 +29,7 @@
                 </a>
             </div>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="{{ route('home') }}">Home</a></li>
                 <!-- Authentication Links -->
                 @guest
                     <li><a href="{{ route('login') }}">Login</a></li>
@@ -36,7 +37,7 @@
 
                         @if(Auth::user()->is_admin === 1)
                             <li>
-                                <a href="{{route('admin.dashboard')}}">Admin Dashboard</a>
+                                <a href="{{route('admin.dashboard')}}">Admin Control Panel</a>
                             </li>
                         @endif
 
@@ -55,11 +56,11 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li class="dropdown-header"><h5>Stores</h5></li>
                                 <li>
-                                    <a href="{{route('store.revenue')}}">Transaction average value</a>
+                                        <a href="{{route('store.revenue')}}">Average transaction values</a>
                                 </li>
 
                                 <li>
-                                    <a href="{{route('store.date')}}">Sales value</a>
+                                    <a href="{{route('store.date')}}">Sales over time</a>
                                 </li>
 
                                 <li>
