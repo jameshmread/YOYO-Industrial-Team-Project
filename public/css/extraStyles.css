@@ -9,3 +9,11 @@
 .panel-heading {
     color: blue;
 }
+
+.navbar-fixed-top {
+    min-height: 80px;
+}
+
+.container {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
