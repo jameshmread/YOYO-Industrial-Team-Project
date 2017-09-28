@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">Store Sales over time</h1>
+            <h1 style="text-align:center;">Store Sales value over time</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-3">
                     <label>Store Selector</label>
