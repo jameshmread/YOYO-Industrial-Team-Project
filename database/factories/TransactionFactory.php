@@ -17,7 +17,7 @@ $factory->define(App\Transaction::class, function (Faker $faker) {
         'customer_id' => $faker->randomElement($customer),
         'store_id' => $faker->randomElement($store),
         'outlet_name' => $faker->randomElement($store2),
-        'date' => $faker->dateTimeThisMonth(),
+        'date' => $faker->dateTimeThisYear(),
         'transaction_type' => $faker->randomElement(['Payment', 'Refund', 'Redemption']),
         'cash_spent' => $cash,
         'discount_amount' => $discount,
