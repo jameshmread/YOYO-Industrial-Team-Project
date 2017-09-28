@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">Average Sales by Store</h1>
+            <h1 style="text-align:center;">Transaction Average</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-3">
                     <label>Store Selector</label>
