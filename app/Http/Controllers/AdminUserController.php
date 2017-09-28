@@ -16,7 +16,6 @@ class AdminUserController extends Controller
      */
     protected static $user_rights = [
         'is_reportable' => 'Can receive reports',
-        'is_reportable_only' => 'Can only receive reports',
         'is_air_bar_staff' => 'Air Bar',
         'is_college_shop_staff' => 'College Shop',
         'is_dental_cafe_staff' => 'Dental Cafe',
