@@ -285,7 +285,7 @@
 
                     if(i % 2 != 0)
                     {
-                        dataSet.name = dataSet.name + " ( Last " + this.dateRangeChoice + ")";
+                        dataSet.name = dataSet.name + " (Last " + this.dateRangeChoice + ")";
                         dataSet.colour = '#'+Math.floor(Math.random()*16777215).toString(16);
                     }
                     else
