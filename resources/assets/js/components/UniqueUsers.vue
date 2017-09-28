@@ -27,7 +27,8 @@
                             :hide-selected="false">
                     </multiselect>
                 </div>
-
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <button v-on:click="getStores()">Get Data</button>
                 </div>

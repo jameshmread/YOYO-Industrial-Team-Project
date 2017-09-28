@@ -27,7 +27,8 @@
                             :hide-selected="false">
                     </multiselect>
                 </div>
-
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <button v-on:click="getStores()">Get Data</button>
                 </div>
@@ -304,10 +305,10 @@
                 // split up values of this dataset by date.
                 var splitData = [0];
 
-                for(var i = 0; i < dataSet.total.length; i++)
-                {
-                    splitData[0] += Math.round(parseFloat(dataSet.total[i]) * 100)/100;
+                for (var i = 0; i < dataSet.total.length; i++) {
+                    splitData[0] += Math.round(parseFloat(dataSet.total[i]) * 100) / 100;
                 }
+
 
                 this.graphData.push({
                     label: dataSet.name,
