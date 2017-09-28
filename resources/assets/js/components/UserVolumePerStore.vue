@@ -10,8 +10,8 @@
                             v-model="storeChoice"
                             :options="stores"
                             :show-labels="false"
-                            :close-on-select="true"
-                            :hide-selected="false"
+                            :close-on-select="false"
+                            :hide-selected="true"
                             :multiple="true">
                     </multiselect>
                 </div>

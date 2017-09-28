@@ -23,8 +23,8 @@
                             v-model="dateRangeChoice"
                             :options="dateRangeChoices"
                             :show-labels="false"
-                            :close-on-select="true"
-                            :hide-selected="false">
+                            :close-on-select="false"
+                            :hide-selected="true">
                     </multiselect>
                 </div>
             </div>
