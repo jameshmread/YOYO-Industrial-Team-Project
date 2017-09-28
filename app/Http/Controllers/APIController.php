@@ -84,7 +84,7 @@ class APIController extends Controller
                 'store_name' => $item['outlet_name'],
                 'store_colour' => Colours::where('store', '=',
                     $item['outlet_name'])->pluck('chart_colour')->first(),
-                'average_sales_value' => $item['total_amount'] / $averageSalesValue->pluck('total_amount')->sum(),
+                'average_sales_value' => $averageSalesValue->pluck('total_amount')->sum() / $averageSalesValue->count(),
             ];
         });
 
