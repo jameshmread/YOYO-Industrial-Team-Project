@@ -356,11 +356,6 @@
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
     h1 {
         font-family: 'Helvetica', Arial;
         color: #464646;
