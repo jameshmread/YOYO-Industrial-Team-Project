@@ -93,11 +93,6 @@
 
                 options: {
                     bezierCurve : false,
-                    title:
-                        {
-                            display: true,
-                            text: "Bunch of transactions."
-                        },
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
@@ -120,7 +115,7 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount [£]'
+                                labelString: 'Retention Value'
                             }
                         }]
                     }
@@ -249,7 +244,8 @@
 
                 axios.all(calls).then(function(results) {
                     results.forEach(function (response) {
-                        data.push(response.data);
+                        if(response.data !== null)
+                            data.push(response.data);
                     })
                 }).then( response=>
                 {

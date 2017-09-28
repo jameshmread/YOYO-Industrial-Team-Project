@@ -93,11 +93,6 @@
 
                 options: {
                     bezierCurve : false,
-                    title:
-                        {
-                            display: true,
-                            text: "Bunch of transactions."
-                        },
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
@@ -120,7 +115,7 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount [£]'
+                                labelString: 'Customer Volume'
                             }
                         }]
                     }

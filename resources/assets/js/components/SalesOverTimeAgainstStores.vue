@@ -121,7 +121,7 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount [£]'
+                                labelString: 'Sales Amount [£]'
                             }
                         }]
                     }
