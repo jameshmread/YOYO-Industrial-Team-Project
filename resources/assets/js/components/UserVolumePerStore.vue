@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">User Volume per Store</h1>
+            <h1 style="text-align:center;">User Volume</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-12">
                     <label>Store Selector</label>
@@ -355,11 +355,6 @@
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
     h1 {
         font-family: 'Helvetica', Arial;
         color: #464646;

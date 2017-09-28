@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">Transaction Average</h1>
+            <h1 style="text-align:center;">Average Transaction Values</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-12">
                     <label>Store Selector</label>
@@ -10,8 +10,8 @@
                             v-model="storeChoice"
                             :options="stores"
                             :show-labels="false"
-                            :close-on-select="true"
-                            :hide-selected="false"
+                            :close-on-select="false"
+                            :hide-selected="true"
                             :multiple="true">
                     </multiselect>
                 </div>
@@ -375,11 +375,6 @@
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
-    .container {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
     h1 {
         font-family: 'Helvetica', Arial;
         color: #464646;
