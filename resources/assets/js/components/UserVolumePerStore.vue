@@ -1,174 +1,362 @@
 <template>
     <div class="container">
+        <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">User volume per store</h1>
-            <h2 style="text-align:center;">Time Period: {{date1}} to {{date2}} </h2>
-
+            <h1 style="text-align:center;">User Volume per Store</h1>
             <div class="row">
-                <div class="col col-md-3 col-lg-3 col-sm-3" style="width: 20%;">
+                <div  v-if="stores.length > 0" class="col-md-12">
+                    <label>Store Selector</label>
                     <multiselect
-                            v-model="choice"
-                            :options="choices"
-                            :searchable="false"
-                            :close-on-select="false"
+                            v-model="storeChoice"
+                            :options="stores"
                             :show-labels="false"
+                            :close-on-select="false"
                             :hide-selected="true"
-                            @input="fillData()"
-                            placeholder="Pick a value">
+                            :multiple="true">
+                    </multiselect>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>Compare by</label>
+                    <multiselect
+                            v-model="dateRangeChoice"
+                            :options="dateRangeChoices"
+                            :show-labels="false"
+                            :close-on-select="false"
+                            :hide-selected="true">
                     </multiselect>
                 </div>
 
-                <br>
-
-                <div class="col col-md-3 col-lg-3 col-sm-3">
-                    <input class="input-group date" v-model="date1" type="text" onfocus="(this.type='date')"
-                           onblur="(this.type='text')" placeholder="Start Date">
-                </div>
-
-                <div class="col col-md-3 col-lg-3 col-sm-3">
-                    <input class="input-group date" v-model="date2" type="text" onfocus="(this.type='date')"
-                           onblur="(this.type='text')" placeholder="End Date">
-                </div>
-
-                <div class="col col-md-3 col-lg-3 col-sm-3">
-                    <button @click="fillData()">Refresh</button>
+                <div class="col-md-4">
+                    <button v-on:click="getStores()">Get Data</button>
                 </div>
             </div>
-            <br>
-
-            <div v-if="choice === 'Bar Chart'">
-                <BarChart :chart-data="datacollection" :options="options"></BarChart>
-            </div>
-            <div v-else-if="choice === 'Pie Chart'">
-                <PieChart :chart-data="datacollection" :options="options"></PieChart>
-            </div>
-
+            <Chart :chart-data="datacollection" :options="options"></Chart>
         </div>
     </div>
-
-
 </template>
 
 <script>
-    import PieChart from './piechart.js'
-    import BarChart from './barchart.js'
+
+    import Chart from './barchart';
     import Multiselect from 'vue-multiselect';
+    import datePicker from 'vue-bootstrap-datetimepicker';
+    import moment from 'moment';
+    import 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css';
+
 
     export default {
         components: {
-            PieChart,
-            BarChart,
-            Multiselect
+            'Chart': Chart,
+            Multiselect,
+            datePicker
         },
+
+        props:['stores'],
+
         data() {
             return {
-                choice: 'Bar Chart',
+                configs: {
+                    range: {
+                        format: 'DD-MM-YYYY',
+                        useCurrent: false,
+                        showClear: true,
+                        showClose: true,
+                    }
+                },
+                dateRangeChoice: 'Week',
+                dateRangeChoices: ['Week', 'Month', 'Year'],
 
-                choices: [
-                    'Bar Chart',
-                    'Pie Chart'
-                ],
+                storeChoice: null,
 
-                options: {
-                    legend: {
-                        display: false
+                OriginDate:
+                    {
+                        startDate: null,
+                        endDate: null,
                     },
 
+                CompareDate:
+                    {
+                        startDate: null,
+                        endDate: null,
+                    },
+
+                datacollection: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: null,
+                            data: []
+                        }
+                    ]
+                },
+
+                options: {
+                    bezierCurve : false,
+                    responsive: true,
+                    maintainAspectRatio: true,
                     scales: {
                         xAxes: [{
                             gridLines:
                                 {
                                     display: true,
-                                    color: 'rgba(0,0,0,0.2)',
-                                    borderDash: [8, 4]
+                                    borderDash: [8,4]
                                 },
-                            barThickness: 50,
-
-                            ticks: {
-                                min: 0,
-                                autoSkip: false
-                            },
-
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Stores'
+                            }
                         }],
                         yAxes: [{
                             gridLines:
                                 {
                                     display: true,
-                                    color: 'rgba(0,0,0,0.2)',
-                                    borderDash: [8, 4]
+                                    borderDash: [8,4]
                                 },
-
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Customer Volume'
+                            }
                         }]
                     }
                 },
 
-                datacollection: null,
-
-                date1: null,
-                date2: null,
+                graphData: [],
             }
         },
-        mounted() {
-            this.fillData()
-        },
+
         methods: {
-            fillData() {
-                axios.get('/api/transactions/users/volumeperstore/' + this.date1 + '/' + this.date2 + ' 23:59:59')
-                    .then(response => {
 
-                        var labels = [];
-                        var values = [];
-                        var colours = [];
-                        var label;
+            getDateRange()
+            {
+                var startDate = null;
+                var endDate = null;
+
+                var startDate2 = null;
+                var endDate2 = null;
+
+                if(this.dateRangeChoice == 'Week')
+                {
+                    this.OriginDate.startDate = moment().startOf("isoWeek");
+                    this.OriginDate.endDate = moment().endOf("isoWeek");
+
+                    startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
+                        this.OriginDate.startDate.get('date');
+                    endDate = this.OriginDate.endDate.get('year') + '-' + (this.OriginDate.endDate.get('month')+1) +
+                        '-' + this.OriginDate.endDate.get('date') + ' 23:59:59';
+
+                    // subtract isnt actally deprecated.
+                    // Moment docs say to use it.
+                    this.CompareDate.startDate = moment().subtract(1, 'weeks').startOf("isoWeek");
+                    this.CompareDate.endDate = moment().subtract(1, 'weeks').endOf("isoWeek");
+                    startDate2 = this.CompareDate.startDate.get('year') + '-' + (this.CompareDate.startDate.get('month')+1) + '-' +
+                        this.CompareDate.startDate.get('date');
+
+                    endDate2 = this.CompareDate.endDate.get('year') + '-' +
+                        (this.CompareDate.endDate.get('month')+1) + '-' +
+                        this.CompareDate.endDate.get('date') + ' 23:59:59';
+
+                    console.log(startDate + ' to ' + endDate);
+                    console.log(startDate2 + ' to ' + endDate2);
+
+                    return [startDate, endDate, startDate2, endDate2];
+                }
+                else if(this.dateRangeChoice == 'Month')
+                {
+                    this.OriginDate.startDate = moment().startOf("month");
+                    this.OriginDate.endDate = moment().endOf("month");
+
+                    startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
+                        this.OriginDate.startDate.get('date');
+                    endDate = this.OriginDate.endDate.get('year') + '-' + (this.OriginDate.endDate.get('month')+1) +
+                        '-' + this.OriginDate.endDate.get('date') + ' 23:59:59';
+
+                    // subtract isnt actally deprecated.
+                    // Moment docs say to use it.
+                    this.CompareDate.startDate = moment().subtract(1, 'months').startOf("month");
+                    this.CompareDate.endDate = moment().subtract(1, 'months').endOf("month");
+                    startDate2 = this.CompareDate.startDate.get('year') + '-' +
+                        (this.CompareDate.startDate.get('month')+1) + '-' +
+                        this.CompareDate.startDate.get('date');
+
+                    endDate2 = this.CompareDate.endDate.get('year') + '-' +
+                        (this.CompareDate.endDate.get('month')+1) + '-' +
+                        this.CompareDate.endDate.get('date') + ' 23:59:59';
+
+                    console.log(startDate + ' to ' + endDate);
+                    console.log(startDate2 + ' to ' + endDate2);
+                    return [startDate, endDate, startDate2, endDate2];
+                }
+                else if(this.dateRangeChoice == 'Year')
+                {
+                    this.OriginDate.startDate = moment().startOf("year");
+                    this.OriginDate.endDate = moment().endOf("year");
+
+                    startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
+                        this.OriginDate.startDate.get('date');
+                    endDate = this.OriginDate.endDate.get('year') + '-' + (this.OriginDate.endDate.get('month')+1) +
+                        '-' + this.OriginDate.endDate.get('date') + ' 23:59:59';
+
+                    // subtract isnt actally deprecated.
+                    // Moment docs say to use it.
+                    this.CompareDate.startDate = moment().subtract(1, 'years').startOf("year");
+                    this.CompareDate.endDate = moment().subtract(1, 'years').endOf("year");
+                    startDate2 = this.CompareDate.startDate.get('year') + '-' + (this.CompareDate.startDate.get('month')+1) + '-' +
+                        this.CompareDate.startDate.get('date');
+
+                    endDate2 = this.CompareDate.endDate.get('year') + '-' +
+                        (this.CompareDate.endDate.get('month')+1) + '-' +
+                        this.CompareDate.endDate.get('date') + ' 23:59:59';
+
+                    console.log(startDate + ' to ' + endDate);
+                    console.log(startDate2 + ' to ' + endDate2);
+                    return [startDate, endDate, startDate2, endDate2];
+                }
+            },
 
 
-                        labels = response.data.map(x => {return x.store});
-                        values = response.data.map(x => {return x.customers});
-                        colours = response.data.map(x => {return x.color});
+            getStores()
+            {
+                this.graphData = [];
+                var dateRange = this.getDateRange();
 
 
-                        if(this.choice === 'Bar Chart'){
+                if(this.storeChoice == null || this.storeChoice.length == 0)
+                {
+                    return;
+                }
 
-                            label = 'Total Amount (£)';
-                            this.options.legend.display = false;
+                var calls =[];
 
+                for(var i = 0; i< this.storeChoice.length; i++) {
+                    var address = ('/api/stores/' + this.storeChoice[i] +'/total-customers/' +
+                        dateRange[0] + '/'
+                        + dateRange[1]);
+                    var prev = ('/api/stores/' + this.storeChoice[i] +'/total-customers/' +
+                        dateRange[2] + '/'
+                        + dateRange[3]);
 
-                        }
+                    calls.push(axios.get(address));
+                    calls.push(axios.get(prev));
+                }
 
-                        else if (this.choice === 'Pie Chart'){
+                var data = [];
 
-                            label = labels;
-                            this.options.legend.display = true;
-
-
-                        }
-
-                        this.datacollection = {
-                            labels: labels,
-                            datasets: [
-                                {
-                                    //Help with if statement for this
-                                    label: label,
-
-                                    backgroundColor: colours,
-
-                                    data: values
-                                }
-                            ],
-                        };
+                axios.all(calls).then(function(results) {
+                    results.forEach(function (response) {
+                        data.push(response.data);
                     })
+                }).then( response=>
+                {
+                    console.log(data);
+                    this.checkData(data);
+
+                });
+            },
+
+            checkData(data)
+            {
+                if(data.length < 1)
+                {
+                    return;
+                }
+
+                for(var i = 0; i < data.length; i++)
+                {
+                    var dataSet = [];
+                    dataSet.name = null;
+                    dataSet.colour = null;
+                    dataSet.date = [];
+                    dataSet.total = [];
+
+                    dataSet.name = data[i][0].store_name;
+                    dataSet.colour = data[i][0].store_colour;
+
+                    if(i % 2 != 0)
+                    {
+                        dataSet.name = dataSet.name + " (Last " + this.dateRangeChoice + ")";
+                        dataSet.colour = '#'+Math.floor(Math.random()*16777215).toString(16);
+                    }
+                    else
+                    {
+                        dataSet.name = data[i][0].store_name + "(This " + this.dateRangeChoice + ")";
+                    }
+
+
+                    for(var j= 0; j < data[i].length; j++)
+                    {
+                        dataSet.total.push(data[i][j].total_customers);
+                    }
+                    this.sortData(dataSet);
+                }
+
+                this.displayData();
+            },
+
+            sortData(dataSet)
+            {
+
+                // split up values of this dataset by date.
+                var splitData = [0];
+
+                for(var i = 0; i < dataSet.total.length; i++)
+                {
+                    splitData[0] += Math.round(parseFloat(dataSet.total[i]) * 100)/100;
+                }
+
+                this.graphData.push({
+                    label: dataSet.name,
+                    borderColor: dataSet.colour,
+                    backgroundColor: dataSet.colour,
+                    data: splitData
+                })
 
 
             },
+
+            displayData()
+            {
+                this.datacollection =
+                    {
+                        datasets : this.graphData
+                    };
+            },
         }
     }
+
+    var enumerateBetweenDates = function(startDate, endDate, type) {
+        var now = startDate;
+        now.add(23, "hours");
+        now.add(59, "minutes");
+        now.add(59, "seconds");
+
+        var dates = [];
+
+        while (now.isBefore(endDate) || now.isSame(endDate)) {
+
+            dates.push(now.format('YYYY-MM-DD HH:mm:ss'));
+            if(type == "Week") {
+                now.add(1, 'days');
+            }
+            if(type == "Month")
+            {
+                now.add(1, "weeks");
+            }
+            if(type == "Year")
+            {
+                now.add(1, "months");
+            }
+        }
+        return dates;
+    };
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style>
     .container {
-        max-width: 100%;
+        max-width: 800px;
         margin: 0 auto;
     }
 
@@ -183,7 +371,6 @@
     }
 
     .Chart {
-        max-width: 100%;
         padding: 20px;
         box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, .4);
         border-radius: 20px;

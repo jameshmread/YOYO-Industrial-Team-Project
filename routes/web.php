@@ -50,12 +50,12 @@ $router->group([
 $router->group([
     'middleware' => ['web', 'auth', 'report']
 ], function (Router $router) {
-    $router->get('/data/stores/date', 'DataController@SalesOverDates')->name('store.date');
-    $router->get('/data/stores/revenue', 'DataController@displayAngularPage')->name('store.revenue');
-    $router->get('/data/stores/retained', 'DataController@displayAngularPage')->name('store.retained');
-    $router->get('/data/stores/unique', 'DataController@displayAngularPage')->name('store.unique');
+    $router->get('/data/stores/sales', 'DataController@salesOverDates')->name('store.date');
+    $router->get('/data/stores/average', 'DataController@AverageSales')->name('store.revenue');
+    $router->get('/data/users/retained', 'DataController@retainedCustomersPerStore')->name('store.retained');
+    $router->get('/data/stores/unique', 'DataController@uniqueCustomersPerStore')->name('store.unique');
     $router->get('/data/stores/total', 'DataController@totalSalesPerStore')->name('store.total');
-    $router->get('/data/users/volumeperstore', 'DataController@userVolumePerStore')->name('user.volumeperstore');
+    $router->get('/data/users/volume', 'DataController@userVolumePerStore')->name('user.volumeperstore');
 });
 
 /**

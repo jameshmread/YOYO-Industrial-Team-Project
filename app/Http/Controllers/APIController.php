@@ -40,8 +40,23 @@ class APIController extends Controller
                     'store_colour' => Colours::where('store', '=',
                         $item['outlet_name'])->pluck('chart_colour')->first(),
                     'transaction_total_amount' => $item['total_amount'],
+                    'date' => $item['date'],
                 ];
             });
+
+        if($totalSalesValue->count() == 0)
+        {
+            $data = [];
+            array_push($data, [
+                "store_name" => $request->store_name,
+                "store_colour" =>Colours::where('store', '=',
+                    $request->store_name)->pluck('chart_colour')->first(),
+                "transaction_total_amount"=> "0.00",
+                "date"=> ""
+            ]);
+
+            return $data;
+        }
 
         return response()
             ->json($totalSalesValue)
@@ -69,9 +84,22 @@ class APIController extends Controller
                 'store_name' => $item['outlet_name'],
                 'store_colour' => Colours::where('store', '=',
                     $item['outlet_name'])->pluck('chart_colour')->first(),
-                'average_sales_value' => $item['total_amount'] / $averageSalesValue->pluck('total_amount')->sum(),
+                'average_sales_value' => $averageSalesValue->pluck('total_amount')->sum() / $averageSalesValue->count(),
             ];
         });
+
+        if($averageSalesValue->count() == 0)
+        {
+            $data = [];
+            array_push($data, [
+                "store_name" => $request->store_name,
+                "store_colour" =>Colours::where('store', '=',
+                    $request->store_name)->pluck('chart_colour')->first(),
+                "average_sales_value"=> "0.00",
+            ]);
+
+            return $data;
+        }
 
         return response()
             ->json($averageSalesValue)
@@ -187,6 +215,7 @@ class APIController extends Controller
                 ];
             }
         });
+
 
         return response()
             ->json($retainedCustomers)

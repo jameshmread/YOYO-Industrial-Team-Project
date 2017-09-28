@@ -14,14 +14,14 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
-
 Vue.component('uservolume', require('./components/UserVolumePerStore.vue'));
-
-Vue.component('store', require('./components/transchart.vue'));
+Vue.component('sales-over-time-against-stores', require('./components/SalesOverTimeAgainstStores.vue'));
 Vue.component('total', require('./components/TotalSalesPerStore.vue'));
 Vue.component('reports', require('./components/UserReports.vue'));
 Vue.component('colour', require('./components/ColourPicker.vue'));
+Vue.component('avg-sales-over-time', require('./components/AverageSalesOverTime.vue'));
+Vue.component('user-retention', require('./components/UserRetentionRate.vue'));
+Vue.component('unique-users', require('./components/UniqueUsers.vue'));
 
 const app = new Vue({
     el: '#app'

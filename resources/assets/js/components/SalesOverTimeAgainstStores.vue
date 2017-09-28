@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">Total Sales</h1>
+            <h1 style="text-align:center;">Store Sales value over time</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-12">
                     <label>Store Selector</label>
@@ -23,8 +23,8 @@
                             v-model="dateRangeChoice"
                             :options="dateRangeChoices"
                             :show-labels="false"
-                            :close-on-select="true"
-                            :hide-selected="false">
+                            :close-on-select="false"
+                            :hide-selected="true">
                     </multiselect>
                 </div>
             </div>
@@ -40,7 +40,7 @@
 
 <script>
 
-    import Chart from './barchart';
+    import Chart from './linechart';
     import Multiselect from 'vue-multiselect';
     import datePicker from 'vue-bootstrap-datetimepicker';
     import moment from 'moment';
@@ -66,6 +66,7 @@
                         showClose: true,
                     }
                 },
+                showChart: false,
                 dateRangeChoice: 'Week',
                 dateRangeChoices: ['Week', 'Month', 'Year'],
 
@@ -106,7 +107,7 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Stores'
+                                labelString: 'Date [Days]'
                             }
                         }],
                         yAxes: [{
@@ -117,13 +118,14 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount [£]'
+                                labelString: 'Sales Amount [£]'
                             }
                         }]
                     }
                 },
 
                 graphData: [],
+                dates: [],
             }
         },
 
@@ -194,8 +196,8 @@
                     this.OriginDate.startDate = moment().startOf("year");
                     this.OriginDate.endDate = moment().endOf("year");
 
-                    startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
-                        this.OriginDate.startDate.get('date');
+                     startDate = this.OriginDate.startDate.get('year') + '-' + (this.OriginDate.startDate.get('month') + 1) + '-' +
+                         this.OriginDate.startDate.get('date');
                     endDate = this.OriginDate.endDate.get('year') + '-' + (this.OriginDate.endDate.get('month')+1) +
                         '-' + this.OriginDate.endDate.get('date') + ' 23:59:59';
 
@@ -220,8 +222,10 @@
             getStores()
             {
                 this.graphData = [];
-
                 var dateRange = this.getDateRange();
+
+                this.dates = enumerateBetweenDates(this.OriginDate.startDate,
+                    this.OriginDate.endDate, this.dateRangeChoice);
 
 
                 if(this.storeChoice == null || this.storeChoice.length == 0)
@@ -231,7 +235,6 @@
 
                 var calls =[];
 
-                console.log('going through calls');
                 for(var i = 0; i< this.storeChoice.length; i++) {
                     var address = ('/api/stores/' + this.storeChoice[i] +'/total-sales-value/' +
                         dateRange[0] + '/'
@@ -243,7 +246,6 @@
                     calls.push(axios.get(address));
                     calls.push(axios.get(prev));
                 }
-                console.log('done going through calls');
 
                 var data = [];
 
@@ -261,6 +263,7 @@
 
             checkData(data)
             {
+                console.log(data.length);
                 if(data.length < 1)
                 {
                     return;
@@ -276,11 +279,13 @@
 
                     dataSet.name = data[i][0].store_name;
                     dataSet.colour = data[i][0].store_colour;
+                    dataSet.compare = false;
 
                     if(i % 2 != 0)
                     {
                         dataSet.name = dataSet.name + " (Last " + this.dateRangeChoice + ")";
                         dataSet.colour = '#'+Math.floor(Math.random()*16777215).toString(16);
+                        dataSet.compare = true;
                     }
                     else
                     {
@@ -288,9 +293,9 @@
                     }
 
 
-
                     for(var j= 0; j < data[i].length; j++)
                     {
+                        dataSet.date.push(data[i][j].date);
                         dataSet.total.push(data[i][j].transaction_total_amount);
                     }
                     this.sortData(dataSet);
@@ -303,29 +308,63 @@
             {
 
                 // split up values of this dataset by date.
-                var splitData = [0];
+                var splitData = [];
 
-                for (var i = 0; i < dataSet.total.length; i++) {
-                    splitData[0] += Math.round(parseFloat(dataSet.total[i]) * 100) / 100;
+                for(var i =0; i < this.dates.length; i++)
+                {
+                    splitData.push(0);
                 }
 
+                for(var i =0; i < dataSet.total.length; i++)
+                {
+                    if(dataSet.compare === false) {
+                        for (var j = 0; j < this.dates.length; j++) {
+                            if (moment(dataSet.date[i]).isBefore(this.dates[j])) {
+                                splitData[j] += Math.round(parseFloat(dataSet.total[i]) * 100) / 100;
+                                break;
+                            }
+                        }
+                    }
+                    else{
+                        var dates = enumerateBetweenDates(this.CompareDate.startDate,
+                            this.CompareDate.endDate, this.dateRangeChoice);
+
+                        for (var j = 0; j < dates.length; j++) {
+                            if (moment(dataSet.date[i]).isBefore(dates[j])) {
+                                splitData[j] += Math.round(parseFloat(dataSet.total[i]) * 100) / 100;
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 this.graphData.push({
                     label: dataSet.name,
                     borderColor: dataSet.colour,
-                    backgroundColor: dataSet.colour,
-                    data: splitData
+                    backgroundColor: 'rgba(0,0,0,0)',
+                    data:  splitData
                 })
-
-
             },
 
             displayData()
             {
+                var displayDates = [];
+
+                for(var x = 0; x < this.dates.length; x++)
+                {
+                    var date = this.dates[x].substring(8, 10) + "-" + this.dates[x].substring(5, 7) + "-" +
+                        this.dates[x].substring(0, 4);
+                    displayDates.push(date);
+                }
+
+                console.log(displayDates);
+
                 this.datacollection =
                     {
+                        labels: displayDates,
                         datasets : this.graphData
-                    };
+                    }
+                    this.showChart = true;
             },
         }
     }

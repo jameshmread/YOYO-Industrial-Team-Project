@@ -19,23 +19,24 @@ class DataController extends Controller
         return view ('charts.totalsalesperstore.totalsales');
     }
 
-    public function displayAngularPage()
+
+    public function uniqueCustomersPerStore()
     {
-        return view('angular.angular');
+        return view('charts.uniquecustomerssperstore.uniqueusers');
     }
 
-    public function uniqueUsersPerStore()
+    public function retainedCustomersPerStore()
     {
-        return view('angular.unique');
+        return view('charts.retainedcustomersperstore.retainedusers');
     }
 
-    public function retainedUsersPerStore()
-    {
-        return view('angular.retained');
-    }
-
-    public function SalesOverDates()
+    public function salesOverDates()
     {
         return view('charts.salesovertime.salesdate');
+    }
+
+    public function averageSales()
+    {
+        return view('charts.averagesales.avgsales');
     }
 }

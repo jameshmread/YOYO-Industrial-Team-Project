@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">Total Sales</h1>
+            <h1 style="text-align:center;">Transaction Average</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-12">
                     <label>Store Selector</label>
@@ -10,8 +10,8 @@
                             v-model="storeChoice"
                             :options="stores"
                             :show-labels="false"
-                            :close-on-select="false"
-                            :hide-selected="true"
+                            :close-on-select="true"
+                            :hide-selected="false"
                             :multiple="true">
                     </multiselect>
                 </div>
@@ -23,8 +23,8 @@
                             v-model="dateRangeChoice"
                             :options="dateRangeChoices"
                             :show-labels="false"
-                            :close-on-select="true"
-                            :hide-selected="false">
+                            :close-on-select="false"
+                            :hide-selected="true">
                     </multiselect>
                 </div>
             </div>
@@ -66,6 +66,7 @@
                         showClose: true,
                     }
                 },
+                showChart: false,
                 dateRangeChoice: 'Week',
                 dateRangeChoices: ['Week', 'Month', 'Year'],
 
@@ -117,13 +118,14 @@
                                 },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Total Amount [£]'
+                                labelString: 'Average Amount [£]'
                             }
                         }]
                     }
                 },
 
                 graphData: [],
+                dates: [],
             }
         },
 
@@ -220,8 +222,10 @@
             getStores()
             {
                 this.graphData = [];
-
                 var dateRange = this.getDateRange();
+
+                this.dates = enumerateBetweenDates(this.OriginDate.startDate,
+                    this.OriginDate.endDate, this.dateRangeChoice);
 
 
                 if(this.storeChoice == null || this.storeChoice.length == 0)
@@ -231,19 +235,17 @@
 
                 var calls =[];
 
-                console.log('going through calls');
                 for(var i = 0; i< this.storeChoice.length; i++) {
-                    var address = ('/api/stores/' + this.storeChoice[i] +'/total-sales-value/' +
+                    var address = ('/api/stores/' + this.storeChoice[i] +'/average-sales-value/' +
                         dateRange[0] + '/'
                         + dateRange[1]);
-                    var prev = ('/api/stores/' + this.storeChoice[i] +'/total-sales-value/' +
+                    var prev = ('/api/stores/' + this.storeChoice[i] +'/average-sales-value/' +
                         dateRange[2] + '/'
                         + dateRange[3]);
 
                     calls.push(axios.get(address));
                     calls.push(axios.get(prev));
                 }
-                console.log('done going through calls');
 
                 var data = [];
 
@@ -261,6 +263,7 @@
 
             checkData(data)
             {
+                console.log(data.length);
                 if(data.length < 1)
                 {
                     return;
@@ -288,10 +291,10 @@
                     }
 
 
-
                     for(var j= 0; j < data[i].length; j++)
                     {
-                        dataSet.total.push(data[i][j].transaction_total_amount);
+                        dataSet.date.push(data[i][j].date);
+                        dataSet.total.push(data[i][j].average_sales_value);
                     }
                     this.sortData(dataSet);
                 }
@@ -305,10 +308,10 @@
                 // split up values of this dataset by date.
                 var splitData = [0];
 
-                for (var i = 0; i < dataSet.total.length; i++) {
-                    splitData[0] += Math.round(parseFloat(dataSet.total[i]) * 100) / 100;
+                for(var i = 0; i < dataSet.total.length; i++)
+                {
+                    splitData[0] += Math.round(parseFloat(dataSet.total[i]) * 100)/100;
                 }
-
 
                 this.graphData.push({
                     label: dataSet.name,
@@ -322,10 +325,22 @@
 
             displayData()
             {
+                var displayDates = [];
+
+                for(var x = 0; x < this.dates.length; x++)
+                {
+                    var date = this.dates[x].substring(8, 10) + "-" + this.dates[x].substring(5, 7) + "-" +
+                        this.dates[x].substring(0, 4);
+                    displayDates.push(date);
+                }
+
+                console.log(this.graphData);
+
                 this.datacollection =
                     {
                         datasets : this.graphData
-                    };
+                    }
+                this.showChart = true;
             },
         }
     }

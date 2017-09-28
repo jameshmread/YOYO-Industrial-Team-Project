@@ -28,7 +28,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="panel-heading">This Month</div>
-                                <div class="panel-body ">
+                                <div class="panel-body">
                                     <dl class="row">
                                         <dt class="col-sm-5">Sales</dt>
                                         <dd class="col-sm-7"> £{{$thisMonthTransactions}}</dd>
@@ -38,7 +38,7 @@
                                         @if($difference > 0)
                                             <dd class="col-sm-7 green"> + £{{$difference}}</dd>
                                         @else
-                                            <dd class="col-sm-7 red"> - £{{$difference}}</dd>
+                                            <dd class="col-sm-7 red"> £{{$difference}}</dd>
                                         @endif
                                     </dl>
                                 </div>
@@ -104,7 +104,7 @@
                                         @if($multiStoresSalesDifference[$i] > 0)
                                             <dd class="col-sm-7 green"> + £{{$multiStoresSalesDifference[$i]}}</dd>
                                         @else
-                                            <dd class="col-sm-7 red"> - £{{$multiStoresSalesDifference[$i]}}</dd>
+                                            <dd class="col-sm-7 red"> £{{$multiStoresSalesDifference[$i]}}</dd>
                                         @endif
                                     </dl>
                                 </div>
@@ -112,7 +112,6 @@
                             <br>
                         @endfor
                     </div>
-
                 </div>
             </div>
             </div>
