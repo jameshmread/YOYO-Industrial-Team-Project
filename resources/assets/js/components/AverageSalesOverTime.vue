@@ -297,7 +297,7 @@
                     for(var j= 0; j < data[i].length; j++)
                     {
                         dataSet.date.push(data[i][j].date);
-                        dataSet.total.push(data[i][j].transaction_total_amount);
+                        dataSet.total.push(data[i][j].average_sales_value);
                     }
                     this.sortData(dataSet);
                 }
