@@ -4,19 +4,20 @@
         <div class="Chart">
             <h1 style="text-align:center;">Total Sales</h1>
             <div class="row">
-                <div  v-if="stores.length > 0" class="col-md-3">
+                <div  v-if="stores.length > 0" class="col-md-12">
                     <label>Store Selector</label>
                     <multiselect
                             v-model="storeChoice"
                             :options="stores"
                             :show-labels="false"
-                            :close-on-select="true"
-                            :hide-selected="false"
+                            :close-on-select="false"
+                            :hide-selected="true"
                             :multiple="true">
                     </multiselect>
                 </div>
-
-                <div class="col-md-3">
+            </div>
+            <div class="row">
+                <div class="col-md-4">
                     <label>Compare by</label>
                     <multiselect
                             v-model="dateRangeChoice"
@@ -94,7 +95,7 @@
                 options: {
                     bezierCurve : false,
                     responsive: true,
-                    maintainAspectRatio: false,
+                    maintainAspectRatio: true,
                     scales: {
                         xAxes: [{
                             gridLines:
@@ -147,8 +148,8 @@
 
                     // subtract isnt actally deprecated.
                     // Moment docs say to use it.
-                    this.CompareDate.startDate = moment().subtract(1, 'days').startOf("isoWeek");
-                    this.CompareDate.endDate = moment().subtract(1, 'days').endOf("isoWeek");
+                    this.CompareDate.startDate = moment().subtract(1, 'weeks').startOf("isoWeek");
+                    this.CompareDate.endDate = moment().subtract(1, 'weeks').endOf("isoWeek");
                     startDate2 = this.CompareDate.startDate.get('year') + '-' + (this.CompareDate.startDate.get('month')+1) + '-' +
                         this.CompareDate.startDate.get('date');
 

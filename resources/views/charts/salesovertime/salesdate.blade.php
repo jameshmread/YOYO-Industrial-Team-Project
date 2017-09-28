@@ -1,4 +1,4 @@
-@extends('layouts.app');
+@extends('layouts.app')
 
 @section('content')
 <sales-over-time-against-stores :stores="{{ json_encode(Auth::user()->GetRights()) }}">
