@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                        <label for="email">Name</label>
+                        <label for="email">Email</label>
                         <input type="text" class="form-control" id="email" name="email"
                                placeholder="{{$user->email}}"
                                value="{{ Request::old('email', $user->email) }}">

@@ -1,0 +1,23 @@
+.red {
+    color: red;
+}
+
+.green {
+    color: #28ba00;
+}
+
+.panel-heading {
+    color: blue;
+}
+
+.navbar-fixed-top {
+    min-height: 80px;
+}
+
+.container {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.navbar-right {
+    padding-top: 20px;
+}
