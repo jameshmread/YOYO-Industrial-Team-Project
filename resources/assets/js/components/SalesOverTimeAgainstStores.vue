@@ -16,18 +16,19 @@
                     </multiselect>
                 </div>
             </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <label>Compare by</label>
-                        <multiselect
-                                v-model="dateRangeChoice"
-                                :options="dateRangeChoices"
-                                :show-labels="false"
-                                :close-on-select="true"
-                                :hide-selected="false">
-                        </multiselect>
-                    </div>
-
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Compare by</label>
+                    <multiselect
+                            v-model="dateRangeChoice"
+                            :options="dateRangeChoices"
+                            :show-labels="false"
+                            :close-on-select="true"
+                            :hide-selected="false">
+                    </multiselect>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     <button v-on:click="getStores()">Get Data</button>
                 </div>
@@ -278,11 +279,13 @@
 
                     dataSet.name = data[i][0].store_name;
                     dataSet.colour = data[i][0].store_colour;
+                    dataSet.compare = false;
 
                     if(i % 2 != 0)
                     {
                         dataSet.name = dataSet.name + " (Last " + this.dateRangeChoice + ")";
                         dataSet.colour = '#'+Math.floor(Math.random()*16777215).toString(16);
+                        dataSet.compare = true;
                     }
                     else
                     {
@@ -314,12 +317,23 @@
 
                 for(var i =0; i < dataSet.total.length; i++)
                 {
-                    for(var j = 0; j < this.dates.length; j++)
-                    {
-                        if(moment(dataSet.date[i]).isBefore(this.dates[j]))
-                        {
-                            splitData[j] += Math.round(parseFloat(dataSet.total[i]) * 100)/100;
-                            break;
+                    if(dataSet.compare === false) {
+                        for (var j = 0; j < this.dates.length; j++) {
+                            if (moment(dataSet.date[i]).isBefore(this.dates[j])) {
+                                splitData[j] += Math.round(parseFloat(dataSet.total[i]) * 100) / 100;
+                                break;
+                            }
+                        }
+                    }
+                    else{
+                        var dates = enumerateBetweenDates(this.CompareDate.startDate,
+                            this.CompareDate.endDate, this.dateRangeChoice);
+
+                        for (var j = 0; j < dates.length; j++) {
+                            if (moment(dataSet.date[i]).isBefore(dates[j])) {
+                                splitData[j] += Math.round(parseFloat(dataSet.total[i]) * 100) / 100;
+                                break;
+                            }
                         }
                     }
                 }
