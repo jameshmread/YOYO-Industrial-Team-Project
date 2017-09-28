@@ -87,6 +87,7 @@ class User extends Authenticatable
         if($this->is_dusa_union_online_staff || $this->is_admin)
         {
             array_push($rights,'DUSA The Union: Online');
+            array_push($rights,'Online Dundee University Students Association');
         }
         if($this->is_dusa_ents_staff || $this->is_admin)
         {
