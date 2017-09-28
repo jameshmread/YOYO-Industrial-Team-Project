@@ -23,3 +23,4 @@ MariaDB (or MySQL)
 1. Copy the `.env.example` to `.env` file, ensuring to put in your MariaDB details
 1. Run `php artisan migrate`
 1. Run `php artisan key:generate`
+1. To Serve on local host: Run `php artisan serve`
