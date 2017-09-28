@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">User Retention Rate Per Store</h1>
+            <h1 style="text-align:center;">User Retention</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-12">
                     <label>Store Selector</label>

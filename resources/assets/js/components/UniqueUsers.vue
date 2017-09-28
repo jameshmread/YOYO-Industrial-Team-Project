@@ -2,7 +2,7 @@
     <div class="container">
         <br/>
         <div class="Chart">
-            <h1 style="text-align:center;">Unique Users Per Store</h1>
+            <h1 style="text-align:center;">Unique Users</h1>
             <div class="row">
                 <div  v-if="stores.length > 0" class="col-md-12">
                     <label>Store Selector</label>
